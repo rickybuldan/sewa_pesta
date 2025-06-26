@@ -73,10 +73,10 @@
                             style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 
 
 18px; vertical-align: bottom; text-align: center;">
-                            <strong style="font-size:16px;">MF COLLECTION</strong>
+                            <strong style="font-size:16px;">SEWA PESTA</strong>
                             <br>phone: 0403 - 247830 322
 
-                            <br> Sri Agung, Tanjab Barat, Jambi
+                            <br> Bandung, Jawa Barat
                         </td>
                     </tr>
                     <tr>
@@ -92,7 +92,7 @@
                             style="font-size: 14px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 
 
 18px; vertical-align: bottom; text-align: center;">
-                            <strong>Cash Receipt</strong>
+                            <strong>Invoice</strong>
                         </td>
                     </tr>
                     <tr>

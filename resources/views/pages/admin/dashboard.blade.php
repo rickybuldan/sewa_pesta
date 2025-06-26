@@ -1,103 +1,191 @@
-@extends('layout.default_two')
+@extends('layout.default_three')
 @push('after-style')
     @foreach ($cssFiles as $file)
         <link rel="stylesheet" href="{{ $file }}">
     @endforeach
 @endpush
 @section('content')
-    <div class="container-fluid">
-        <div class="page-title">
-            <div class="row">
-                <div class="col-6">
-                    <h3>{{ $subtitle }}</h3>
-                </div>
-                <div class="col-6">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">
-                                <svg class="stroke-icon">
-                                    <use href="../assets/svg/icon-sprite.svg#stroke-home"></use>
-                                </svg></a></li>
-                        <li class="breadcrumb-item">{{ $title }}</li>
-                        <li class="breadcrumb-item active">{{ $subtitle }}</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xxl-5 col-md-7 box-col-7">
+            <div class="col-sm-3">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-sm-12">
                         <div class="card">
-                            <div class="card-header card-no-border pb-0">
-                                <h5>Total Penjualan</h5>
-                                <span class="f-light f-w-500 f-14">Total Keseluruhan</span>
-                            </div>
-                            <div class="card-body pt-0">
-                                <div class="d-flex align-items-end gap-1">
-                                    <h4 class="total-sales">0</h4>
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between">
+                                    <div class="p-2">
+                                        <h5>Transaksi Selesai</h5>
+                                    </div>
+                                    <div class="p-2">
+                                        {{-- <a class="btn btn-primary" id="add-btn"><i class="fa fa-plus"></i> Tambah</a> --}}
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="card-body text-start">
+                                <b id="total-proses">0</b>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xxl-12 col-md-6 box-col-12">
+                    <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5>Penjualan Barang Terbanyak</h5><span>Keseluruhan</span>
-                            </div>
-                            <div class="card-body pt-0">
-                                <div class="table-responsive  theme-scrollbar">
-                                    <table id="table-list" class="dataTables_wrapper">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Nama Barang</th>
-                                                <th>Jumlah Terjual</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
+                                <div class="d-flex justify-content-between">
+                                    <div class="p-2">
+                                        <h5>Total Barang Disewakan</h5>
+                                    </div>
+                                    <div class="p-2">
+                                        {{-- <a class="btn btn-primary" id="add-btn"><i class="fa fa-plus"></i> Tambah</a> --}}
+                                    </div>
                                 </div>
                             </div>
+                            <div class="card-body text-start">
+                                <b id="total-sewa-barang">0 Barang</b>
+                            </div>
                         </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-sm-9">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <div class="p-2">
+                                <h5>Jadwal Penyewaan</h5>
+                            </div>
+                            <div class="p-2">
+                                {{-- <a class="btn btn-primary" id="add-btn"><i class="fa fa-plus"></i> Tambah</a> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="calendar"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-7 col-md-6 box-col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header card-no-border pb-0">
-                                <h5>Transaksi Terbaru</h5>
-                                <span class="f-light f-w-500 f-14">Transaksi dibulan <b id="this-month">ini</b></span>
+        </div>
+        <div class="modal fade" id="modal-data" tabindex="-1" aria-labelledby="exampleModalCenter1" style="display: none;"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Form Data</h5>
+                        <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="basic-form">
+
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Nama Produk</label>
+                                <div class="col-sm-9">
+                                    <input id="form-name" type="text" class="form-control" placeholder="Nama">
+                                </div>
                             </div>
-                            <div class="card-body pt-0">
-                                <div class="visitors-container">
-                                    <div id="visitor-chart"></div>
+                            {{-- <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Kode Produk</label>
+                                <div class="col-sm-5">
+                                    <input id="form-code" type="text" class="form-control" placeholder="Kode Produk">
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="btn-group btn-group-square" role="group" aria-label="Basic example">
+                                        <button class="btn btn-danger" type="button" onclick="setNullProd()"><i
+                                                class="fa fa-eraser" aria-hidden="true"></i></button>
+                                        <button class="btn btn-primary" type="button" onclick="generateProdCode()"><i
+                                                class="fa fa-refresh" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            </div> --}}
+
+                            {{-- <div class="mb-3 row d-flex justify-content-center">
+                                <img src="/template/admin2/assets/images/lightgallry/01.jpg" style="width:50% "
+                                    class="img-prod" itemprop="thumbnail" alt="Image description">
+                            </div> --}}
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Harga</label>
+                                <div class="col-sm-9">
+                                    <input id="form-price" type="text" oninput="formatRupiahByElement(this)"
+                                        class="form-control" placeholder="Harga">
+                                </div>
+                            </div>
+                            <div class="mb-3 row d-flex justify-content-center">
+                                <img src="/template/admin2/assets/images/lightgallry/01.jpg" style="width:30% "
+                                    class="img-paket" itemprop="thumbnail" alt="Image description">
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Foto</label>
+                                <div class="col-sm-9">
+                                    <input id="form-img" type="file" accept="image/*" class="form-control"
+                                        >
+                                </div>
+                            </div>
+                            {{-- <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Berat</label>
+                                <div class="col-sm-9">
+                                    <input id="form-weight" type="number" class="form-control" placeholder="Gram">
+                                </div>
+                            </div> --}}
+                            {{-- <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Stok</label>
+                                <div class="col-sm-3">
+                                    <input id="form-min" type="number" class="form-control" placeholder="Minimum">
+                                </div>
+                                <div class="col-sm-3">
+                                    <input id="form-max" type="number" class="form-control" placeholder="Maksimum">
+                                </div>
+                                <div class="col-sm-9">
+                                    <input id="form-init" type="number" class="form-control" placeholder="Awal">
+                                </div>
+                            </div> --}}
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Deskripsi</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" id="form-desc" placeholder="Deskripsi" required=""></textarea>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="save-btn" class="btn btn-primary">Save</button>
                     </div>
                 </div>
-                {{-- <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header card-no-border pb-0">
-                                <h5>Transaksi Terbaru</h5>
-                                <span class="f-light f-w-500 f-14">Transaksi dibulan <b id="this-month">ini</b></span>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-data-barcode" tabindex="-1" aria-labelledby="exampleModalCenter1"
+            style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Form Data</h5>
+                        <button class="btn-close py-0" type="button" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="basic-form">
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Barcode</label>
+                                <div class="col-sm-9">
+                                    <input id="form-barcode-br" type="text" class="form-control" readonly>
+                                </div>
                             </div>
-                            <div class="card-body pt-0">
-                                <div class="visitors-container">
-                                    <div id="visitor-chart"></div>
+
+                        </div>
+                        <div class="basic-form">
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Jumlah Barcode</label>
+                                <div class="col-sm-9">
+                                    <input id="form-barcode-jml" type="number" class="form-control" >
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> --}}
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                        <button type="button" onclick="printImages()" class="btn btn-primary">Print</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,16 +1,35 @@
-@extends('layout.default_three')
+@extends('layout.default_two')
 @push('after-style')
     @foreach ($cssFiles as $file)
         <link rel="stylesheet" href="{{ $file }}">
     @endforeach
 @endpush
 @section('content')
+    <div class="container-fluid">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-6">
+                    <h3>{{ $subtitle }}</h3>
+                </div>
+                <div class="col-6">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">
+                                <svg class="stroke-icon">
+                                    <use href="../assets/svg/icon-sprite.svg#stroke-home"></use>
+                                </svg></a></li>
+                        <li class="breadcrumb-item">{{ $title }}</li>
+                        <li class="breadcrumb-item active">{{ $subtitle }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    {{-- <div class="card-header">
+                    <div class="card-header">
                         <div class="d-flex justify-content-between">
                             <div class="p-2">
                                 <h5>{{ $subtitle }}</h5>
@@ -24,7 +43,7 @@
                                         aria-selected="false">Permission JSON</a></li>
                             </ul>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="card-body">
                         <div id="list-role" class="row">
                         </div>
@@ -32,7 +51,7 @@
                             <div class="tab-pane fade show active" id="pills-aboutus" role="tabpanel"
                                 aria-labelledby="pills-aboutus-tab">
                                 <div class="table-responsive theme-scrollbar">
-                                    <table id="table-list" class="table table-striped table-bordered dt-responsive nowrap">
+                                    <table id="table-list" class="dataTables_wrapper">
                                         <thead>
                                             <tr>
                                                 <th>No</th>

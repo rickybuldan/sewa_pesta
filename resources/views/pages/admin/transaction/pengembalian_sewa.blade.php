@@ -7,57 +7,47 @@
 @section('content')
     <!-- Container-fluid starts-->
     <div class="container-fluid">
+     <div class="row">
+            
+        <div class="row mb-4">
+            <div class="col-xl-11 ">
+                <div class="position-relative topbar-search">
+                    <input type="text" id="search_data" class="form-control ps-4" placeholder="No Transaksi..." />
+                    <i class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
+                </div>
+            </div>
+            <div class="col-xl-1 ">
+                <button class="btn btn-dark" type="button" onclick="search_transaction()">Cari</button>
+            </div>
+              
+        </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                            {{-- <div class="p-2">
-                                <h5>{{ $subtitle }}</h5>
-                            </div> --}}
-                            <div class="p-2">
-                                <a class="btn btn-primary" id="add-btn"><i class="fa fa-plus"></i> Tambah</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive  theme-scrollbar">
-                            <table id="table-list" class="table table-striped table-bordered dt-responsive nowrap">
-                                <thead> 
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Produk</th>
-                                        <th>Harga</th>
-                                        <th>Deskripsi</th>
-                                        <th>Gambar</th>
-                                        {{-- <th>Berat</th> --}}
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <div class="col-xl-12 ">
+                <div class="row content-gallery-products">
                 </div>
             </div>
         </div>
+        
         <div class="modal fade" id="modal-data" tabindex="-1" aria-labelledby="exampleModalCenter1" style="display: none;"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Form Data</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Cek Kondisi Barang</h5>
                         <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="basic-form">
 
                             <div class="mb-3 row">
-                                <label class="col-sm-3 col-form-label">Nama Produk</label>
+                                <label class="col-sm-3 col-form-label">No Transaksi</label>
                                 <div class="col-sm-9">
-                                    <input id="form-name" type="text" class="form-control" placeholder="Nama">
+                                    <input id="form-no-transaction" type="text" class="form-control" placeholder="" readonly>
                                 </div>
+                            </div>
+                            <hr>
+                            <div class="mb-3 row content-retur-prods">
+
                             </div>
                             {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Kode Produk</label>
@@ -78,21 +68,11 @@
                                 <img src="/template/admin2/assets/images/lightgallry/01.jpg" style="width:50% "
                                     class="img-prod" itemprop="thumbnail" alt="Image description">
                             </div> --}}
-                            <div class="mb-3 row">
+                            {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Harga</label>
                                 <div class="col-sm-9">
                                     <input id="form-price" type="text" oninput="formatRupiahByElement(this)"
                                         class="form-control" placeholder="Harga">
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label class="col-sm-3 col-form-label">Status</label>
-                                <div class="col-sm-9">
-                                    <select class="form-select form-select-sm" id="form-status">
-                                        <option value="0">Tersedia</option>
-                                        <option value="1">Sewa</option>
-                                        <option value="2">Rusak</option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="mb-3 row d-flex justify-content-center">
@@ -105,8 +85,7 @@
                                     <input id="form-img" type="file" accept="image/*" class="form-control"
                                         >
                                 </div>
-                            </div>
-                           
+                            </div> --}}
                             {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Berat</label>
                                 <div class="col-sm-9">
@@ -125,17 +104,17 @@
                                     <input id="form-init" type="number" class="form-control" placeholder="Awal">
                                 </div>
                             </div> --}}
-                            <div class="mb-3 row">
+                            {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Deskripsi</label>
                                 <div class="col-sm-9">
                                     <textarea class="form-control" id="form-desc" placeholder="Deskripsi" required=""></textarea>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="save-btn" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Tutup</button>
+                        <button type="button" onclick="sendBackTransaction()" class="btn btn-primary">Simpan</button>
                     </div>
                 </div>
             </div>
@@ -146,7 +125,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Form Data</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Pengecekan Barang</h5>
                         <button class="btn-close py-0" type="button" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>

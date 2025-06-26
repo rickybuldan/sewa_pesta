@@ -7,6 +7,7 @@ use App\Models\Package;
 
 use App\Models\Pet;
 use App\Models\Product;
+use App\Models\Constant;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\UserAccess;
@@ -1104,42 +1105,52 @@ class JsonDataController extends Controller
 
                     DB::beginTransaction();
 
-                    $data = json_decode($request->getContent());
-
+                    $data = json_decode($request->input('data'));
+                    
                     $status = [];
+
+                    $image = $request->file('image');
+                    $status = [];
+                    $imagePath = null;
+                    
+                    if ($image) {
+                        // dd( $image->getRealPath());
+                        $imagePath = $image->store('images', 'public');
+                        // dd($imagePath);
+                    }
 
                     $nowdate = now();
                     $notrx = Transaction::generateNoTransaction($nowdate);
-
+                    
                     $transaction = Transaction::create([
-                        'customer_name' => $data->cust_nama,
+                        'customer_name' => $data->tenant_name,
                         'no_transaction' => $notrx,
                         'created_by' => $MasterClass->getSession('user_id'),
-                        'price_total' => $data->price_total,
-                        'exchange' => $data->exchange,
-                        'payment_amount' => $data->payment_amount,
-                        'status' => 10
+                        'price_total' => $data->grand_total,
+                        'start_date' => $data->start_date,
+                        'end_date' => $data->end_date,
+                        'address' => $data->address,
+                        'customer_phone' => $data->phone_number,
+                        'status' => 10,
+                        'file_path'=> $imagePath
                     ]);
 
                     $saved1 = $MasterClass->checkErrorModel($transaction);
 
-                    foreach ($data->all_product as $pdr) {
+                    foreach ($data->items as $pdr) {
 
                         $detailTransac = TransactionDetail::create([
                             'id_transaction' => $transaction->id,
-                            'kd_product' => $pdr->kd_product,
-                            'quantity' => $pdr->jml,
-                            'unit_price' => $pdr->price_one,
-                            'sub_total' => $pdr->subtotal,
+                            'id_product' => $pdr->id,
+                            'day' => $data->day,
+                            'sub_total' => ($pdr->price * $data->day),
                         ]);
 
                         $saved2 = $MasterClass->checkErrorModel($detailTransac);
-                        $product = Product::where('prod_code', $pdr->kd_product)->first();
-                        $newStock = $product->stock - $pdr->jml;
-                        $saveProd = Product::where([
-                            'prod_code' => $pdr->kd_product,
+                        $saveProd = Product::where(column: [
+                            'id' => $pdr->id,
                         ])->update([
-                                    'stock' => $newStock
+                                    'status' => 1
                                 ]);
                         $saved3 = $MasterClass->checkerrorModelUpdate($saveProd);
                     }
@@ -1198,7 +1209,6 @@ class JsonDataController extends Controller
 
                     DB::beginTransaction();
 
-
                     $status = [];
 
                     $data = json_decode($request->getContent());
@@ -1217,8 +1227,33 @@ class JsonDataController extends Controller
                     }
 
                     if ($data->tableName == 'transactions') {
-                        $query = $query . " ORDER BY created_at DESC";
+                        $query = "
+                            SELECT
+                                t.*,
+                                COALESCE(d.denda, 0) AS denda
+                            FROM transactions t
+                            LEFT JOIN (
+                                SELECT
+                                    td.id_transaction,
+                                    SUM(
+                                        CASE 
+                                            WHEN td.good_condition = 0 THEN
+                                                CASE 
+                                                    WHEN mc.type = 1 THEN (td.sub_total + mc.value)
+                                                    WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value))
+                                                    ELSE 0
+                                                END
+                                            ELSE 0
+                                        END
+                                    ) AS denda
+                                FROM transaction_details td
+                                LEFT JOIN master_constants mc ON mc.is_active = 1
+                                GROUP BY td.id_transaction
+                            ) d ON d.id_transaction = t.id
+                            ORDER BY t.created_at ASC;
+                        ";
                     }
+                    // dd($query);
 
                     $saved = DB::select($query);
                     $saved = $MasterClass->checkErrorModel($saved);
@@ -1351,22 +1386,26 @@ class JsonDataController extends Controller
                     $data = json_decode($request->input('data'));
                     $status = [];
                     $imagePath = null;
+                    
                     if ($data->id) {
                         $product = Product::find($data->id);
                         $currentFilePath = $product->file_path;
-
+                       
                         if (empty($image)) {
                             $imagePath = $currentFilePath;
                         } else {
                             $imagePath = $image->store('images', 'public');
                         }
 
+
                     } else {
                         if ($image) {
+                            // dd( $image->getRealPath());
                             $imagePath = $image->store('images', 'public');
+                            // dd($imagePath);
                         }
                     }
-
+                    
                     $saved = Product::updateOrCreate(
                         [
                             'id' => $data->id,
@@ -1374,19 +1413,111 @@ class JsonDataController extends Controller
                         [
                             'product_name' => $data->product_name,
 
-                            'prod_code' => $data->prod_code,
+                            // 'prod_code' => $data->prod_code,
                             'price' => $data->price,
                             'file_path' => $imagePath,
                             'desc' => $data->desc,
-                            'weight' => $data->weight,
-                            'stock_minimum' => $data->min,
-                            'stock_maximum' => $data->max,
-                            'stock' => $data->init,
+                            'status' => $data->status,
+                            // 'stock_minimum' => $data->min,
+                            // 'stock_maximum' => $data->max,
+                            // 'stock' => $data->init,
                         ]
                     );
 
-                    if ($imagePath && $data->id) {
+                    // if ($imagePath && $data->id) {
 
+                    // }
+
+                    $saved = $MasterClass->checkErrorModel($saved);
+
+                    $status = $saved;
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
+    public function saveConstant(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data       = json_decode($request->input('data'));
+                    $status     = [];
+                    
+                    if ($data->id) {
+
+                        $saved = Constant::query()->update([
+                            'is_active' => 0
+                        ]);
+
+                        $saved = $MasterClass->checkerrorModelUpdate($saved);
+
+                        $saved = Constant::updateOrCreate(
+                        [
+                            'id' => $data->id,
+                            ],
+                            [
+                                'is_active' => 1,
+                            ]
+                        );
+
+                    } else {
+                        $saved = Constant::updateOrCreate(
+                        [
+                            'id' => $data->id,
+                            ],
+                            [
+                                'constant_name' => $data->const_name,
+                                'type' => $data->type,
+                                'value' => $data->value,
+                                'is_active' => 0,
+                            ]
+                        );
                     }
 
                     $saved = $MasterClass->checkErrorModel($saved);
@@ -1519,6 +1650,169 @@ class JsonDataController extends Controller
         $notification = json_decode($payload);
 
         return response('OK', 200);
+    }
+
+    public function setSendTransaction(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data = json_decode($request->input('data'));
+                    $status = [];
+                    
+                    $saved = Transaction::where([
+                        'id' => $data->id,
+                    ])->update([
+                        'status' => 20
+                    ]);
+
+                    $saved = $MasterClass->checkerrorModelUpdate($saved);
+
+                    $status = $saved;
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
+    public function setSendBackTransaction(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data = json_decode($request->input('data'));
+                    $status = [];
+                    // dd($data);
+                    foreach ($data->items as $it) {
+
+                        $saved = TransactionDetail::where([
+                            'id_product' => $it->id_product,
+                        ])->update([
+                            'good_condition' => $it->good_condition
+                        ]);
+                        
+                        $saved = $MasterClass->checkerrorModelUpdate($saved);
+                        
+                        $status_product = 2;
+                        if( $it->good_condition == 1){
+                            $status_product = 0;
+                        }
+
+                        $saved = Product::where([
+                            'id' => $it->id_product,
+                        ])->update([
+                            'status' => $status_product,
+                        ]);
+
+                        $saved = $MasterClass->checkerrorModelUpdate($saved);
+
+                        $status = $saved;
+
+                        if ($status['code'] != $MasterClass::CODE_SUCCESS) {
+                            break;
+                        }
+
+                    }
+
+                    $saved = Transaction::where([
+                        'id' => $data->id_transaction,
+                    ])->update([
+                        'status' => 30
+                    ]);
+
+                    $saved = $MasterClass->checkerrorModelUpdate($saved);
+
+                    $status = $saved;
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
     }
 
 

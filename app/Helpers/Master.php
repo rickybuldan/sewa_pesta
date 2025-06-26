@@ -187,6 +187,9 @@ class Master
             }else if($param == "menu"){
                 $seskey = Session::get('menu');
             } 
+            else if($param == "address"){
+                $seskey = Session::get('address');
+            } 
         }
 
 

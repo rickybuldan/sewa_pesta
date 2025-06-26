@@ -41,32 +41,32 @@ class GenerateController extends Controller
             ->with($data);
     }
 
-    public function gendataview(Request $request){
+    // public function gendataview(Request $request){
 
-        $javascriptFiles = [
-            asset('action-js/global/global-action.js'),
-            asset('action-js/generate/generate-action.js'),
-        ];
+    //     $javascriptFiles = [
+    //         asset('action-js/global/global-action.js'),
+    //         asset('action-js/generate/generate-action.js'),
+    //     ];
     
-        $cssFiles = [
-            // asset('css/main.css'),
-            // asset('css/custom.css'),
-        ];
-        $baseURL = url('/');
-        $varJs = [
-            'const baseURL = "' . $baseURL . '"',
-        ];
+    //     $cssFiles = [
+    //         // asset('css/main.css'),
+    //         // asset('css/custom.css'),
+    //     ];
+    //     $baseURL = url('/');
+    //     $varJs = [
+    //         'const baseURL = "' . $baseURL . '"',
+    //     ];
 
-        $data = [
-            'javascriptFiles' => $javascriptFiles,
-            'cssFiles' => $cssFiles,
-            'varJs'=> $varJs
-             // Menambahkan base URL ke dalam array
-        ];
+    //     $data = [
+    //         'javascriptFiles' => $javascriptFiles,
+    //         'cssFiles' => $cssFiles,
+    //         'varJs'=> $varJs
+    //          // Menambahkan base URL ke dalam array
+    //     ];
     
-        return view('pages.generate.gendata')
-            ->with($data);
-    }
+    //     return view('pages.generate.gendata')
+    //         ->with($data);
+    // }
 
     public function generate(Request $request){
 

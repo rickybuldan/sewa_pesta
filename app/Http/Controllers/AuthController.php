@@ -53,7 +53,6 @@ class AuthController extends Controller
                     Session::put('user_id', Auth::user()->id);
                     Session::put('name', Auth::user()->name);
                     Session::put('role_id', Auth::user()->role_id);
-
                     return redirect()->intended('/');
                 }
             } else {
@@ -102,10 +101,9 @@ class AuthController extends Controller
                         'email' => $data->email,
                         'phone' => $data->phone,
                         'address' => $data->address,
-                        'role_id' => 11,
+                        'role_id' => 14,
                         'password' => Hash::make($data->password),
                         'is_active' => 0,
-
 
                     ] // Kolom yang akan diisi
                 );
@@ -113,16 +111,25 @@ class AuthController extends Controller
                 if ($saved) {
                     $name = $data->name;
                     $email = $data->email;
-                    $sub = "Verification KIMISHOP";
-                    $mess = "silakan klik link ini untuk verifikasi email " . $baseURL . "/verifyemail?code=" . encrypt($saved->id);
+                    $sub = "Verification Sewa Pesta";
+                    $mess = "silakan klik link dibawah ini untuk verifikasi email " ;
+                    $link = $baseURL . "/verifyemail?code=" .encrypt($saved->id);
 
                     $send_mail = $data->email;
-                    $mail = Mail::to($send_mail)->send(new SendMail($name, $email, $sub, $mess));
+                    try {
+                        Mail::to($send_mail)->send(new SendMail($name, $email, $sub, $mess, $link));
 
-                    $results = [
-                        'code' => 0,
-                        'info' => 'Success, silakan verifikasi email anda untuk login.',
-                    ];
+                        $results = [
+                            'code' => 0,
+                            'info' => 'Success, silakan verifikasi email anda untuk login.',
+                        ];
+                    } catch (\Exception $e) {
+                        $results = [
+                            'code' => 2,
+                            'info' => 'Email gagal dikirim: ' . $e->getMessage(),
+                        ];
+                    }
+                    dd($results);
 
                     return $results;
 

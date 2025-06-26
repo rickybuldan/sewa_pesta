@@ -7,41 +7,83 @@
 @section('content')
     <!-- Container-fluid starts-->
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                            {{-- <div class="p-2">
-                                <h5>{{ $subtitle }}</h5>
-                            </div> --}}
-                            <div class="p-2">
-                                <a class="btn btn-primary" id="add-btn"><i class="fa fa-plus"></i> Tambah</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive  theme-scrollbar">
-                            <table id="table-list" class="table table-striped table-bordered dt-responsive nowrap">
-                                <thead> 
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Produk</th>
-                                        <th>Harga</th>
-                                        <th>Deskripsi</th>
-                                        <th>Gambar</th>
-                                        {{-- <th>Berat</th> --}}
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <div class="row mb-4">
+            <div class="col-xl-11 ">
+                <div class="position-relative topbar-search">
+                    <input type="text" id="search_data" class="form-control ps-4" placeholder="Cari Barang..." />
+                    <i class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
                 </div>
             </div>
+            <div class="col-xl-1 ">
+                <button class="btn btn-dark" type="button" onclick="search_transaction()">Cari</button>
+            </div>
+              
         </div>
+        <div class="row">
+            
+            <div class="col-xl-8 ">
+                <div class="row content-gallery-products">
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Detail Sewa</h5>
+                    </div><!-- end card header -->
+
+                    <div class="card-body h-75">
+                        <div class="mb-3">
+                            <label for="simpleinput" class="form-label">Nama Penyewa</label>
+                            <input type="text" id="tenant-name" class="form-control">
+                        </div>
+                       
+                        <div class="mb-3">
+                            <label for="simpleinput" class="form-label">Hari</label>
+                            <input type="text" id="dateRange" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="simpleinput" class="form-label">Phone</label>
+                            <input type="text" id="phone-number" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="simpleinput" class="form-label">Alamat</label>
+                            <textarea class="form-control" id="fulladdress" rows="5" spellcheck="false"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="simpleinput" class="form-label">Bukti Pembayaran</label>
+                            <input id="form-img" type="file" accept="image/*" class="form-control">
+                        </div>
+                       
+                        {{-- <div class="mb-">
+                            <label for="simpleinput" class="form-label">List Barang</label>
+                        </div> --}}
+                        <hr>
+                        <div class="mb-3 content-product-cart">
+                            
+
+                        </div>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-xl-6">
+                                <b>Grand Total</b>
+                            </div>
+                            <div class="col-xl-6 text-end">
+                                <b id="total-price">Rp 0</b>
+                            </div>
+                        </div>
+                       
+                        
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="button" class="btn btn-outline-info rounded-pill" onclick="checkValidation()">Simpan</button>
+                        </div>
+                    </div> <!-- end card-body -->
+                    
+                </div> <!-- end card-->
+            </div> <!-- end col -->
+        </div>
+        
         <div class="modal fade" id="modal-data" tabindex="-1" aria-labelledby="exampleModalCenter1" style="display: none;"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -85,16 +127,6 @@
                                         class="form-control" placeholder="Harga">
                                 </div>
                             </div>
-                            <div class="mb-3 row">
-                                <label class="col-sm-3 col-form-label">Status</label>
-                                <div class="col-sm-9">
-                                    <select class="form-select form-select-sm" id="form-status">
-                                        <option value="0">Tersedia</option>
-                                        <option value="1">Sewa</option>
-                                        <option value="2">Rusak</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="mb-3 row d-flex justify-content-center">
                                 <img src="/template/admin2/assets/images/lightgallry/01.jpg" style="width:30% "
                                     class="img-paket" itemprop="thumbnail" alt="Image description">
@@ -106,7 +138,6 @@
                                         >
                                 </div>
                             </div>
-                           
                             {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Berat</label>
                                 <div class="col-sm-9">

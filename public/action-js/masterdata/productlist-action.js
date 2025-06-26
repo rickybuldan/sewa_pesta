@@ -64,25 +64,28 @@ function getListData() {
             { data: "price" },
             { data: "desc" },
             { data: "file_path" },
-            { data: "weight" },
+            // { data: "weight" },
             { data: "id" },
         ],
         columnDefs: [
-            // {
-            //     mRender: function (data, type, row) {
-            //         $rowData = "";
-            //         if (row.category == "GR") {
-            //             $rowData = "Grooming";
-            //         }
-            //         if (row.category == "PN") {
-            //             $rowData = "Penitipan";
-            //         }
-            //         return $rowData;
-            //     },
-            //     visible: true,
-            //     targets: 2,
-            //     className: "text-center",
-            // },
+            {
+                mRender: function (data, type, row) {
+                    $rowData = row.product_name;
+                    if (row.status == 0) {
+                        $rowData += ` <span class="badge rounded-pill text-bg-primary">Tersedia</span>`;
+                    }
+                     if (row.status == 1) {
+                        $rowData += ` <span class="badge rounded-pill text-bg-danger">Sewa</span>`;
+                    }
+                    if (row.status == 2) {
+                        $rowData += ` <span class="badge rounded-pill text-bg-dark">Rusak</span>`;
+                    }
+                    return $rowData;
+                },
+                visible: true,
+                targets: 1,
+                className: "text-center",
+            },
             {
                 mRender: function (data, type, row) {
 
@@ -106,24 +109,24 @@ function getListData() {
                 targets: 4,
                 className: "text-center",
             },
-            {
-                mRender: function (data, type, row) {
+            // {
+            //     mRender: function (data, type, row) {
 
-                    return row.weight + "gr";
-                },
-                visible: true,
-                targets: 5,
-                className: "text-center",
-            },
+            //         return row.weight + "gr";
+            //     },
+            //     visible: true,
+            //     targets: 5,
+            //     className: "text-center",
+            // },
             {
                 mRender: function (data, type, row) {
-                    var $rowData = `<button type="button" class="btn btn-info btn-sm me-2 edit-btn"><i class="fa fa-pencil"></i></button>`;
-                    $rowData += `<button type="button" class="btn btn-danger btn-sm me-2 delete-btn"><i class="fa fa-trash"></i></button>`;
-                    $rowData += `<button type="button" class="btn btn-dark btn-sm print-barcode-btn"><i class="fa fa-print" aria-hidden="true"></i></button>`;
+                    var $rowData = `<button type="button" class="btn btn-info btn-sm me-2 edit-btn">Edit</button>`;
+                    $rowData += `<button type="button" class="btn btn-danger btn-sm me-2 delete-btn">Hapus</i></button>`;
+                    // $rowData += `<button type="button" class="btn btn-dark btn-sm print-barcode-btn"><i class="fa fa-print" aria-hidden="true"></i></button>`;
                     return $rowData;
                 },
                 visible: true,
-                targets: 6,
+                targets: 5,
                 className: "text-center",
             },
         ],
@@ -176,8 +179,9 @@ function editdata(rowData) {
     $("#form-max").val(rowData.stock_maximum);
     $("#form-min").val(rowData.stock_minimum);
     $("#form-init").val(rowData.stock);
-    $("#form-code").val(rowData.prod_code)
-    generateProdCode($("#form-code").val())
+    $("#form-status").val(rowData.status).trigger('change')
+    
+    // generateProdCode($("#form-code").val())
     $("#modal-data").modal("show");
 }
 
@@ -215,13 +219,13 @@ function checkValidation() {
     )
         return false;
 
-    if (
-        validationSwalFailed(
-            (isObject["prod_code"] = $("#form-code").val()),
-            "Kode produk tidak boleh kosong."
-        )
-    )
-        return false;
+    // if (
+    //     validationSwalFailed(
+    //         (isObject["prod_code"] = $("#form-code").val()),
+    //         "Kode produk tidak boleh kosong."
+    //     )
+    // )
+    //     return false;
     pricexx = unformatRupiah($("#form-price").val());
     if (
         validationSwalFailed(
@@ -235,33 +239,33 @@ function checkValidation() {
         setImagePackage();
     }
 
-    if (
-        validationSwalFailed(
-            (isObject["weight"] = $("#form-weight").val()),
-            "Berat tidak boleh kosong"
-        )
-    )
-        return false;
+    // if (
+    //     validationSwalFailed(
+    //         (isObject["weight"] = $("#form-weight").val()),
+    //         "Berat tidak boleh kosong"
+    //     )
+    // )
+    //     return false;
+
+    // if (
+    //     validationSwalFailed(
+    //         (isObject["min"] = $("#form-min").val()),
+    //         "Stok minimun tidak boleh kosong"
+    //     )
+    // )
+    //     return false;
+    // if (
+    //     validationSwalFailed(
+    //         (isObject["max"] = $("#form-max").val()),
+    //         "Stok maksimum tidak boleh kosong"
+    //     )
+    // )
+    //     return false;
 
     if (
         validationSwalFailed(
-            (isObject["min"] = $("#form-min").val()),
-            "Stok minimun tidak boleh kosong"
-        )
-    )
-        return false;
-    if (
-        validationSwalFailed(
-            (isObject["max"] = $("#form-max").val()),
-            "Stok maksimum tidak boleh kosong"
-        )
-    )
-        return false;
-
-    if (
-        validationSwalFailed(
-            (isObject["init"] = $("#form-init").val()),
-            "Stok awal tidak boleh kosong"
+            (isObject["status"] = $("#form-status").val()),
+            "Status tidak boleh kosong"
         )
     )
         return false;
@@ -401,40 +405,40 @@ function saveData() {
 
 let imgUrls = [];
 
-async function generateProdCode(code_br) {
-    try {
+// async function generateProdCode(code_br) {
+//     try {
 
-        const data = await new Promise((resolve, reject) => {
-            $.ajax({
-                url: baseURL + "/getRandomCode",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ barcode_code: code_br }),
-                success: function (response) {
+//         const data = await new Promise((resolve, reject) => {
+//             $.ajax({
+//                 url: baseURL + "/getRandomCode",
+//                 type: "POST",
+//                 contentType: "application/json",
+//                 data: JSON.stringify({ barcode_code: code_br }),
+//                 success: function (response) {
 
-                    if (parseInt(response.code) == 0) {
-                        resolve(response.data);
-                    } else {
-                        reject(new Error(response.message));
-                    }
-                },
-                error: function (xhr, status, error) {
-                    reject(new Error(xhr.responseText || error));
-                },
-            });
-        });
+//                     if (parseInt(response.code) == 0) {
+//                         resolve(response.data);
+//                     } else {
+//                         reject(new Error(response.message));
+//                     }
+//                 },
+//                 error: function (xhr, status, error) {
+//                     reject(new Error(xhr.responseText || error));
+//                 },
+//             });
+//         });
 
-        $("#img-prod").attr("src", data.img_url);
-        setImagePackage(data.img_url, $(".img-prod"));
-        $("#form-code").val(data.prod_code);
+//         $("#img-prod").attr("src", data.img_url);
+//         setImagePackage(data.img_url, $(".img-prod"));
+//         $("#form-code").val(data.prod_code);
 
-        const imgUrl = data.img_url;
-        imgUrls.push(imgUrl);
+//         const imgUrl = data.img_url;
+//         imgUrls.push(imgUrl);
 
-    } catch (error) {
-        sweetAlert("Oops...", error.message, "error");
-    }
-}
+//     } catch (error) {
+//         sweetAlert("Oops...", error.message, "error");
+//     }
+// }
 
 
 
@@ -443,68 +447,68 @@ function setNullProd() {
     setImagePackage(null, $(".img-prod"))
 }
 
-async function printImages() {
-    jml_barcode = $('#form-barcode-jml').val()
+// async function printImages() {
+//     jml_barcode = $('#form-barcode-jml').val()
 
-    Swal.fire({
-        title: "Loading",
-        text: "Please wait...",
-        allowOutsideClick: false,
-        onBeforeOpen: () => {
-            Swal.showLoading();
-        }
-    });
+//     Swal.fire({
+//         title: "Loading",
+//         text: "Please wait...",
+//         allowOutsideClick: false,
+//         onBeforeOpen: () => {
+//             Swal.showLoading();
+//         }
+//     });
 
-    if (jml_barcode > 0) {
-        for (let index = 0; index < jml_barcode; index++) {
-            await generateProdCode($("#form-barcode-br").val())
-        }
-    }
+//     if (jml_barcode > 0) {
+//         for (let index = 0; index < jml_barcode; index++) {
+//             await generateProdCode($("#form-barcode-br").val())
+//         }
+//     }
     
-    Swal.close();
+//     Swal.close();
 
-    if (imgUrls.length == 0) {
-        alert("Tidak ada gambar untuk dicetak.");
-        return;
-    }
+//     if (imgUrls.length == 0) {
+//         alert("Tidak ada gambar untuk dicetak.");
+//         return;
+//     }
 
-    let printWindow = window.open('', '_blank');
+//     let printWindow = window.open('', '_blank');
 
-    // Buat konten untuk jendela baru
-    let imagesHtml = imgUrls.map(url => `<img src="${url}" alt="Product Image" style="max-width: 100%; height: auto; margin: 10px;">`).join('');
+//     // Buat konten untuk jendela baru
+//     let imagesHtml = imgUrls.map(url => `<img src="${url}" alt="Product Image" style="max-width: 100%; height: auto; margin: 10px;">`).join('');
 
-    printWindow.document.write(`
-        <html>
-        <head>
+//     printWindow.document.write(`
+//         <html>
+//         <head>
           
-            <style>
-                body {
-                    text-align: center;
-                    margin: 0;
-                }
-                img {
-                    max-width: 200px;  
-                    max-height: 150px; 
-                    height: auto;     
-                    margin: 15px;     
-                }
-            </style>
-        </head>
-        <body>
-            <h1>${$("#form-barcode-br").val()}</h1>
-            ${imagesHtml}
-        </body>
-        </html>
-    `);
+//             <style>
+//                 body {
+//                     text-align: center;
+//                     margin: 0;
+//                 }
+//                 img {
+//                     max-width: 200px;  
+//                     max-height: 150px; 
+//                     height: auto;     
+//                     margin: 15px;     
+//                 }
+//             </style>
+//         </head>
+//         <body>
+//             <h1>${$("#form-barcode-br").val()}</h1>
+//             ${imagesHtml}
+//         </body>
+//         </html>
+//     `);
 
-    printWindow.document.close();
-    printWindow.focus();
+//     printWindow.document.close();
+//     printWindow.focus();
 
-    printWindow.onload = function () {
-        printWindow.print();
-        printWindow.onafterprint = function () {
-            printWindow.close();
-        };
-    };
-}
+//     printWindow.onload = function () {
+//         printWindow.print();
+//         printWindow.onafterprint = function () {
+//             printWindow.close();
+//         };
+//     };
+// }
 

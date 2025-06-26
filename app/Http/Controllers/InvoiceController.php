@@ -18,7 +18,7 @@ class InvoiceController extends Controller
                 $noinvoice = $request->get('noinvoice');
 
                 DB::beginTransaction();
-                // dd($mid);
+
 
                 $status = [];
                 $sql = "SELECT
@@ -35,8 +35,9 @@ class InvoiceController extends Controller
                             LEFT JOIN products p ON p.prod_code = td.kd_product
                             LEFT JOIN users us ON us.id = t.created_by
                         WHERE t.no_transaction ='" . $noinvoice . "'";
-            
+                dd($sql);
                 $saved = DB::select($sql);
+
                 $saved = $MasterClass->checkErrorModel($saved);
 
                 $status = $saved;
@@ -51,10 +52,9 @@ class InvoiceController extends Controller
 
             } else {
                 $noinvoice = $request->query('noinvoice');
-
+                // dd($noinvoice);
                 $javascriptFiles = [
                     asset('action-js/global/global-action.js'),
-                    // asset('action-js/generate/generate-action.js'),
                     asset('action-js/invoice/invoice-action.js'),
                 ];
 
@@ -68,21 +68,19 @@ class InvoiceController extends Controller
                     'const no_invoice = "' . $noinvoice . '"',
                 ];
 
-
                 $data = [
                     'javascriptFiles' => $javascriptFiles,
                     'cssFiles' => $cssFiles,
                     'varJs' => $varJs,
                     'title' => "Invoice",
                     'subtitle' => "Detail Invoice",
-                    // Menambahkan base URL ke dalam array
                 ];
 
                 return view('pages.admin.invoice.invoice')
                     ->with($data);
             }
         } catch (\Exception $e) {
-            // Roll back the transaction in case of an exception
+
             $results = [
                 'code' => '102',
                 'info' => $e->getMessage(),

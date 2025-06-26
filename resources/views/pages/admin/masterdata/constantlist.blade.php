@@ -26,10 +26,9 @@
                                 <thead> 
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Produk</th>
-                                        <th>Harga</th>
-                                        <th>Deskripsi</th>
-                                        <th>Gambar</th>
+                                        <th>Nama Konstan</th>
+                                        <th>Tipe</th>
+                                        <th>Nilai</th>
                                         {{-- <th>Berat</th> --}}
                                         <th>Aksi</th>
                                     </tr>
@@ -54,11 +53,28 @@
                         <div class="basic-form">
 
                             <div class="mb-3 row">
-                                <label class="col-sm-3 col-form-label">Nama Produk</label>
+                                <label class="col-sm-3 col-form-label">Nama</label>
                                 <div class="col-sm-9">
                                     <input id="form-name" type="text" class="form-control" placeholder="Nama">
                                 </div>
                             </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Tipe</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select form-select-sm" id="form-type-const">
+                                        <option value="1">Nominal</option>
+                                        <option value="2">Persen</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Value</label>
+                                <div class="col-sm-9">
+                                    <input id="form-value-const" type="number" class="form-control">
+                                </div>
+                            </div>
+                            
+                            
                             {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Kode Produk</label>
                                 <div class="col-sm-5">
@@ -78,21 +94,11 @@
                                 <img src="/template/admin2/assets/images/lightgallry/01.jpg" style="width:50% "
                                     class="img-prod" itemprop="thumbnail" alt="Image description">
                             </div> --}}
-                            <div class="mb-3 row">
+                            {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Harga</label>
                                 <div class="col-sm-9">
                                     <input id="form-price" type="text" oninput="formatRupiahByElement(this)"
                                         class="form-control" placeholder="Harga">
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label class="col-sm-3 col-form-label">Status</label>
-                                <div class="col-sm-9">
-                                    <select class="form-select form-select-sm" id="form-status">
-                                        <option value="0">Tersedia</option>
-                                        <option value="1">Sewa</option>
-                                        <option value="2">Rusak</option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="mb-3 row d-flex justify-content-center">
@@ -105,8 +111,7 @@
                                     <input id="form-img" type="file" accept="image/*" class="form-control"
                                         >
                                 </div>
-                            </div>
-                           
+                            </div> --}}
                             {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Berat</label>
                                 <div class="col-sm-9">
@@ -125,12 +130,12 @@
                                     <input id="form-init" type="number" class="form-control" placeholder="Awal">
                                 </div>
                             </div> --}}
-                            <div class="mb-3 row">
+                            {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Deskripsi</label>
                                 <div class="col-sm-9">
                                     <textarea class="form-control" id="form-desc" placeholder="Deskripsi" required=""></textarea>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="modal-footer">
