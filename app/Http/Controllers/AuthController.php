@@ -129,7 +129,7 @@ class AuthController extends Controller
                             'info' => 'Email gagal dikirim: ' . $e->getMessage(),
                         ];
                     }
-                    dd($results);
+                    // dd($results);
 
                     return $results;
 
