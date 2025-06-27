@@ -109,7 +109,7 @@ function getMenuAccess() {
 
 function validationSwalFailed(param, isText) {
     // console.log(param);
-    if (param == "" || param == null || param == 0) {
+    if (param == "" || param == null) {
         sweetAlert("Oops...", isText, "warning");
 
         return 1;
