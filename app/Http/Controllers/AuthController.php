@@ -77,9 +77,7 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        Session::forget('user_id');
-        Session::forget('name');
-        Session::forget('role_id');
+        Session::flush();
 
         $request->session()->invalidate();
 
