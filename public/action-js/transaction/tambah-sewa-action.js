@@ -492,6 +492,8 @@ $("#form-img").change(function () {
 function saveData() {
     // formdata
     var formData = new FormData();
+    var file = $("#form-img")[0].files[0];
+    formData.append("image", file);
     formData.append("data", JSON.stringify(isObject));
 
     $.ajax({
