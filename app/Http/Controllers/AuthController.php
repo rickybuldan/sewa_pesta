@@ -44,17 +44,21 @@ class AuthController extends Controller
             if ($user->is_active == 1 && Auth::attempt($credentials)) {
                 Auth::logoutOtherDevices($request->password);
 
-                if (Auth::user()->roles->first()->role_name == "Customer") {
-                    Session::put('user_id', Auth::user()->id);
-                    Session::put('name', Auth::user()->name);
-                    Session::put('role_id', Auth::user()->role_id);
-                    return redirect(route('home'));
-                } else {
-                    Session::put('user_id', Auth::user()->id);
-                    Session::put('name', Auth::user()->name);
-                    Session::put('role_id', Auth::user()->role_id);
-                    return redirect()->intended('/');
-                }
+                // if (Auth::user()->roles->first()->role_name == "Customer") {
+                //     Session::put('user_id', Auth::user()->id);
+                //     Session::put('name', Auth::user()->name);
+                //     Session::put('role_id', Auth::user()->role_id);
+                //     return redirect(route('home'));
+                // } else {
+                //     Session::put('user_id', Auth::user()->id);
+                //     Session::put('name', Auth::user()->name);
+                //     Session::put('role_id', Auth::user()->role_id);
+                //     return redirect()->intended('/');
+                // }
+                Session::put('user_id', Auth::user()->id);
+                Session::put('name', Auth::user()->name);
+                Session::put('role_id', Auth::user()->role_id);
+                return redirect()->intended('/');
             } else {
                 return redirect()
                     ->back()
