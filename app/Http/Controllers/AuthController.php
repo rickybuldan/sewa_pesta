@@ -18,7 +18,12 @@ class AuthController extends Controller
     public function index()
     {
         // Logika untuk menampilkan halaman indeks pengguna
+        if(Auth::check()){
+            return redirect('/');
+        }
+        
         return view('auth.login');
+        
     }
 
     // public function signup()
@@ -28,6 +33,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+
         $data = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -58,7 +64,7 @@ class AuthController extends Controller
                 Session::put('user_id', Auth::user()->id);
                 Session::put('name', Auth::user()->name);
                 Session::put('role_id', Auth::user()->role_id);
-                return redirect()->intended(default: '/');
+                return redirect()->intended('/');
             } else {
                 return redirect()
                     ->back()

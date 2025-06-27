@@ -28,7 +28,7 @@ class GeneralController extends Controller
 
         }
         
-        return redirect('/dashboard');
+        return redirect('/login');
     }
     public function dashboard(Request $request){
         $MasterClass = new Master();
