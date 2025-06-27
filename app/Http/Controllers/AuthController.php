@@ -58,7 +58,7 @@ class AuthController extends Controller
                 Session::put('user_id', Auth::user()->id);
                 Session::put('name', Auth::user()->name);
                 Session::put('role_id', Auth::user()->role_id);
-                return redirect()->intended('/');
+                return redirect()->intended(default: '/');
             } else {
                 return redirect()
                     ->back()

@@ -114,6 +114,51 @@ class Master
         return $status;
     }
 
+    public function AuthenticatedViewIsActive()
+    {
+        $role_id =$this->getSession('role_id');
+        // $route   ='/'.$route;
+        
+        if(Auth::check()){
+           
+            $saved = DB::select("SELECT * FROM menus_access ma LEFT JOIN users_access ua ON ma.id = ua.menu_access_id WHERE ua.role_id =".$role_id." AND ua.i_view = 1" );
+          
+            
+            if (!empty($saved)) {
+                if ($saved[0]->i_view == 1) {
+                    $status = [
+                        'code' => self::CODE_SUCCESS,
+                        'info' => self::INFO_SUCCESS,
+                        'data' => $saved[0]->url
+                    ];
+                } else if ($saved[0]->i_view == 0) {
+                    return abort(403);
+                } else {
+                    $status = [
+                        'code' => '1',
+                        'info' => self::INFO_FAILED,
+                    ];
+                }
+            } else {
+                if(empty($saved)){
+                    return abort(403);
+                }
+                // Handle the case when no results are found
+                $status = [
+                    'code' => '1',
+                    'info' => self::INFO_FAILED,
+                ];
+            }
+        }else{
+
+            $status=[
+                'code'=>  '1',
+                'info'=> self::INFO_FAILED,
+            ];
+        }
+        return $status;
+    }
+
 
 
     public function checkErrorModel($model){

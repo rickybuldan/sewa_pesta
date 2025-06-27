@@ -17,12 +17,14 @@ class GeneralController extends Controller
         
         if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
             $roled = $MasterClass->getSession('role_id');
-            
-            // if($roled == 11){
+            $getActive = $MasterClass->AuthenticatedViewIsActive();
+         
+            $urlredirect = $getActive['data'];
+            // if($roled == 14){
             //     return redirect('/home');
             // }
 
-            return redirect('/dashboard');
+            return redirect( $urlredirect);
 
         }
         
