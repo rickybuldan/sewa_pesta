@@ -917,32 +917,33 @@ class JsonDataController extends Controller
                     // ORDER BY
                     //     all_days.day_order;
                     // ";
+
                     $query = "
+                        SELECT
+                            t.*,
+                            COALESCE(d.denda, 0) AS denda
+                        FROM transactions t
+                        LEFT JOIN (
                             SELECT
-                                all_days.day_of_week,
-                                COALESCE(COUNT(CASE WHEN transactions.status = 10 THEN transactions.id END), 0) AS success_count,
-                                COALESCE(SUM(CASE WHEN transactions.status = 10 THEN transactions.price_total END), 0) AS success_total,
-                                COALESCE(COUNT(CASE WHEN transactions.status = 50 THEN transactions.id END), 0) AS failed_count,
-                                COALESCE(SUM(CASE WHEN transactions.status = 50 THEN transactions.price_total END), 0) AS failed_total
-                            FROM
-                                (
-                                    SELECT 'Monday' AS day_of_week, 1 AS day_order
-                                    UNION SELECT 'Tuesday', 2
-                                    UNION SELECT 'Wednesday', 3
-                                    UNION SELECT 'Thursday', 4
-                                    UNION SELECT 'Friday', 5
-                                    UNION SELECT 'Saturday', 6
-                                    UNION SELECT 'Sunday', 7
-                                ) AS all_days
-                            LEFT JOIN
-                                transactions ON DAYNAME(transactions.created_at) = all_days.day_of_week
-                                AND MONTH(transactions.created_at) = MONTH(CURRENT_DATE)
-                                AND YEAR(transactions.created_at) = YEAR(CURRENT_DATE)
-                            GROUP BY
-                                all_days.day_of_week, all_days.day_order
-                            ORDER BY
-                                all_days.day_order
-                        ";
+                                td.id_transaction,
+                                SUM(
+                                    CASE 
+                                        WHEN td.good_condition = 0 THEN
+                                            CASE 
+                                                WHEN mc.type = 1 THEN (td.sub_total + mc.value)
+                                                WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value))
+                                                ELSE 0
+                                            END
+                                        ELSE 0
+                                    END
+                                ) AS denda
+                            FROM transaction_details td
+                            LEFT JOIN master_constants mc ON mc.is_active = 1
+                            GROUP BY td.id_transaction
+                        ) d ON d.id_transaction = t.id
+                        ORDER BY t.created_at ASC;
+                    ";
+                
 
 
 
@@ -1226,33 +1227,7 @@ class JsonDataController extends Controller
                         $query = $query . " WHERE " . $data->where;
                     }
 
-                    if ($data->tableName == 'transactions') {
-                        $query = "
-                            SELECT
-                                t.*,
-                                COALESCE(d.denda, 0) AS denda
-                            FROM transactions t
-                            LEFT JOIN (
-                                SELECT
-                                    td.id_transaction,
-                                    SUM(
-                                        CASE 
-                                            WHEN td.good_condition = 0 THEN
-                                                CASE 
-                                                    WHEN mc.type = 1 THEN (td.sub_total + mc.value)
-                                                    WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value))
-                                                    ELSE 0
-                                                END
-                                            ELSE 0
-                                        END
-                                    ) AS denda
-                                FROM transaction_details td
-                                LEFT JOIN master_constants mc ON mc.is_active = 1
-                                GROUP BY td.id_transaction
-                            ) d ON d.id_transaction = t.id
-                            ORDER BY t.created_at ASC;
-                        ";
-                    }
+                    
                     // dd($query);
 
                     $saved = DB::select($query);

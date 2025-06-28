@@ -21,7 +21,7 @@ function getTransaction() {
             initialView: "dayGridMonth",
             events: function (fetchInfo, successCallback, failureCallback) {
                 $.ajax({
-                    url: baseURL + "/loadGlobal",
+                    url: baseURL + "/getOverviewTransaction",
                     type: "POST",
                     data: JSON.stringify({ tableName: "transactions" }),
                     dataType: "json",
