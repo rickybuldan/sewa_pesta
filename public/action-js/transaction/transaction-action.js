@@ -23,7 +23,7 @@ function setImagePackage(urlFile, elementID) {
 function getListData() {
     dtpr = $("#table-list").DataTable({
         ajax: {
-            url: baseURL + "/loadGlobal",
+            url: baseURL + "/getOverviewTransaction",
             type: "POST",
             contentType: "application/json", // Set content type to JSON
             data: function (d) {
