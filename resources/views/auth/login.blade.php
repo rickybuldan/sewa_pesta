@@ -213,4 +213,7 @@
     </div>
 @endsection
 @push('after-script')
+ <script type="text/javascript">
+    localStorage.removeItem('savedHTML');
+ </script>
 @endpush
