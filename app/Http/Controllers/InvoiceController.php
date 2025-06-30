@@ -41,7 +41,7 @@ class InvoiceController extends Controller
                                         WHEN td.good_condition = 0 THEN
                                             CASE 
                                                 WHEN mc.type = 1 THEN (td.sub_total + mc.value)
-                                                WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value))
+                                                WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value / 100))
                                                 ELSE 0
                                             END
                                         ELSE 0
