@@ -920,7 +920,21 @@ class JsonDataController extends Controller
 
                     $query = "
                         SELECT
-                            t.*,
+                            t.id,
+                            t.start_date,
+                            t.end_date,
+                            t.no_transaction,
+                            t.status,
+                            t.created_by,
+                            t.updated_by,
+                            t.price_total,
+                            t.customer_name,
+                            t.address,
+                            t.customer_phone,
+                            t.file_path,
+                            t.created_at,
+                            t.updated_at,
+                            (t.price_total + COALESCE(d.denda, 0)) as grand_total, 
                             COALESCE(d.denda, 0) AS denda
                         FROM transactions t
                         LEFT JOIN (
@@ -1127,6 +1141,7 @@ class JsonDataController extends Controller
                         'customer_name' => $data->tenant_name,
                         'no_transaction' => $notrx,
                         'created_by' => $MasterClass->getSession('user_id'),
+                        'updated_by' => $MasterClass->getSession('user_id'),
                         'price_total' => $data->grand_total,
                         'start_date' => $data->start_date,
                         'end_date' => $data->end_date,
@@ -1220,6 +1235,26 @@ class JsonDataController extends Controller
                         FROM
 
                     " . $data->tableName;
+                    if (isset($data->is_detail)) {
+                        $query = "
+                        SELECT
+                            *,
+                            COALESCE(
+                                    CASE 
+                                        WHEN td.good_condition = 0 THEN
+                                            CASE 
+                                                WHEN mc.type = 1 THEN (td.sub_total + mc.value)
+                                                WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value))
+                                                ELSE 0
+                                            END
+                                        ELSE 0
+                                    END
+                                ,0) AS denda
+                        FROM
+
+                        " . $data->tableName;
+                        
+                    }
 
                     $whereClause = isset($data->where) ? " WHERE " . $data->where : "";
 
@@ -1646,7 +1681,8 @@ class JsonDataController extends Controller
                     $saved = Transaction::where([
                         'id' => $data->id,
                     ])->update([
-                        'status' => 20
+                        'status' => 20,
+                        'updated_by' => $MasterClass->getSession('user_id')
                     ]);
 
                     $saved = $MasterClass->checkerrorModelUpdate($saved);
@@ -1744,7 +1780,8 @@ class JsonDataController extends Controller
                     $saved = Transaction::where([
                         'id' => $data->id_transaction,
                     ])->update([
-                        'status' => 30
+                        'status' => 30,
+                        'updated_by' => $MasterClass->getSession('user_id')
                     ]);
 
                     $saved = $MasterClass->checkerrorModelUpdate($saved);

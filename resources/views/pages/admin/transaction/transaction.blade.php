@@ -27,8 +27,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No Transaksi</th>
-                                        <th>Total Harga</th>
+                                        
                                         <th>Denda</th>
+                                        <th>Total Harga</th>
                                         {{-- <th>Deskripsi</th> --}}
                                         <th>Bukti Bayar</th>
                                         {{-- <th>Berat</th> --}}

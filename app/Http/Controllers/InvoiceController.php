@@ -14,32 +14,50 @@ class InvoiceController extends Controller
         $MasterClass = new Master();
         try {
             if ($request->isMethod('post')) {
-
+             
                 $noinvoice = $request->get('noinvoice');
-
+                if(empty($noinvoice)){
+                    $results = [
+                        'code' => 1,
+                        'info' => 'Data TIdak Ditemukan',
+                        'data' => null,
+                    ];
+                    return $MasterClass->Results($results);
+                }
                 DB::beginTransaction();
 
 
                 $status = [];
-                $sql = "SELECT
+                $sql = " 
+                        SELECT
                             t.*,
-                            td.quantity,
-                            td.sub_total,
-                            td.unit_price,
-                            p.product_name,
-                            DATE_FORMAT(t.created_at, '%d-%b-%Y, %h.%i%p') AS created_date_formatted,
-                            us.name as kasir
-                        FROM
-                            transactions t
-                            LEFT JOIN transaction_details td ON td.id_transaction = t.id
-                            LEFT JOIN products p ON p.prod_code = td.kd_product
-                            LEFT JOIN users us ON us.id = t.created_by
+                            COALESCE(d.denda, 0) AS denda
+                        FROM transactions t
+                        LEFT JOIN (
+                            SELECT
+                                td.id_transaction,
+                                SUM(
+                                    CASE 
+                                        WHEN td.good_condition = 0 THEN
+                                            CASE 
+                                                WHEN mc.type = 1 THEN (td.sub_total + mc.value)
+                                                WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value))
+                                                ELSE 0
+                                            END
+                                        ELSE 0
+                                    END
+                                ) AS denda
+                            FROM transaction_details td
+                            LEFT JOIN master_constants mc ON mc.is_active = 1
+                            GROUP BY td.id_transaction
+                        ) d ON d.id_transaction = t.id
+                        
                         WHERE t.no_transaction ='" . $noinvoice . "'";
-                dd($sql);
+                // dd($sql);
                 $saved = DB::select($sql);
-
+             
                 $saved = $MasterClass->checkErrorModel($saved);
-
+               
                 $status = $saved;
 
                 $results = [

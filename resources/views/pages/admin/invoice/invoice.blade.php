@@ -1,243 +1,234 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
-    <head>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <style type="text/css">
-            @media print {
-                body * {
-                    visibility: hidden;
-                }
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Kwitansi Sewa Dwi Karya</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
 
-                #printable-section,
-                #printable-section * {
-                    visibility: visible;
-                }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
 
-                #printable-section {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                }
-            }
+        .header h1 {
+            margin: 0;
+            color: #005baa;
+        }
 
-            body {
-                margin: 0;
-                padding: 0;
-                background: #ffffff;
-            }
+        .subheader {
+            text-align: center;
+            font-size: 10px;
+            margin-top: 4px;
+        }
 
-            div,
-            p,
-            a,
-            li,
-            td {
-                -webkit-text-size-adjust: none;
-            }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            position: relative;
+            z-index: 2;
+        }
 
-            body {
-                width: 88mm;
-                height: 100%;
-                background-color: #ffffff;
-                margin: 0;
-                padding: 0;
-                -webkit-font-smoothing: antialiased;
+        .info div {
+            width: 38%;
+        }
 
-            }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
 
-            p {
-                padding: 0 !important;
-                margin-top: 0 !important;
-                margin-right: 0 !important;
-                margin-bottom: 0 !important;
-                margin- left: 0 !important;
-            }
+        table, th, td {
+            border: 1px solid #000;
+        }
 
-            .visibleMobile {
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .total-box {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .total-box div {
+            width: 48%;
+        }
+
+        .footer {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer .left {
+            font-size: 10px;
+        }
+
+        .footer .right {
+            text-align: center;
+        }
+
+        /* Watermark Styles */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 100px;
+            color: rgba(0, 0, 0, 0.06);
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        @media screen {
+            .watermark {
                 display: none;
             }
+        }
 
-            .hiddenMobile {
+        @media print {
+            .watermark {
                 display: block;
             }
-        </style>
-    </head>
+        }
+    </style>
+</head>
 
-    <body>
-        <div id="printable-section">
-            <table width="100%" border="0" cellpadding='2' cellspacing="2" align="center" bgcolor="#ffffff"
-                style="padding-top:4px;">
-                <tbody>
-                    <tr>
-                        <td
-                            style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 
+<body>
+    <div class="watermark" id="watermark">PROSES</div>
 
-18px; vertical-align: bottom; text-align: center;">
-                            <strong style="font-size:16px;">SEWA PESTA</strong>
-                            <br>phone: 0403 - 247830 322
+    <div class="header">
+        <h1>DWI KARYA</h1>
+        <div class="subheader">Penyewaan Perlengkapan Pesta</div>
+        <div class="subheader">Jl. Raya Timur No. 89 Cikuray Singaparna Telp. (0265) 545526</div>
+    </div>
 
-                            <br> Bandung, Jawa Barat
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="2" colspan="0" style="border-bottom:1px solid #e4e4e4 "></td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="info">
+        <div>
+            <strong>No Transaksi:</strong><b id="f-no-transaksi">000955</b><br>
+            <strong>No HP Customer:</strong><b id="f-phone-customer">000955</b><br>
+            <strong>Yth:</strong> Bapak/Ibu <b id="f-name-customer">000955</b><br>
+        </div>
+        <div>
+            <strong>Singaparna,</strong> 30 Juni 2025<br>
+            <strong>Untuk Sewa Tgl:</strong><b id="f-rent-date"></b><br>
+        </div>
+    </div>
 
-            <table width="100%" border="0" cellpadding="0" cellspacing="2" align="center">
-                <tbody>
-                    <tr>
-                        <td colspan="100"
-                            style="font-size: 14px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 
+        <table>
+        <tr>
+            <th colspan="5">STATUS SEWA</th>
+        </tr>
+        <tr>
+            <th>TGL</th>
+            <th>STATUS</th>
+            <th>OLEH</th>
+           
+        <tbody id="data-history">
+            <tr>
+                <td>01-06-2025</td>
+                <td>PROSES / DIPESAN</td>
+                <td>ALEX</td>
+            </tr>
+        </tbody>
+        
+        <!-- Tambahkan baris lainnya di sini -->
+       
+    </table>
 
-18px; vertical-align: bottom; text-align: center;">
-                            <strong>Invoice</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td
-                            style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 
+    <table>
+        <tr>
+            <th colspan="5">BARANG YANG DISEWA</th>
+        </tr>
+        <tr>
+            <th>BANYAKNYA</th>
+            <th>BARANG</th>
+            <th>HARGA</th>
+            <th>DENDA</th>
+            <th>SUBTOTAL</th>
+        </tr>
 
-18px; vertical-align: bottom; text-align: left;">
-                            <b class="customer_name">Customer Name</b>
+        <tbody id="data-products">
+            <tr>
+                <td>01-06-2025</td>
+                <td>PROSES / DIPESAN</td>
+                <td>ALEX</td>
+            </tr>
+        </tbody>
+       
+        
+        <!-- Tambahkan baris lainnya di sini -->
+        {{-- <tr>
+            <td colspan="4" align="right"><strong>JUMLAH</strong></td>
+            <td>50.000</td>
+        </tr> --}}
+    </table>
 
-                        </td>
-                        <td
-                            style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height:18px; vertical-align: top; text-align: right;">
-                            <br><b class="no_invoice">INVOICE: #32432432423</b>
-                            <br><b class="date_invoice">Date: Feb 27, 2018</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="2" colspan="100" style="padding-top:15px;border-bottom:1px solid #e4e4e4 ">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table width="100%" border="0" cellpadding="0" cellspacing="2" align="center">
-                <thead>
-                    <tr>
-                        <td
-                            style="font-size: 10px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:center; ">
-                            Barang
-                        </td>
-                        <td
-                            style="font-size: 10px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:center; ">
-                            Qty
-                        </td>
-                        <td
-                            style="font-size: 10px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:center; ">
-                            Satuan
-                        </td>
-                        <td
-                            style="font-size: 10px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:center; ">
-                            Subtotal
-                        </td>
-                    </tr>
-                </thead>
-                <tbody id="detail_invoice">
-                    <tr>
-                        <td
-                            style="font-size: 10px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:left; padding-left:16px ">
-                            Grand Total:
-                        </td>
-                        <td style="font-size: 10px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:left; white-space:nowrap; "
-                            width="100 ">
-                            <b class="v-total-amount">150</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="2" colspan="100" style=" border-bottom:1px solid #e4e4e4 "></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- /Header -->
-
-            <!-- Table Total -->
-            <table width="100%" border="0 " cellpadding="0" cellspacing="2" align="center"
-                style="padding: 12px 0px 5px 2px">
-                <tbody>
-                    <tr>
-                        <td
-                            style="font-size: 11px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:left; padding-left:16px ">
-                            Grand Total:
-                        </td>
-                        <td style="font-size: 11px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:left; white-space:nowrap; "
-                            width="100 ">
-                            <b class="v-total-amount">150</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td
-                            style="font-size: 11px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:left; padding-left:16px ">
-                            Jumlah Bayar:
-                        </td>
-                        <td style="font-size: 11px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:left; white-space:nowrap; "
-                            width="100 ">
-                            <b class="v-total-payment">150</b>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td height="2" colspan="100" style="padding-top:12px;border-bottom:1px solid #e4e4e4 "></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table width="100%" border="0 " cellpadding="0" cellspacing="2" align="center"
-                style="padding: 5px 0px 5px 2px">
-                <tbody>
-                    <tr>
-                        <td
-                            style="font-size: 11px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:left; padding-left:16px ">
-                            Kembalian:
-                        </td>
-                        <td style="font-size: 11px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:left; white-space:nowrap; "
-                            width="100 ">
-                            <b class="v-total-exchange">150</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td height="2" colspan="100" style="padding-top:12px;border-bottom:1px solid #e4e4e4 "></td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- /Table Total -->
-            <!-- Customer sign -->
-            <table width="100% " border="0 " cellpadding="0" cellspacing="2" align="center"
-                style="padding: 12px 0px 5px 2px">
-                <tbody>
-                    <tr>
-                    </tr>
-                    <tr>
-                        <td style="font-size: 14px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:right; padding-top:16px "
-                            class="kasir-name">
-                            Kasir:
-                        </td>
-                    </tr>
-                    <tr>
-                        <td
-                            style="font-size: 14px; font-family: 'Open Sans', sans-serif; color: #646a6e; line-height: 16px; vertical-align: top; text-align:center; padding-top:16px">
-
-                        </td>
-                    </tr>
-                </tbody>
+    <div class="total-box">
+        <div>
+            <p><strong>CATATAN:</strong><br>
+                Barang yang hilang/rusak harus diganti oleh penyewa dengan harga yang sesuai</p>
+        </div>
+        <div>
+            <table style="width:100%">
+                <tr>
+                    <td><strong>GRAND TOTAL</strong></td>
+                    <td><strong id="grand-total">Rp 250.000</strong></td>
+                </tr>
             </table>
         </div>
-        <a href="#" onclick="window.history.back();"> Kembali </a>
-        <a style="margin-left:10px" href="#" onclick="printElement()"> Cetak </a>
-        <script>
-            @foreach ($varJs as $varjsi)
-                {!! $varjsi !!}
-            @endforeach
-        </script>
-        <script src="{{ asset('template/admin2/assets/js/jquery.min.js') }}"></script>
-        @foreach ($javascriptFiles as $file)
-            <script src="{{ $file }}"></script>
+    </div>
+
+    <div class="footer">
+        <div class="left">
+            <em>Terima Kasih</em>
+        </div>
+        <div class="right">
+            Hormat Kami,<br><br><br>
+            ( Tanda Tangan )
+        </div>
+    </div>
+
+    <a href="#" onclick="window.history.back();">Kembali</a>
+    <a style="margin-left:10px" href="#" onclick="window.print()">Cetak</a>
+
+    <script>
+        @foreach ($varJs as $varjsi)
+            {!! $varjsi !!}
         @endforeach
-    </body>
+    </script>
+    <script src="{{ asset('template/admin2/assets/js/jquery.min.js') }}"></script>
+    @foreach ($javascriptFiles as $file)
+        <script src="{{ $file }}"></script>
+    @endforeach
+</body>
 
 </html>
+

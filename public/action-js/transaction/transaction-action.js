@@ -9,6 +9,10 @@ $(document).ready(function () {
     getListData();
 });
 
+function getinvoice(params) {
+    location.href = baseURL + "/invoice?noinvoice=" + params.no_transaction;
+}
+
 function setImagePackage(urlFile, elementID) {
     console.log(urlFile);
     elementID.prop("src", null);
@@ -61,8 +65,9 @@ function getListData() {
                 },
             },
             { data: "no_transaction" },
-            { data: "price_total" },
+            // { data: "price_total" },
             { data: "denda" },
+            { data: "grand_total" },
             { data: "file_path" },
             // { data: "weight" },
             { data: "id" },
@@ -90,10 +95,10 @@ function getListData() {
                 mRender: function (data, type, row) {
 
                     return formatRupiah(
-                        row.price_total);
+                        row.grand_total);
                 },
                 visible: true,
-                targets: 2,
+                targets: 3,
                 className: "text-center",
             },
             {
@@ -103,7 +108,7 @@ function getListData() {
                         row.denda);
                 },
                 visible: true,
-                targets: 3,
+                targets: 2,
                 className: "text-center",
             },
             {
@@ -149,8 +154,9 @@ function getListData() {
                 .on("click", function () {
                     var tr = $(this).closest("tr");
                     var rowData = dtpr.row(tr).data();
-
-                    editdata(rowData);
+                    // console.log(rowData);
+                    
+                    getinvoice(rowData)
                 });
             $(rows)
                 .find(".delete-btn")
@@ -173,6 +179,8 @@ function getListData() {
         },
     });
 }
+
+
 
 let isObject = {};
 
@@ -519,4 +527,6 @@ function setNullProd() {
 //         };
 //     };
 // }
+
+
 

@@ -161,33 +161,38 @@ class Master
 
 
 
-    public function checkErrorModel($model){
-       
-        // $results=[
-        //     'code'=> $model ? self::CODE_SUCCESS : self::CODE_FAILED,
-        //     'info'=> $model ? self::INFO_SUCCESS : $model->getErrors(),
-        //     'data' => $model->toArray(),
-        // ];
+    public function checkErrorModel($model)
+    {
+        try {
+            if (is_array($model)) {
+                $code = empty($model) ? self::CODE_FAILED : self::CODE_SUCCESS;
+                $info = $code === self::CODE_FAILED ? self::INFO_SUCCESS : null;
+                $data = $model;
+            } else {
+                $code = $model ? self::CODE_SUCCESS : self::CODE_FAILED;
+                $info = $model ? self::INFO_SUCCESS : $model->getErrors();
+                $data = $model->toArray();
+            }
+
+            $results = [
+                'code' => $code,
+                'info' => $info,
+                'data' => $data,
+            ];
+
+        } catch (\Exception $e) {
             
-        if (is_array($model)) {
-            $code = empty($model) ? self::CODE_FAILED : self::CODE_SUCCESS;
-            $info = $code === self::CODE_FAILED ? self::INFO_SUCCESS : null;
-            $data = $model;
+            // Jika terjadi exception, kita anggap sebagai gagal
+            $results = [
+                'code' => self::CODE_FAILED,
+                'info' => $e->getMessage(),
+                'data' => [],
+            ];
         }
-        else {
-            $code = $model ? self::CODE_SUCCESS : self::CODE_FAILED;
-            $info = $model ? self::INFO_SUCCESS : $model->getErrors();
-            $data = $model->toArray();
-        }
-        
-        $results = [
-            'code' => $code,
-            'info' => $info,
-            'data' => $data,
-        ];
 
         return $results;
     }
+
 
     public function checkerrorModelUpdate($model){
        

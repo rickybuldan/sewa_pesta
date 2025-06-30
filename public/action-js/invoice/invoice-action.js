@@ -1,3 +1,4 @@
+
 $.ajaxSetup({
     headers: {
         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -24,6 +25,7 @@ function loadInvoice() {
         },
         complete: function () {
             // swal.close();
+            getHistoryTransaction()
         },
         success: function (response) {
             console.log(response);
@@ -32,9 +34,10 @@ function loadInvoice() {
                 console.log(response);
                 data = response.data;
                 console.log(data);
-                $(".customer_name").text(data[0].customer_name);
-                $(".customer_address").text(data[0].address);
-                $(".customer_phone").text(data[0].phone);
+                $("#f-no-transaksi").text(data[0].no_transaction);
+                $("#f-name-customer").text(data[0].customer_name);
+                $("#f-phone-customer").text(data[0].customer_phone);
+                $("#f-rent-date").text(data[0].start_date +'-'+data[0].end_date );
                 $(".no_invoice").text("#" + data[0].no_transaction);
                 $(".date_invoice").text(data[0].created_date_formatted);
                 $(".kasir-name").text("Kasir: "+data[0].kasir);
@@ -85,4 +88,168 @@ function loadInvoice() {
 
 function printElement() {
     window.print();
+}
+
+function getHistoryTransaction() {
+    let wherestate = "th.no_transaction = '" + no_invoice+"'";
+    $.ajax({
+        url: baseURL + "/loadGlobal",
+        type: "POST",
+        data: JSON.stringify({
+            where: wherestate,
+            tableName: "transaction_history th LEFT JOIN users us ON us.id = th.updated_by",
+        }),
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: function () {
+            // Swal.fire({
+            //     title: "Loading",
+            //     text: "Please wait...",
+            // });
+        },
+        complete: function () {
+            // Swal.close();
+            getDetailProducts()
+        },
+        success: function (response) {
+            // Handle response sukses
+            $("#data-history").html();
+            if (response.code == 0) {
+                
+                if (response.data.length == 0) {
+                    sweetAlert("Oops...", "Tidak ada data!", "error");
+                    return;
+                }
+
+                let prods = response.data;
+                globProduct = prods;
+                galleryprods = ``;
+                $("#data-history").html();
+                for (let index = 0; index < prods.length; index++) {
+                    nt = prods[index].updated_at;
+                    nm = prods[index].name;
+                    dsc = prods[index].desc;
+                    img = prods[index].file_path;
+                    idp = prods[index].id;
+                    sstatus = prods[index].status;
+                    $rowData  = ''
+                    if (sstatus == 10) {
+                        $rowData = ` Proses`;
+                    }
+                     if (sstatus == 20) {
+                        $rowData = ` Kirim`;
+                    }
+                    if (sstatus == 30) {
+                        $rowData = `Selesai`;
+                    }
+
+                    galleryprods += `
+                            <tr>
+                                <td>${nt}</td>
+                                <td>${$rowData}</td>
+                                <td>${nm}</td>
+                            </tr>
+                        `;
+
+                    // if ((index + 1) % 4 == 0 || index == prods.length - 1) {
+                    //     galleryprods += `</div>`; // end row
+                    // }
+                }
+                $("#data-history").html(galleryprods);
+            } else {
+                sweetAlert("Oops...", response.message, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+}
+
+
+function getDetailProducts() {
+    let wherestate = "t.no_transaction = '" + no_invoice+"'";
+    $.ajax({
+        url: baseURL + "/loadGlobal",
+        type: "POST",
+        data: JSON.stringify({
+            where: wherestate,
+            is_detail:true,
+            tableName: "transactions t LEFT JOIN users us ON us.id = t.updated_by LEFT JOIN transaction_details td ON td.id_transaction = t.id LEFT JOIN products p ON p.id = td.id_product LEFT JOIN master_constants mc ON mc.is_active = 1",
+        }),
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: function () {
+            // Swal.fire({
+            //     title: "Loading",
+            //     text: "Please wait...",
+            // });
+        },
+        complete: function () {
+            // Swal.close();
+        },
+        success: function (response) {
+            // Handle response sukses
+            $("#data-products").html();
+            if (response.code == 0) {
+                
+                if (response.data.length == 0) {
+                    sweetAlert("Oops...", "Tidak ada data!", "error");
+                    return;
+                }
+
+                let prods = response.data;
+                globProduct = prods;
+                galleryprods = ``;
+                gt = 0
+                $("#data-products").html();
+                for (let index = 0; index < prods.length; index++) {
+                    nt = prods[index].updated_at;
+                    nm = prods[index].product_name;
+                    dsc = prods[index].sub_total;
+                    img = prods[index].denda;
+                    idp = prods[index].id;
+                    sstatus = prods[index].status;
+                    valuedenda = prods[index].value
+                    gt += img
+                    $rowData  = ''
+                    if (sstatus == 10) {
+                        $rowData = ` Proses`;
+                    }
+                     if (sstatus == 20) {
+                        $rowData = ` Kirim`;
+                    }
+                    if (sstatus == 30) {
+                        $rowData = `Selesai`;
+                    }
+
+                    galleryprods += `
+                            <tr>
+                                <td>${1}</td>
+                                <td>${nm}</td>
+                                <td>${formatRupiah(dsc)}</td>
+                                <td>${formatRupiah(valuedenda)}</td>
+                                <td>${formatRupiah(img)}</td>
+                            </tr>
+                        `;
+
+                    // if ((index + 1) % 4 == 0 || index == prods.length - 1) {
+                    //     galleryprods += `</div>`; // end row
+                    // }
+                }
+
+                $("#grand-total").html(formatRupiah(gt))
+                $("#data-products").html(galleryprods);
+            } else {
+                sweetAlert("Oops...", response.message, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
 }
