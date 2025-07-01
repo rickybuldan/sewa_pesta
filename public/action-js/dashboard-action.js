@@ -90,7 +90,8 @@ function getTransaction() {
             },
             eventClick: function(info) {
                 info.jsEvent.preventDefault(); // don't let the browser navigate
-
+                console.log(info.event.title);
+                
                 if (info.event.title) {
                     getinvoice(info.event.title) 
                 }
@@ -105,5 +106,5 @@ function getTransaction() {
 
 
 function getinvoice(params) {
-    location.href = baseURL + "/invoice?noinvoice=" + params.no_transaction;
+    location.href = baseURL + "/invoice?noinvoice=" + params;
 }
