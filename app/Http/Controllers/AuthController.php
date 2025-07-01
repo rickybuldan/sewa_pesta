@@ -168,7 +168,7 @@ class AuthController extends Controller
     {
         $uid = decrypt($request->query('code'));
         $saved = User::where('id', $uid)
-             ->where('status', '!=', 1)
+             ->where('is_active', '!=', 1)
              ->first();
 
         if ($saved) {
