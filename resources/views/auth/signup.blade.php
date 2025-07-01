@@ -312,7 +312,7 @@
                 success: function(response) {
                     // Handle response sukses
                     if (response.code == 0) {
-                        swal("Saved !", response.message, "success").then(function() {
+                        swal("Saved !", "Silakan cek email anda!", "success").then(function() {
                             window.location.href = '/';
                         });
                         // Reset form

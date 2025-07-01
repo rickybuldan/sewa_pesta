@@ -167,18 +167,17 @@ class AuthController extends Controller
     public function verifyemail(Request $request)
     {
         $uid = decrypt($request->query('code'));
-        $saved = User::updateOrCreate(
-            [
-                'id' => $uid,
-            ],
-            [
-                'is_active' => 1,
-            ] // Kolom yang akan diisi
-        );
+        $saved = User::where('id', $uid)
+             ->where('status', '!=', 1)
+             ->first();
+
         if ($saved) {
+            $saved->is_active = 1;
+            $saved->save();
+
             return view('auth.login')->withErrors(['email' => 'Email berhasil diverifikasi silakan login.']);
         } else {
-            return view('auth.login')->withErrors(['email' => 'Verifikasi gagal silakan coba lagi.']);
+            return view('auth.login')->withErrors(['email' => 'Verifikasi gagal atau akun sudah aktif.']);
         }
 
 
