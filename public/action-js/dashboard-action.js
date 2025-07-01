@@ -31,6 +31,11 @@ function getTransaction() {
                     success: function (response) {
                         // Handle response sukses
                         if (response.code == 0) {
+                            // console.log(response.data);
+                            
+                            $(".total-rent").text(response.total_rent)
+                            $(".total-revenue-rent").text(formatRupiah(response.total_revenue_rent))
+                            $(".total-customers").text(response.total_customers)
                             let events  = response.data.map(function (item) {
                                 txcolor     = "white";
                                 backColor   = "#007bff";
@@ -83,10 +88,22 @@ function getTransaction() {
                     },
                 });
             },
+            eventClick: function(info) {
+                info.jsEvent.preventDefault(); // don't let the browser navigate
+
+                if (info.event.title) {
+                    getinvoice(info.event.title) 
+                }
+            }
         }
     );
 
     calendar.render();
 
     // Fungsi untuk tambah 1 hari di end_date
+}
+
+
+function getinvoice(params) {
+    location.href = baseURL + "/invoice?noinvoice=" + params.no_transaction;
 }

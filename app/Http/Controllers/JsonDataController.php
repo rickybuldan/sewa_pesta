@@ -959,8 +959,6 @@ class JsonDataController extends Controller
                     ";
                 
 
-
-
                     $saved = DB::select($query);
                     $saved = $MasterClass->checkErrorModel($saved);
 
@@ -987,17 +985,49 @@ class JsonDataController extends Controller
                     //     ],
                     // ];
                     $status = $saved;
+                    $query2 = "
+                        SELECT
+                            COUNT(*) total_rent
+                        FROM transactions
+                    ";
+                
 
+                    $saved2 = DB::select($query2);
+                    $saved2 = $MasterClass->checkErrorModel($saved2);
+                    
+                    $query3 = "
+                        SELECT
+                            sum(price_total) total_revenue_rent
+                        FROM transactions
+                    ";
+                
+
+                    $saved3 = DB::select($query3);
+                    $saved3 = $MasterClass->checkErrorModel($saved3);
+
+                    $query4 = "
+                        SELECT
+                            COUNT(*) total_customers
+                        FROM users where role_id = 14
+                    ";
+                
+
+                    $saved4 = DB::select($query4);
+                    $saved4 = $MasterClass->checkErrorModel($saved4);
                     // if($status['code'] == $MasterClass::CODE_SUCCESS){
                     //     DB::commit();
                     // }else{
                     //     DB::rollBack();
                     // }
+                    // dd($saved4);
 
                     $results = [
                         'code' => $status['code'],
                         'info' => $status['info'],
                         'data' => $status['data'],
+                        'total_rent'=> $saved2['data'][0]->total_rent,
+                        'total_revenue_rent'=> $saved3['data'][0]->total_revenue_rent,
+                        'total_customers'=> $saved4['data'][0]->total_customers,
                     ];
 
 
