@@ -305,6 +305,7 @@
                     Swal.fire({
                         title: "Loading",
                         text: "Please wait...",
+                        showConfirmButton: false
                     });
                 },
                 complete: function() {},
@@ -312,7 +313,7 @@
                     // Handle response sukses
                     if (response.code == 0) {
                         swal("Saved !", response.message, "success").then(function() {
-                            location.reload();
+                            window.location.href = '/';
                         });
                         // Reset form
                     } else {
