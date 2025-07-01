@@ -1,4 +1,4 @@
-{{-- <!DOCTYPE html> --}}
+<!DOCTYPE html>
 <html lang="en">
     @stack('before-style')
     @include('includes.admin3.style')
