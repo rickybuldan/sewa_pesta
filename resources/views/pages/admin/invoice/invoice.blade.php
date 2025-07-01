@@ -109,7 +109,7 @@
 
         @media screen {
             .watermark {
-                display: none;
+                display: block;
             }
         }
 
@@ -122,7 +122,7 @@
 </head>
 
 <body>
-    <div class="watermark" id="watermark">PROSES</div>
+    <div class="watermark" id="watermark">-</div>
 
     <div class="header">
         <h1>DWI KARYA</h1>
@@ -132,13 +132,13 @@
 
     <div class="info">
         <div>
-            <strong>No Transaksi:</strong><b id="f-no-transaksi">000955</b><br>
-            <strong>No HP Customer:</strong><b id="f-phone-customer">000955</b><br>
-            <strong>Yth:</strong> Bapak/Ibu <b id="f-name-customer">000955</b><br>
+            <strong>No Transaksi:</strong><b id="f-no-transaksi">-</b><br>
+            <strong>No HP Customer:</strong><b id="f-phone-customer">-</b><br>
+            <strong>Yth:</strong> Bapak/Ibu <b id="f-name-customer">-</b><br>
         </div>
         <div>
             <strong>Singaparna,</strong> 30 Juni 2025<br>
-            <strong>Untuk Sewa Tgl:</strong><b id="f-rent-date"></b><br>
+            <strong>Untuk Sewa Tgl:</strong><b id="f-rent-date">-</b><br>
         </div>
     </div>
 
@@ -153,9 +153,9 @@
            
         <tbody id="data-history">
             <tr>
-                <td>01-06-2025</td>
-                <td>PROSES / DIPESAN</td>
-                <td>ALEX</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
             </tr>
         </tbody>
         
@@ -177,9 +177,11 @@
 
         <tbody id="data-products">
             <tr>
-                <td>01-06-2025</td>
-                <td>PROSES / DIPESAN</td>
-                <td>ALEX</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
             </tr>
         </tbody>
        
@@ -200,7 +202,7 @@
             <table style="width:100%">
                 <tr>
                     <td><strong>GRAND TOTAL</strong></td>
-                    <td><strong id="grand-total">Rp 250.000</strong></td>
+                    <td><strong id="grand-total">-</strong></td>
                 </tr>
             </table>
         </div>
