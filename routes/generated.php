@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\JsonDataController;
+
+Route::get('/dashboard', [GeneralController::class, 'dashboard'])->name('');
+Route::get('/userlist', [GeneralController::class, 'userlist'])->name('');
+Route::get('/userrole', [GeneralController::class, 'userrole'])->name('');
+Route::post('/getAccessMenu', [JsonDataController::class, 'getAccessMenu'])->name('');
+Route::post('/getRole', [JsonDataController::class, 'getRole'])->name('');
+Route::post('/getAccessRole', [JsonDataController::class, 'getAccessRole'])->name('');
+Route::post('/getRoleMenuAccess', [JsonDataController::class, 'getRoleMenuAccess'])->name('');
+Route::post('/saveUserAccessRole', [JsonDataController::class, 'saveUserAccessRole'])->name('');
+Route::post('/updateMenuAccessName', [JsonDataController::class, 'updateMenuAccessName'])->name('');
+Route::post('/getUserList', [JsonDataController::class, 'getUserList'])->name('');
+Route::post('/saveUser', [JsonDataController::class, 'saveUser'])->name('');
+Route::post('/deleteUser', [JsonDataController::class, 'deleteUser'])->name('');
+Route::post('/deleteGlobal', [JsonDataController::class, 'deleteGlobal'])->name('');
+Route::get('/transaction', [GeneralController::class, 'transaction'])->name('');
+Route::post('/saveRole', [JsonDataController::class, 'saveRole'])->name('');
+Route::post('/saveTransaction', [JsonDataController::class, 'saveTransaction'])->name('');
+Route::post('/loadGlobal', [JsonDataController::class, 'loadGlobal'])->name('');
+Route::get('/report', [GeneralController::class, 'report'])->name('');
+Route::post('/changeStatusTransaction', [JsonDataController::class, 'changeStatusTransaction'])->name('');
+Route::get('/productlist', [GeneralController::class, 'productlist'])->name('');
+Route::post('/saveProduct', [JsonDataController::class, 'saveProduct'])->name('');
+Route::post('/createPayment', [JsonDataController::class, 'createPayment'])->name('');
+Route::post('/notificationHandler', [JsonDataController::class, 'notificationHandler'])->name('');
+Route::post('/getRandomCode', [JsonDataController::class, 'getRandomCode'])->name('');
+Route::get('/tambahSewa', [GeneralController::class, 'tambahSewa'])->name('');
+Route::post('/getOverviewProfit', [JsonDataController::class, 'getOverviewProfit'])->name('');
+Route::post('/getOverviewTransaction', [JsonDataController::class, 'getOverviewTransaction'])->name('');
+Route::post('/getOverviewLastTransaction', [JsonDataController::class, 'getOverviewLastTransaction'])->name('');
+Route::get('/pengembalianBarang', [GeneralController::class, 'pengembalianBarang'])->name('');
+Route::get('/pengirimanBarang', [GeneralController::class, 'pengirimanBarang'])->name('');
+Route::post('/setSendTransaction', [JsonDataController::class, 'setSendTransaction'])->name('');
+Route::post('/setSendBackTransaction', [JsonDataController::class, 'setSendBackTransaction'])->name('');
+Route::get('/constantlist', [GeneralController::class, 'constantlist'])->name('');
+Route::post('/saveConstant', [JsonDataController::class, 'saveConstant'])->name('');

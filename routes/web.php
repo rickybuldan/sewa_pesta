@@ -63,24 +63,27 @@ Route::middleware(['auth','auth.session'])->group(function () {
         Route::post('/generate', [GenerateController::class, 'generate'])->name('generate');
     });
 
-
-    try {
-        $allowedRoutes  = MenusAccess::all();
-        foreach ($allowedRoutes as $routeData) {
-            // Route::middleware(['role:' . $routeData->role])->group(function () use ($routeData) {
-                // Anda dapat menggunakan $routeData->id untuk mengidentifikasi setiap entri secara unik
-                if ($routeData->param_type == "VIEW"){
-                    Route::get($routeData->url, [GeneralController::class, $routeData->method])->name($routeData->name);
-                }else{
-                    Route::post($routeData->url, [JsonDataController::class, $routeData->method])->name($routeData->name);
-                }
-            // });
-        }
-    } catch (Exception $e) {
-        echo '*************************************' . PHP_EOL;
-        echo 'Error fetching database pages: ' . PHP_EOL;
-        echo $e->getMessage() . PHP_EOL;
-        echo '*************************************' . PHP_EOL;
+    if (file_exists(base_path('routes/generated.php'))) {
+        require base_path('routes/generated.php');
     }
+
+    // try {
+    //     $allowedRoutes  = MenusAccess::all();
+    //     foreach ($allowedRoutes as $routeData) {
+    //         // Route::middleware(['role:' . $routeData->role])->group(function () use ($routeData) {
+    //             // Anda dapat menggunakan $routeData->id untuk mengidentifikasi setiap entri secara unik
+    //             if ($routeData->param_type == "VIEW"){
+    //                 Route::get($routeData->url, [GeneralController::class, $routeData->method])->name($routeData->name);
+    //             }else{
+    //                 Route::post($routeData->url, [JsonDataController::class, $routeData->method])->name($routeData->name);
+    //             }
+    //         // });
+    //     }
+    // } catch (Exception $e) {
+    //     echo '*************************************' . PHP_EOL;
+    //     echo 'Error fetching database pages: ' . PHP_EOL;
+    //     echo $e->getMessage() . PHP_EOL;
+    //     echo '*************************************' . PHP_EOL;
+    // }
 });
 
