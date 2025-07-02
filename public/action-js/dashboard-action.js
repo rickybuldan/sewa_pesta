@@ -34,7 +34,7 @@ function getTransaction() {
                             // console.log(response.data);
                             
                             $(".total-rent").text(response.total_rent)
-                            $(".total-revenue-rent").text(formatRupiah(response.total_revenue_rent))
+                            $(".total-revenue-rent").text(formatRupiah(response.total_revenue_rent ? response.total_revenue_rent : 0 ))
                             $(".total-customers").text(response.total_customers)
                             let events  = response.data.map(function (item) {
                                 txcolor     = "white";
