@@ -41,7 +41,17 @@ function loadInvoice() {
                 $(".no_invoice").text("#" + data[0].no_transaction);
                 $(".date_invoice").text(data[0].created_date_formatted);
                 $(".kasir-name").text("Kasir: "+data[0].kasir);
-                
+                $statusmaintran='-'
+                if (response.data[0].status == 10) {
+                    $statusmaintran = ` Proses`;
+                }
+                    if (response.data[0].status == 20) {
+                    $statusmaintran = ` Kirim`;
+                }
+                if (response.data[0].status == 30) {
+                    $statusmaintran = `Selesai`;
+                }
+                $("#watermark").html($statusmaintran)
                 $(".v-total-payment").text(formatRupiah(parseFloat(data[0].payment_amount)));
                 $(".v-total-exchange").text(formatRupiah(parseFloat(data[0].exchange)));
                 
