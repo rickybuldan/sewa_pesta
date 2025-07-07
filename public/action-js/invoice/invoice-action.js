@@ -157,7 +157,7 @@ function getHistoryTransaction() {
                 }
                 $("#data-history").html(galleryprods);
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {
@@ -243,7 +243,7 @@ function getDetailProducts() {
                 $("#grand-total").html(formatRupiah(gt))
                 $("#data-products").html(galleryprods);
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {

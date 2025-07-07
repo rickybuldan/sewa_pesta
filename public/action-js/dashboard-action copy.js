@@ -363,7 +363,7 @@ function getProfit() {
         getTransaction();
         $(".total-sales").html(formatRupiah(parseFloat(response.data[0].price_total)))
       } else {
-        sweetAlert("Oops...", response.message, "error");
+        sweetAlert("Oops...", response.info, "error");
       }
     },
     error: function (xhr, status, error) {
@@ -391,7 +391,7 @@ function getTransaction() {
         updateChartTransaction(response.data)
         getListView();
       } else {
-        sweetAlert("Oops...", response.message, "error");
+        sweetAlert("Oops...", response.info, "error");
       }
     },
     error: function (xhr, status, error) {

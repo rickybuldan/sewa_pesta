@@ -136,7 +136,7 @@ function getListData() {
                 }
                 $(".content-gallery-products").html(galleryprods);
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {
@@ -437,13 +437,13 @@ function deleteData(data) {
                 success: function (response) {
                     // Handle response sukses
                     if (response.code == 0) {
-                        swal("Deleted !", response.message, "success").then(
+                        swal("Deleted !", response.info, "success").then(
                             function () {
                                 location.reload();
                             }
                         );
                     } else {
-                        sweetAlert("Oops...", response.message, "error");
+                        sweetAlert("Oops...", response.info, "error");
                     }
                 },
                 error: function (xhr, status, error) {
@@ -514,12 +514,12 @@ function saveData() {
         success: function (response) {
             // Handle response sukses
             if (response.code == 0) {
-                swal("Saved !", response.message, "success").then(function () {
+                swal("Saved !", response.info, "success").then(function () {
                     location.reload();
                 });
                 // Reset form
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {

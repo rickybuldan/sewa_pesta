@@ -455,13 +455,13 @@ function deleteRole(data) {
                 success: function (response) {
                     // Handle response sukses
                     if (response.code == 0) {
-                        swal("Deleted !", response.message, "success").then(
+                        swal("Deleted !", response.info, "success").then(
                             function () {
                                 location.reload();
                             }
                         );
                     } else {
-                        sweetAlert("Oops...", response.message, "error");
+                        sweetAlert("Oops...", response.info, "error");
                     }
                 },
                 error: function (xhr, status, error) {

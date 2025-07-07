@@ -1203,6 +1203,7 @@ class JsonDataController extends Controller
                         $saved3 = $MasterClass->checkerrorModelUpdate($saveProd);
                         if ($saved3['code'] != $MasterClass::CODE_SUCCESS){
                             DB::rollBack();
+                            $saved3['info'] = 'Terdapat barang yang sudah disewa, silakan reload halaman.';
                             return $MasterClass->Results($saved3);
                         }
 

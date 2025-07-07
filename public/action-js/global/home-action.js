@@ -23,7 +23,7 @@ function loadProduct(x) {
             console.log(response);
             // Handle response sukses
             if (response.code == 0) {
-                // swal("Saved !", response.message, "success").then(function () {
+                // swal("Saved !", response.info, "success").then(function () {
                 //     // location.reload();
                 //     location.href = baseURL+"/invoice?noinvoice="+response.data.no_transaction
                 // });
@@ -96,7 +96,7 @@ function loadProduct(x) {
                     $(".product-new-added").html(el);
                 }
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {
@@ -145,7 +145,7 @@ function selectedProduct(params) {
                     $(".product-image-slider").html(img);
                 }
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {
@@ -204,14 +204,14 @@ function deleteCart(id_product) {
                 success: function (response) {
                     // Handle response sukses
                     if (response.code == 0) {
-                        swal("Deleted !", response.message, "success").then(
+                        swal("Deleted !", response.info, "success").then(
                             function () {
                                 // location.reload();
                                 loadCart()
                             }
                         );
                     } else {
-                        sweetAlert("Oops...", response.message, "error");
+                        sweetAlert("Oops...", response.info, "error");
                     }
                 },
                 error: function (xhr, status, error) {
@@ -258,13 +258,13 @@ function saveCart(id_product, qty) {
         success: function (response) {
             // Handle response sukses
             if (response.code == 0) {
-                swal("Saved !", response.message, "success").then(function () {
+                swal("Saved !", response.info, "success").then(function () {
                     // location.reload();
                     loadCart()
                 });
                 // Reset form
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {

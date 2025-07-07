@@ -52,7 +52,7 @@ function loadOrderCart() {
             // console.log(response);
             // Handle response sukses
             if (response.code == 0) {
-                // swal("Saved !", response.message, "success").then(function () {
+                // swal("Saved !", response.info, "success").then(function () {
                 //     // location.reload();
                 //     location.href = baseURL+"/invoice?noinvoice="+response.data.no_transaction
                 // });
@@ -130,7 +130,7 @@ function loadOrderCart() {
 
                 $('.order_table tbody').html(el);
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {
@@ -217,7 +217,7 @@ function checkCost(obj) {
 
                 $(".sel-courier-package").val("").trigger("change");
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {
@@ -272,7 +272,7 @@ function loadProvinces() {
 
 
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {
@@ -358,7 +358,7 @@ function loadCities(id) {
                 $(".sel-cities").val("").trigger("change");
 
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {
@@ -400,7 +400,7 @@ function loadUserOrder() {
             // console.log(response);
             // Handle response sukses
             if (response.code == 0) {
-                // swal("Saved !", response.message, "success").then(function () {
+                // swal("Saved !", response.info, "success").then(function () {
                 //     // location.reload();
                 //     location.href = baseURL+"/invoice?noinvoice="+response.data.no_transaction
                 // });
@@ -412,7 +412,7 @@ function loadUserOrder() {
                 $('#f-address').val(data[0].address)
                 $('#f-note-order').html()
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {

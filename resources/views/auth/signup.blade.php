@@ -317,7 +317,7 @@
                         });
                         // Reset form
                     } else {
-                        sweetAlert("Oops...", response.message, "error");
+                        sweetAlert("Oops...", response.info, "error");
                     }
                 },
                 error: function(xhr, status, error) {

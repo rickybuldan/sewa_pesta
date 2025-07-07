@@ -103,7 +103,7 @@ async function getListData() {
 
             $(".content-gallery-products").html(galleryprods);
         } else {
-            sweetAlert("Oops...", response.message, "error");
+            sweetAlert("Oops...", response.info, "error");
         }
     } catch (err) {
         sweetAlert("Oops...", err.responseText || "Gagal memuat data", "error");
@@ -246,13 +246,13 @@ function sendBackTransaction() {
                 },
                 success: function (response) {
                     if (response.code == 0) {
-                        swal("Success!", response.message, "success").then(
+                        swal("Success!", response.info, "success").then(
                             function () {
                                 location.reload();
                             }
                         );
                     } else {
-                        sweetAlert("Oops...", response.message, "error");
+                        sweetAlert("Oops...", response.info, "error");
                     }
                 },
                 error: function (xhr) {
