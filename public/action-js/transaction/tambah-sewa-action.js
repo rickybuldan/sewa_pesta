@@ -515,8 +515,13 @@ function saveData() {
             // Handle response sukses
             if (response.code == 0) {
                 swal("Saved !", response.info, "success").then(function () {
-                    location.reload();
+                    // location.reload();
+                    getinvoice(response.data);
+                    function getinvoice(params) {
+                        location.href = baseURL + "/invoice?noinvoice=" + params;
+                    }
                 });
+                
                 // Reset form
             } else {
                 sweetAlert("Oops...", response.info, "error");

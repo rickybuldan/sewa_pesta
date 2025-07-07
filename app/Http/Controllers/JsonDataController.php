@@ -1208,7 +1208,7 @@ class JsonDataController extends Controller
                         }
 
                     }
-
+                    $saved3['data'] = $notrx;
                     $status = $saved3;
 
                     // dd($saved3);
