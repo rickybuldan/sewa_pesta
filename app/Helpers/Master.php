@@ -12,7 +12,7 @@ class Master
     const INFO_SUCCESS = 'Success';
     const INFO_FAILED = 'Failed';
     const CODE_SUCCESS = '0';
-    const CODE_FAILED = '0';
+    const CODE_FAILED = '1';
     public function Results($data, $asJson = false)
     {
         $defaultData = [
@@ -209,7 +209,7 @@ class Master
         }
         else {
             $code = self::CODE_FAILED;
-            $info = $model->getErrors();
+            $info = 'No rows updated'; // atau custom error message
             $data = null;
         }
 

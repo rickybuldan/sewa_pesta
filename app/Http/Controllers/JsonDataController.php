@@ -1193,22 +1193,31 @@ class JsonDataController extends Controller
                         ]);
 
                         $saved2 = $MasterClass->checkErrorModel($detailTransac);
-                        $saveProd = Product::where(column: [
+                        $saveProd = Product::where( [
                             'id' => $pdr->id,
-                        ])->update([
+                            'status' => 0,
+                        ])->update( [
                                     'status' => 1
                                 ]);
+                        // dd($saveProd);
                         $saved3 = $MasterClass->checkerrorModelUpdate($saveProd);
+                        if ($saved3['code'] != $MasterClass::CODE_SUCCESS){
+                            DB::rollBack();
+                            return $MasterClass->Results($saved3);
+                        }
+
                     }
 
                     $status = $saved3;
+
+                    // dd($saved3);
 
                     if ($status['code'] == $MasterClass::CODE_SUCCESS) {
                         DB::commit();
                     } else {
                         DB::rollBack();
                     }
-                    $status = $saved1;
+
                     $results = [
                         'code' => $status['code'],
                         'info' => $status['info'],
