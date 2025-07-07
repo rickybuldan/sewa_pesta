@@ -10,7 +10,7 @@ class Transaction extends Model
 {
     use HasFactory;
     // protected $table = "pengadaan";
-    protected $fillable = ['no_transaction','start_date','end_date','file_path','status','created_by','price_total','customer_name','phone','email','address','description','customer_phone','exchange'];
+    protected $fillable = ['no_transaction','start_date','end_date','file_path','status','created_by','updated_by','price_total','customer_name','phone','email','address','description','customer_phone','exchange'];
 
     public static function generateNoTransaction($paramDate)
     {
