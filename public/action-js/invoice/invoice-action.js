@@ -223,7 +223,7 @@ function getDetailProducts() {
                     idp = prods[index].id;
                     sstatus = prods[index].status;
                     valuedenda = prods[index].value
-                    gt += img
+                    gt += dsc+img
                     $rowData  = ''
                     if (sstatus == 10) {
                         $rowData = ` Proses`;
@@ -240,8 +240,8 @@ function getDetailProducts() {
                                 <td>${1}</td>
                                 <td>${nm}</td>
                                 <td>${formatRupiah(dsc)}</td>
-                                <td>${formatRupiah(valuedenda)}</td>
                                 <td>${formatRupiah(img)}</td>
+                                <td>${formatRupiah(dsc+img)}</td>
                             </tr>
                         `;
 
@@ -249,6 +249,8 @@ function getDetailProducts() {
                     //     galleryprods += `</div>`; // end row
                     // }
                 }
+                console.log(gt);
+                
 
                 $("#grand-total").html(formatRupiah(gt))
                 $("#data-products").html(galleryprods);
