@@ -942,7 +942,7 @@ class JsonDataController extends Controller
                                 td.id_transaction,
                                 SUM(
                                     CASE 
-                                        WHEN td.good_condition = 0 THEN
+                                        WHEN td.good_condition = 0 AND td.good_condition IS NOT NULL AND mc.value is not null AND mc.value != 0 THEN
                                             CASE 
                                                 WHEN mc.type = 1 THEN (td.sub_total + mc.value)
                                                 WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value / 100))
@@ -1281,7 +1281,7 @@ class JsonDataController extends Controller
                             *,
                             COALESCE(
                                     CASE 
-                                        WHEN td.good_condition = 0 THEN
+                                        WHEN td.good_condition = 0 AND td.good_condition IS NOT NULL AND mc.value is not null AND mc.value != 0 THEN
                                             CASE 
                                                 WHEN mc.type = 1 THEN (td.sub_total + mc.value)
                                                 WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value / 100))
