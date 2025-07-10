@@ -1166,15 +1166,16 @@ class JsonDataController extends Controller
 
                     $nowdate = now();
                     $notrx = Transaction::generateNoTransaction($nowdate);
-                    
+                    $start_date = Carbon::parse($data->start_date)->format('Y-m-d H:i:s');
+                    $end_date = Carbon::parse($data->end_date)->format('Y-m-d H:i:s');
                     $transaction = Transaction::create([
                         'customer_name' => $data->tenant_name,
                         'no_transaction' => $notrx,
                         'created_by' => $MasterClass->getSession('user_id'),
                         'updated_by' => $MasterClass->getSession('user_id'),
                         'price_total' => $data->grand_total,
-                        'start_date' => $data->start_date,
-                        'end_date' => $data->end_date,
+                        'start_date' => $start_date,
+                        'end_date' => $end_date,
                         'address' => $data->address,
                         'customer_phone' => $data->phone_number,
                         'status' => 10,
