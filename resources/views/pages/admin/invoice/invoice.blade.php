@@ -107,6 +107,12 @@
             white-space: nowrap;
         }
 
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+
         @media screen {
             .watermark {
                 display: block;
@@ -218,8 +224,8 @@
         </div>
     </div>
 
-    <a href="#" onclick="window.history.back();">Kembali</a>
-    <a style="margin-left:10px" href="#" onclick="window.print()">Cetak</a>
+    <a href="#" class="no-print " onclick="window.history.back();">Kembali</a>
+    <a style="margin-left:10px" class="no-print" href="#" onclick="window.print()">Cetak</a>
 
     <script>
         @foreach ($varJs as $varjsi)
