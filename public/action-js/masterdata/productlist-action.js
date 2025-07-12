@@ -180,6 +180,7 @@ function editdata(rowData) {
     $("#form-max").val(rowData.stock_maximum);
     $("#form-min").val(rowData.stock_minimum);
     $("#form-init").val(rowData.stock);
+    $("#form-items").val(rowData.items)
     $("#form-status").val(rowData.status).trigger('change')
     
     // generateProdCode($("#form-code").val())
