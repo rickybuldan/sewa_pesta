@@ -216,6 +216,8 @@ function getDetailProducts() {
                 gt = 0
                 $("#data-products").html();
                 for (let index = 0; index < prods.length; index++) {
+                    console.log(prods);
+                    
                     nt = prods[index].updated_at;
                     nm = prods[index].product_name;
                     dsc = prods[index].sub_total;
@@ -237,7 +239,7 @@ function getDetailProducts() {
 
                     galleryprods += `
                             <tr>
-                                <td>${1}</td>
+                                <td>${prods[index].items}</td>
                                 <td>${nm}</td>
                                 <td>${formatRupiah(dsc)}</td>
                                 <td>${formatRupiah(img)}</td>

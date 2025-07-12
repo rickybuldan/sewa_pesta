@@ -1469,6 +1469,7 @@ class JsonDataController extends Controller
                             'file_path' => $imagePath,
                             'desc' => $data->desc,
                             'status' => $data->status,
+                            'items' => $data->items,
                             // 'stock_minimum' => $data->min,
                             // 'stock_maximum' => $data->max,
                             // 'stock' => $data->init,

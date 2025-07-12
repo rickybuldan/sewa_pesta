@@ -61,10 +61,11 @@ function getListData() {
                 },
             },
             { data: "product_name" },
+            { data: "items" },
             { data: "price" },
             { data: "desc" },
             { data: "file_path" },
-            // { data: "weight" },
+
             { data: "id" },
         ],
         columnDefs: [
@@ -93,7 +94,7 @@ function getListData() {
                         row.price);
                 },
                 visible: true,
-                targets: 2,
+                targets: 3,
                 className: "text-center",
             },
             {
@@ -106,7 +107,7 @@ function getListData() {
                     return $rowData;
                 },
                 visible: true,
-                targets: 4,
+                targets: 5,
                 className: "text-center",
             },
             // {
@@ -126,7 +127,7 @@ function getListData() {
                     return $rowData;
                 },
                 visible: true,
-                targets: 5,
+                targets: 6,
                 className: "text-center",
             },
         ],
@@ -231,6 +232,14 @@ function checkValidation() {
         validationSwalFailed(
             (isObject["price"] = pricexx),
             "Harga tidak boleh kosong"
+        )
+    )
+        return false;
+
+    if (
+        validationSwalFailed(
+            (isObject["items"] = $("#form-items").val()),
+            "Item tidak boleh kosong"
         )
     )
         return false;

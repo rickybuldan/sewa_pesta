@@ -27,6 +27,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Produk</th>
+                                        <th>Item</th>
                                         <th>Harga</th>
                                         <th>Deskripsi</th>
                                         <th>Gambar</th>
@@ -83,6 +84,13 @@
                                 <div class="col-sm-9">
                                     <input id="form-price" type="text" oninput="formatRupiahByElement(this)"
                                         class="form-control" placeholder="Harga">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Item</label>
+                                <div class="col-sm-9">
+                                    <input id="form-items" type="number"
+                                        class="form-control" placeholder="Jumlah item">
                                 </div>
                             </div>
                             <div class="mb-3 row">
