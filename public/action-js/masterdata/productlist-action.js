@@ -176,10 +176,10 @@ function editdata(rowData) {
     $("#form-name").val(rowData.product_name);
     $("#form-price").val(rupiahprice);
     $("#form-desc").val(rowData.desc);
-    $("#form-weight").val(rowData.weight);
-    $("#form-max").val(rowData.stock_maximum);
-    $("#form-min").val(rowData.stock_minimum);
-    $("#form-init").val(rowData.stock);
+    // $("#form-weight").val(rowData.weight);
+    // $("#form-max").val(rowData.stock_maximum);
+    // $("#form-min").val(rowData.stock_minimum);
+    // $("#form-init").val(rowData.stock);
     $("#form-items").val(rowData.items)
     $("#form-status").val(rowData.status).trigger('change')
     
