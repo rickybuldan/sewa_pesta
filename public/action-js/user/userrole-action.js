@@ -103,32 +103,31 @@ function getListView() {
             var rows = api.rows({ page: "current" }).nodes();
             var last = null;
 
-            $(rows)
-                .find(".permissiondet-btn")
-                .on("click", function (e) {
-                    e.preventDefault();
-                    var tr = $(this).closest("tr");
-                    var rowData = dtview.row(tr).data();
-                    console.log(rowData);
-                    settingPermissionMenu(rowData);
-                });
-            $(rows)
-                .find(".edit-btn")
-                .on("click", function (e) {
-                    e.preventDefault();
-                    var tr = $(this).closest("tr");
-                    var rowData = dtview.row(tr).data();
-                    setDataMenu(rowData);
+            $('body').on('click', '.permissiondet-btn', function (e) {
+                e.preventDefault();
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) tr = tr.prev(); // kalau tombol ada di child row
+                var rowData = dtview.row(tr).data();
+                console.log(rowData);
+                settingPermissionMenu(rowData);
+            });
 
-                });
-            $(rows)
-                .find(".jsondata-btn")
-                .on("click", function (e) {
-                    e.preventDefault();
-                    var tr = $(this).closest("tr");
-                    var rowData = dtview.row(tr).data();
-                    setJsonData(rowData);
-                });
+            $('body').on('click', '.edit-btn', function (e) {
+                e.preventDefault();
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) tr = tr.prev();
+                var rowData = dtview.row(tr).data();
+                setDataMenu(rowData);
+            });
+
+            $('body').on('click', '.jsondata-btn', function (e) {
+                e.preventDefault();
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) tr = tr.prev();
+                var rowData = dtview.row(tr).data();
+                setJsonData(rowData);
+            });
+
         },
         initComplete: function () {
             loadRole(null, 2)

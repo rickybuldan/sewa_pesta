@@ -225,52 +225,59 @@ function getListData() {
 
             $("#total-pendapatan").val(formatRupiah(parseFloat(totalColumn1)));
 
-            $(rows)
-                .find(".done-btn")
-                .on("click", function () {
-                    var tr = $(this).closest("tr");
-                    var rowData = dtpr.row(tr).data();
-                    saveChangeStatus(rowData, 10);
-                });
+            $('body').on('click', '.done-btn', function () {
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) {
+                    tr = tr.prev();
+                }
+                var rowData = dtpr.row(tr).data();
+                saveChangeStatus(rowData, 10);
+            });
 
-            $(rows)
-                .find(".paid-btn")
-                .on("click", function () {
-                    var tr = $(this).closest("tr");
-                    var rowData = dtpr.row(tr).data();
-                    saveChangeStatus(rowData, 20);
-                });
+            $('body').on('click', '.paid-btn', function () {
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) {
+                    tr = tr.prev();
+                }
+                var rowData = dtpr.row(tr).data();
+                saveChangeStatus(rowData, 20);
+            });
 
-            $(rows)
-                .find(".process-btn")
-                .on("click", function () {
-                    var tr = $(this).closest("tr");
-                    var rowData = dtpr.row(tr).data();
-                    // if (rowData.karyawan_id == null && rowData.transaction_type == "GR") {
-                    //     showModalKaryawan(rowData)
-                    // } else {
-                    //     saveChangeStatus(rowData, 30);
-                    // }
+            $('body').on('click', '.process-btn', function () {
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) {
+                    tr = tr.prev();
+                }
+                var rowData = dtpr.row(tr).data();
 
-                    saveChangeStatus(rowData, 30);
+                // Kalau mau logika tambahan bisa diaktifkan lagi
+                // if (rowData.karyawan_id == null && rowData.transaction_type == "GR") {
+                //     showModalKaryawan(rowData);
+                // } else {
+                //     saveChangeStatus(rowData, 30);
+                // }
 
-                });
+                saveChangeStatus(rowData, 30);
+            });
 
-            $(rows)
-                .find(".cancel-btn")
-                .on("click", function () {
-                    var tr = $(this).closest("tr");
-                    var rowData = dtpr.row(tr).data();
-                    saveChangeStatus(rowData, 50);
-                });
+            $('body').on('click', '.cancel-btn', function () {
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) {
+                    tr = tr.prev();
+                }
+                var rowData = dtpr.row(tr).data();
+                saveChangeStatus(rowData, 50);
+            });
 
-            $(rows)
-                .find(".invoice-btn")
-                .on("click", function () {
-                    var tr = $(this).closest("tr");
-                    var rowData = dtpr.row(tr).data();
-                    getinvoice(rowData);
-                });
+            $('body').on('click', '.invoice-btn', function () {
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) {
+                    tr = tr.prev();
+                }
+                var rowData = dtpr.row(tr).data();
+                getinvoice(rowData);
+            });
+
 
         },
     });

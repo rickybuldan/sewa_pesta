@@ -136,30 +136,29 @@ function getListData() {
             var rows = api.rows({ page: "current" }).nodes();
             var last = null;
 
-            $(rows)
-                .find(".edit-btn")
-                .on("click", function () {
-                    var tr = $(this).closest("tr");
-                    var rowData = dtpr.row(tr).data();
+            $('body').on('click', '.edit-btn', function () {
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) tr = tr.prev(); // kalau tombol ada di child row
+                var rowData = dtpr.row(tr).data();
+                editdata(rowData);
+            });
 
-                    editdata(rowData);
-                });
-            $(rows)
-                .find(".delete-btn")
-                .on("click", function () {
-                    var tr = $(this).closest("tr");
-                    var rowData = dtpr.row(tr).data();
-                    deleteData(rowData);
-                });
-            $(rows)
-                .find(".print-barcode-btn")
-                .on("click", function () {
-                    var tr = $(this).closest("tr");
-                    var rowData = dtpr.row(tr).data();
+            $('body').on('click', '.delete-btn', function () {
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) tr = tr.prev();
+                var rowData = dtpr.row(tr).data();
+                deleteData(rowData);
+            });
 
-                    $("#form-barcode-br").val(rowData.prod_code)
-                    $("#modal-data-barcode").modal("show")
-                });
+            $('body').on('click', '.print-barcode-btn', function () {
+                var tr = $(this).closest('tr');
+                if (tr.hasClass('child')) tr = tr.prev();
+                var rowData = dtpr.row(tr).data();
+
+                $("#form-barcode-br").val(rowData.prod_code);
+                $("#modal-data-barcode").modal("show");
+            });
+
 
 
         },
