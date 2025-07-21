@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class Master
 {
     const INFO_SUCCESS = 'Success';
-    const INFO_FAILED = 'Failed';
+    const INFO_FAILED = 'Failed, Data Not Found';
     const CODE_SUCCESS = '0';
     const CODE_FAILED = '1';
     public function Results($data, $asJson = false)
@@ -24,6 +24,7 @@ class Master
         
 
         if ($data !== null) {
+            
             $data = Master::checkArray($data);
             $setArr = array_merge($defaultData, $data);
         } else {
@@ -166,7 +167,7 @@ class Master
         try {
             if (is_array($model)) {
                 $code = empty($model) ? self::CODE_FAILED : self::CODE_SUCCESS;
-                $info = $code === self::CODE_FAILED ? self::INFO_SUCCESS : null;
+                $info = $code === self::CODE_FAILED ? self::INFO_FAILED : null;
                 $data = $model;
             } else {
                 $code = $model ? self::CODE_SUCCESS : self::CODE_FAILED;
