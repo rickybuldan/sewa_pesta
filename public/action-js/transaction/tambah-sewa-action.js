@@ -493,6 +493,14 @@ function saveData() {
     // formdata
     var formData = new FormData();
     var file = $("#form-img")[0].files[0];
+
+    if (
+        validationSwalFailed(
+            (file),
+            "Bukti pembayaran tidak boleh kosong"
+        )
+    )
+        return false;
     formData.append("image", file);
     formData.append("data", JSON.stringify(isObject));
 
