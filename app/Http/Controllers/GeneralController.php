@@ -17,18 +17,19 @@ class GeneralController extends Controller
         
         if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
             $roled = $MasterClass->getSession('role_id');
+            if($roled == 14){
+                return redirect('/home');
+            }
+
             $getActive = $MasterClass->AuthenticatedViewIsActive();
-            // dd($getActive);
             $urlredirect = $getActive['data'];
-            // if($roled == 14){
-            //     return redirect('/home');
-            // }
+            
 
             return redirect( $urlredirect);
 
         }
         
-        return redirect('/login');
+        return redirect('/home');
     }
     public function dashboard(Request $request){
         $MasterClass = new Master();

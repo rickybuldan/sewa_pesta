@@ -97,9 +97,8 @@
                                 <label class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
                                     <select class="form-select form-select-sm" id="form-status">
-                                        <option value="0">Tersedia</option>
-                                        <option value="1">Sewa</option>
-                                        <option value="2">Rusak</option>
+                                        <option value="0">Aktif</option>
+                                        <option value="1">Inaktif</option>
                                     </select>
                                 </div>
                             </div>

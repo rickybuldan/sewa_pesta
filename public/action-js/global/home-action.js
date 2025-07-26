@@ -1,14 +1,14 @@
 // $(document).ready(function () {
 
 // });
-loadProduct("featured");
+loadProduct();
 loadCart()
 
-function loadProduct(x) {
+function loadProduct() {
     $.ajax({
         url: baseURL + "/home/loadGlobal",
         type: "POST",
-        data: JSON.stringify({ tableName: "products", type: x }),
+        data: JSON.stringify({ tableName: "products", where: "status = 0" }),
         dataType: "json",
         contentType: "application/json",
         beforeSend: function () {
@@ -18,7 +18,7 @@ function loadProduct(x) {
             // });
         },
 
-        complete: function () {},
+        complete: function () { },
         success: function (response) {
             console.log(response);
             // Handle response sukses
@@ -29,72 +29,91 @@ function loadProduct(x) {
                 // });
                 // Reset form
                 data = response.data;
+                $(".total-products").text(data.length)
 
                 imgslider = "";
-                el = "";
-
+                let el = '';
                 for (let index = 0; index < data.length; index++) {
-                    // modal
-                    // imgslider += `<figure class="border-radius-10">
-                    //                 <img src="/storage/${data[index]['file_path']}" alt="product image">
-                    //             </figure>`
-                    console.log(data[index]);
-                    el += ` <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                                <div class="product-cart-wrap mb-30">
-                                    <div class="product-img-action-wrap">
-                                        <div class="product-img product-img-zoom">
-                                            <a href="shop-product-right.html">
-                                                <img class="default-img"
-                                                    src="/storage/${
-                                                        data[index]["file_path"]
-                                                    }"
-                                                    alt="">
-                                                <img class="hover-img"
-                                                    src="/storage/${
-                                                        data[index]["file_path"]
-                                                    }"
-                                                    alt="">
-                                            </a>
-                                        </div>
-                                        <div class="product-action-1 d-none">
-                                            <a aria-label="Quick view" class="action-btn hover-up" onclick="selectedProduct(${
-                                                data[index]["id"]
-                                            })" data-bs-toggle="modal"
-                                                data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i>
-                                            </a>
-                                        </div>
-                                        <div class="product-badges product-badges-position product-badges-mrg">
-                                            <span class="hot">Hot</span>
-                                        </div>
+                    // Tambahkan pembuka row setiap 3 item
+                    if (index % 4 === 0) {
+                        el += `<div class="row">`;
+                    }
+
+                    el += `
+                            
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                            <div class="single-product mb-40">
+                                <div class="single-product-img position-relative over-hidden">
+                                    <div class="single-product-label position-absolute">
+                                        <span class="text-center text-white d-block brown-l-bg">Hot</span>
                                     </div>
-                                    <div class="product-content-wrap">
-                                        <div class="product-category">
-                                            <a href="shop-grid-right.html">Kacamata</a>
-                                        </div>
-                                        <h2><a href="shop-product-right.html">${
-                                            data[index]["product_name"]
-                                        }</a></h2>
-                                        
-                                        <div class="product-price">
-                                            <span>${formatRupiah(
-                                                data[index]["price"]
-                                            )}</span>
-                                        </div>
-                                        <div class="product-action-1 show">
-                                            <a aria-label="Add To Cart" class="action-btn hover-up" onclick="saveCart(${
-                                                data[index]["id"]
-                                            },1)"><i
-                                                    class="fi-rs-shopping-bag-add"></i></a>
+                                    <a class="position-relative d-block" href="#" tabindex="0">
+                                    
+                                        <img style="width: 320px; height: 320px; object-fit: cover;"  src="/storage/${data[index]["file_path"]}" alt="">
+                                        <img style="width: 320px; height: 320px; object-fit: cover;"  class="hover-img position-absolute" src="/storage/${data[index]["file_path"]}" alt="product">
+                                    </a>
+                                    <ul class="view-btn position-absolute transition-3">
+                                        <li class="text-center">
+                                            <a onclick="selectedProduct(${data[index]["id"]})" class="theme-color white-bg text-center d-inline-block" data-toggle="tooltip" data-placement="top" title="" data-original-title="Blossom Porcelain Side bottle" tabindex="0">Quick View</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="single-product-info position-relative mt-10">
+                                    <div class="single-product-tag">
+                                        <a href="#" class="primary-color mr-1" tabindex="0">Product</a>
+                                    </div>
+                                    <h5 class="single-product-name"><a href="#" tabindex="0">${data[index]["product_name"]}</a></h5>
+                                    <div class="single-product-action d-flex position-relative transition-3">
+                                        <ul class="single-product-price d-flex">
+                                            <li>
+                                                <span>${formatRupiah(data[index]["price"])}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="add-to-cart position-absolute transition-3">
+                                            <a onclick="saveCart(${data[index]["id"]},1)" href="#" class="d-block theme-color text-uppercase" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart" tabindex="0">
+                                                <span class="mr-2"><span class="icon-shopping-bag"></span></span>add to cart
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                            </div>`;
+                            </div>
+                        </div>
+                    `;
+
+                    // Tutup row setiap 3 item atau di item terakhir
+                    if ((index + 1) % 4 === 0 || index === data.length - 1) {
+                        el += `</div>`;
+                    }
                 }
-                if (x == "featured") {
-                    $(".product-featured").html(el);
-                } else {
-                    $(".product-new-added").html(el);
-                }
+                // Masukkan ke elemen HTML
+                $(".product-active").html(el).slick({
+                    dots: false,
+                    arrows: false,
+                    infinite: false,
+                    slidesToShow: 4,
+                    slidesToScroll: 2,
+                    responsive: [
+                        {
+                            breakpoint: 1199,
+                            settings: {
+                                slidesToShow: 3,
+                            }
+                        },
+                        {
+                            breakpoint: 687,
+                            settings: {
+                                slidesToShow: 2,
+                            }
+                        },
+                        {
+                            breakpoint: 475,
+                            settings: {
+                                slidesToShow: 1,
+                            }
+                        }
+                    ]
+                });
+
             } else {
                 sweetAlert("Oops...", response.info, "error");
             }
@@ -123,7 +142,7 @@ function selectedProduct(params) {
             // });
         },
 
-        complete: function () {},
+        complete: function () { },
         success: function (response) {
             console.log(response);
             // Handle response sukses
@@ -195,12 +214,12 @@ function deleteCart(id_product) {
                 dataType: "json",
                 contentType: "application/json",
                 beforeSend: function () {
-                    Swal.fire({
-                        title: "Loading",
-                        text: "Please wait...",
-                    });
+                    // Swal.fire({
+                    //     title: "Loading",
+                    //     text: "Please wait...",
+                    // });
                 },
-                complete: function () {},
+                complete: function () { },
                 success: function (response) {
                     // Handle response sukses
                     if (response.code == 0) {
@@ -249,12 +268,12 @@ function saveCart(id_product, qty) {
         dataType: "json",
         contentType: "application/json",
         beforeSend: function () {
-            Swal.fire({
-                title: "Loading",
-                text: "Please wait...",
-            });
+            // Swal.fire({
+            //     title: "Loading",
+            //     text: "Please wait...",
+            // });
         },
-        complete: function () {},
+        complete: function () { },
         success: function (response) {
             // Handle response sukses
             if (response.code == 0) {

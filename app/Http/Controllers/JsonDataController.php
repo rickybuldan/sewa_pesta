@@ -1194,23 +1194,23 @@ class JsonDataController extends Controller
                         ]);
 
                         $saved2 = $MasterClass->checkErrorModel($detailTransac);
-                        $saveProd = Product::where( [
-                            'id' => $pdr->id,
-                            'status' => 0,
-                        ])->update( [
-                                    'status' => 1
-                                ]);
-                        // dd($saveProd);
-                        $saved3 = $MasterClass->checkerrorModelUpdate($saveProd);
-                        if ($saved3['code'] != $MasterClass::CODE_SUCCESS){
-                            DB::rollBack();
-                            $saved3['info'] = 'Terdapat barang yang sudah disewa, silakan reload halaman.';
-                            return $MasterClass->Results($saved3);
-                        }
+                        // $saveProd = Product::where( [
+                        //     'id' => $pdr->id,
+                        //     'status' => 0,
+                        // ])->update( [
+                        //             'status' => 1
+                        //         ]);
+                        // // dd($saveProd);
+                        // $saved3 = $MasterClass->checkerrorModelUpdate($saveProd);
+                        // if ($saved3['code'] != $MasterClass::CODE_SUCCESS){
+                        //     DB::rollBack();
+                        //     $saved3['info'] = 'Terdapat barang yang sudah disewa, silakan reload halaman.';
+                        //     return $MasterClass->Results($saved3);
+                        // }
 
                     }
-                    $saved3['data'] = $notrx;
-                    $status = $saved3;
+                    $saved2['data'] = $notrx;
+                    $status = $saved2;
 
                     // dd($saved3);
 

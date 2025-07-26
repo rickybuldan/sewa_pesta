@@ -382,7 +382,7 @@ function loadCart() {
         type: "POST",
         data: JSON.stringify({
             tableName: "carts c LEFT JOIN products p ON p.id = c.id_product",
-            where: "c.id_user = " + xid + "",
+            where: "c.id_user = " + xid + " and p.status = 0",
         }),
         dataType: "json",
         contentType: "application/json",
@@ -403,7 +403,7 @@ function loadCart() {
                 // });
                 // Reset form
                 data = response.data;
-                $('.pro-count').text(data.length)
+                $('.s-count').text(data.length)
 
                 imgslider = "";
                 el = "";
@@ -424,48 +424,43 @@ function loadCart() {
                     if (data[index]["file_path"]) {
                         imgslider = `<img alt="Evara" src="/storage/${data[index]["file_path"]}"></img>`;
                     }
+                    console.log(imgslider);
+                    
 
-                    el += ` <ul>
-                                <li>
-                                    <div class="shopping-cart-img">
-                                        <a href="shop-product-right.html">${imgslider}</a>
-                                    </div>
-                                    <div class="shopping-cart-title">
-                                        <h4>
-                                            <a href="shop-product-right.html">${
-                                                data[index]["product_name"]
-                                            }</a>
-                                        </h4>
-                                        <h4><span>${
-                                            data[index]["qty"]
-                                        } × </span>${formatRupiah(
-                        data[index]["price"]
-                    )}</h4>
-                                    </div>
-                                    <div class="shopping-cart-delete">
-                                        <a onclick="deleteCart(${
-                                            data[index]["id"]
-                                        })"><i class="fi-rs-cross-small"></i></a>
-                                    </div>
+                    el += ` 
+                            <ul class="d-flex pt-20 pb-20 border-b-light-gray">
+                                <li class="h-shop-cart-img pl-0">
+                                    <a class="d-block" href="#"> ${imgslider}</a>
+                                </li>
+                                <li class="pl-3">
+                                    <h6 class="single-product-name"><a
+                                            href="#">${data[index]["product_name"]}</a></h6>
+                                    <span class="primary-color">${quantity}<span>x</span>${formatRupiah(
+                                        price * quantity
+                                    )}</span>
+                                </li>
+                                <li class="s-p-remove px-1 pl-0">
+                                    <span onclick="deleteCart(${data[index]["id_product"]})">x</span>
                                 </li>
                             </ul>`;
                 }
 
-                elfooter = ` <div class="shopping-cart-footer">
-                                <div class="shopping-cart-total">
-                                    <h4>Total <span>${formatRupiah(
+                elfooter = `
+                            <div class="s-sub-t mt-3 mb-20">
+                                <span class="theme-color">Subtotal:</span>
+                                <span class="theme-color float-right">${formatRupiah(
                                         totalPrice
-                                    )}</span></h4>
-                                </div>
-                                <div class="shopping-cart-button">
-                                    <a href="${baseURL+"/home/checkout"}">Checkout</a>
-                                </div>
-                            </div>`;
+                                    )}</span>
+                            </div>
+                            <a href="#" class="sub-btn d-inline-block width100 text-white text-uppercase theme-bg border-0 ">checkout</a>
+                           `
                 el += elfooter;
 
-                $(".list-products-cart").html(el);
+                $(".h-shop-cart-contetn").html(el);
             } else {
-                sweetAlert("Oops...", response.info, "error");
+                $('.s-count').text(0)
+                $(".h-shop-cart-contetn").html("No Product In Cart")
+                // sweetAlert("Oops...", response.info, "error");
             }
         },
         error: function (xhr, status, error) {

@@ -73,13 +73,10 @@ function getListData() {
                 mRender: function (data, type, row) {
                     $rowData = row.product_name;
                     if (row.status == 0) {
-                        $rowData += ` <span class="badge rounded-pill text-bg-primary">Tersedia</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-primary">Aktif</span>`;
                     }
                      if (row.status == 1) {
-                        $rowData += ` <span class="badge rounded-pill text-bg-danger">Sewa</span>`;
-                    }
-                    if (row.status == 2) {
-                        $rowData += ` <span class="badge rounded-pill text-bg-dark">Rusak</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-danger">Inaktif</span>`;
                     }
                     return $rowData;
                 },

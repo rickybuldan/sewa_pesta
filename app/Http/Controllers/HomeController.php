@@ -46,7 +46,7 @@ class HomeController extends Controller
             // Menambahkan base URL ke dalam array
         ];
 
-        return view('pages.landing2.home')
+        return view('pages.landing3.home')
             ->with($data);
 
     }
@@ -288,7 +288,7 @@ class HomeController extends Controller
                 // Menambahkan base URL ke dalam array
             ];
 
-            return view('pages.landing2.checkout')
+            return view('pages.landing3.checkout')
                 ->with($data);
         }
     
@@ -324,8 +324,7 @@ class HomeController extends Controller
                                     p.price,
                                     p.product_name,
                                     p.file_path,
-                                    p.stock,
-                                    (p.weight * c.qty) weight
+                                    p.items
 
                                 FROM " . $data->tableName;
                 }
@@ -686,8 +685,13 @@ class HomeController extends Controller
                     $data = json_decode($request->getContent());
 
                     $status = [];
+                    $col = 'id';
 
-                    $saved = DB::table($data->tableName)->where('id', $data->id)->delete();
+                    if ($data->tableName == "carts"){
+                        $col='id_product';
+                    }
+
+                    $saved = DB::table($data->tableName)->where( $col, $data->id)->delete();
 
                     $saved = $MasterClass->checkerrorModelUpdate($saved);
 

@@ -9,7 +9,7 @@
         @include('includes.layout_frontend.header')
         @include('includes.layout_frontend.right_sidebar')
         <main class="main">
-            @yield('content')
+            @yield(section: 'content')
         </main>
         @include('includes.layout_frontend.footer')
         
