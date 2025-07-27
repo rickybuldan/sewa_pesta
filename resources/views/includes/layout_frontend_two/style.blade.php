@@ -3,17 +3,14 @@
     <title></title>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>DWI&#8211; KARYA &amp; PILIHAN &#8211; UNTUK ANDA</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
+    <title>SEWA PESTA</title>
+    <!-- Google font-->
     <!-- Favicon -->
-    
-       
- 
-        <!-- Place favicon.ico in the root directory -->
-    <link rel="shortcut icon" href="images/logo/favicons.png" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('template/admin3/dist/assets/images/favicon.ico') }}">
 
     <!-- All css here -->
     <link rel="stylesheet" href="{{ asset('template/frontend2/css/bootstrap.min.css') }}">
