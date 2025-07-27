@@ -38,7 +38,7 @@
                                         <h2 class="text-capitalize theme-color mb-20">Checkout</h2>
                                         <nav aria-label="breadcrumb">
                                             <ol class="breadcrumb justify-content-center bg-transparent">
-                                            <li class="breadcrumb-item"><a class="primary-color" href="index.html">Home</a></li>
+                                            <li class="breadcrumb-item"><a class="primary-color" href="/home">Home</a></li>
                                             <li class="breadcrumb-item active text-capitalize" aria-current="page">Checkout</li>
                                             </ol>
                                         </nav>

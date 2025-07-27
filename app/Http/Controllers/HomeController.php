@@ -295,6 +295,47 @@ class HomeController extends Controller
         return redirect('/login');
         
     }
+
+    public function productdetails(Request $request)
+    {
+        if(Auth::check()){
+            $javascriptFiles = [
+                asset('action-js/global/global2-action.js'),
+                asset('action-js/global/product-detail-action.js')
+                // asset('action-js/generate/generate-action.js'),
+                // asset('action-js/masterdata/house-action.js'),
+            ];
+
+            $cssFiles = [
+                // asset('css/main.css'),
+                // asset('css/custom.css'),
+            ];
+            $userId = Auth::id();
+            $baseURL = url('/');
+            $noinvoice = $request->get('id_product');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+                'const uid = "' . $userId . '"',
+                'const id_product_glob = "'. $noinvoice.'"',
+            ];
+
+
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs' => $varJs,
+                'title' => "Checkout",
+                'subtitle' => "Index",
+                // Menambahkan base URL ke dalam array
+            ];
+
+            return view('pages.landing3.productdetails')
+                ->with($data);
+        }
+    
+        return redirect('/login');
+        
+    }
     // method action db
     public function loadGlobal(Request $request)
     {

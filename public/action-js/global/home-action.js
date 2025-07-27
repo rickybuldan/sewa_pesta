@@ -129,50 +129,13 @@ function loadProduct() {
 }
 
 function selectedProduct(params) {
+    // alert(1)
     id = params;
 
-    $.ajax({
-        url: baseURL + "/home/loadGlobal",
-        type: "POST",
-        data: JSON.stringify({ tableName: "products", where: "id = " + id }),
-        dataType: "json",
-        contentType: "application/json",
-        beforeSend: function () {
-            // Swal.fire({
-            //     title: "Loading",
-            //     text: "Please wait...",
-            // });
-        },
-
-        complete: function () { },
-        success: function (response) {
-            console.log(response);
-            // Handle response sukses
-            if (response.code == 0) {
-                data = response.data;
-
-                $(".product-name").html(data[0]["product_name"]);
-                $(".product-brands").html(data[0]["brands"]);
-                $(".product-price span").html(formatRupiah(data[0]["price"]));
-                $(".product-desc").html(data[0]["desc"]);
-
-                imgpath = data[0]["file_path"];
-                console.log(imgpath);
-                if (imgpath) {
-                    img = `  <figure class="border-radius-10">
-                                <img src="storage/${imgpath}" alt="product image">
-                            </figure>`;
-
-                    $(".product-image-slider").html(img);
-                }
-            } else {
-                sweetAlert("Oops...", response.info, "error");
-            }
-        },
-        error: function (xhr, status, error) {
-            sweetAlert("Oops...", xhr.responseText, "error");
-        },
-    });
+    getinvoice(id);
+    function getinvoice(params) {
+        location.href = baseURL + "/home/productdetails?id_product=" + params;
+    }
 }
 
 // function checkValidation() {
