@@ -77,7 +77,7 @@ function getTransaction() {
 
                             successCallback(events);
                         } else {
-                            sweetAlert("Oops...", response.info, "error");
+                            // sweetAlert("Oops...", response.info, "error");
                         }
                     },
                     error: function (xhr, status, error) {
