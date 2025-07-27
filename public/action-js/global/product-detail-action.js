@@ -48,7 +48,7 @@ function loadOrderCart() {
                 $(".zoom-gallery").attr("href",baseURL + $rowData);
                 $('.details-img').attr("src",$rowData);
                 $('.details-name').html(data.product_name);
-                $('.details-price').html(formatRupiah(data.price));
+                $('.details-price').html(formatRupiah(data.price)+"/Hari");
                 $('.details-desc').html(data.desc);
                 // $('.total-transfer').html(formatRupiah(grandTotal));
                 
