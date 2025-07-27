@@ -1,6 +1,5 @@
 <head>
     <meta charset="utf-8">
-    <title></title>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
