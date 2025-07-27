@@ -239,7 +239,7 @@ function getDetailProducts() {
 
                     galleryprods += `
                             <tr>
-                                <td>${prods[index].items}</td>
+                                <td>${prods[index].item}</td>
                                 <td>${nm}</td>
                                 <td>${formatRupiah(dsc)}</td>
                                 <td>${formatRupiah(img)}</td>

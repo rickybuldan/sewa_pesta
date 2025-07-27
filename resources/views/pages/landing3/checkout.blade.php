@@ -23,6 +23,8 @@
     }
 
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
 @endpush
 
 @section('content')
@@ -57,33 +59,65 @@
                     <div class="row">
                         <div class="col-xl-8  col-lg-10  col-md-12  col-sm-12 col-12 offset-xl-2 offset-lg-1 px-xl-0">
                             <div class="login-form-area border-light-gray2 pl-90 pr-90 pt-90 pb-95">
-                                <h3 class="mb-30 text-center">Login From Here</h3>
-                                <form action="#">
-                                    <div class="login-form">
-                                        <label class="mt-25">Email Address <span class="secondary-color">**</span></label>
-                                        <div class="email">
-                                            <input type="email" class="form-control rounded-0 border-light-gray2 pl-20" name="email" id="r-email" placeholder="Enter Username or Email address">
+                                <h3 class="mb-30 text-center">Cart Details</h3>
+                              
+                                    <div class="login-form mb-50">
+                                        <label class="mt-25">Nama <span class="secondary-color">**</span></label>
+                                        <div class="">
+                                            <input type="text" class="form-control rounded-0 border-light-gray2 pl-20"  id="f-name" placeholder="Nama">
                                         </div>
-                                        <label class="mt-25">Password <span class="secondary-color">**</span></label>
-                                        <div class="password">
-                                            <input type="text" class="form-control rounded-0 border-light-gray2 pl-20" name="subject" id="subject" placeholder="Enter password">
+                                        <label class="mt-25">Phone <span class="secondary-color">**</span></label>
+                                        <div class="">
+                                            <input type="text" class="form-control rounded-0 border-light-gray2 pl-20"  id="f-phone" placeholder="Alamat">
                                         </div>
-                                        <div class="forget-pass d-sm-flex align-items-center justify-content-between pt-20 pb-20">
-                                            <div class="save-info d-flex mb-15">
-                                                <input class="p-0 mr-2" type="checkbox" aria-label="Checkbox for following text input">
-                                                <p class="mb-0"> Remember me! </p>
-                                            </div>
-                                            <p class="mb-15"><a class="secondary-color" href="#">Lost your password? </a></p>
+                                        <label class="mt-25">Alamat <span class="secondary-color">**</span></label>
+                                        <div class="">
+                                            <input type="text" class="form-control rounded-0 border-light-gray2 pl-20"  id="f-address" placeholder="Alamat">
                                         </div>
+                                        <label class="mt-25">Jumlah Hari <span class="secondary-color">**</span></label>
+                                        <div class="">
+                                            <input type="text" class="form-control rounded-0 border-light-gray2 pl-20"  id="dateRange" placeholder="Hari">
+                                        </div>
+                                        <label class="mt-25">Item Details<span class="secondary-color"></span></label>
+                                        <div class="">
+                                            <table class="order_table table table-striped" >
+                                                <thead>
+                                                    <th>Barang</th>
+                                                    <th>Item</th>
+                                                    <th>Total</th>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+
+                                        <label class="mt-25">Transfer Ke:<span class="secondary-color"></span></label>
+                                        <div class="">
+                                            <table class="table table-striped" >
+                                                <thead>
+                                                    <th>No Rekening</th>
+                                                    <th>A/N</th>
+                                                    <th>Total</th>
+                                                </thead>
+                                                <tbody>
+                                                    <td class="text-center">111222333455</td>
+                                                    <td class="text-center">John Doe</td>
+                                                    <td class="text-right total-transfer">Rp 0</td>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <label class="mt-25">Bukti Pembayaran <span class="secondary-color">**</span></label>
+                                        <div class="">
+                                            <input type="file" class="form-control rounded-0 border-light-gray2 pl-20"  id="form-img" placeholder="Alamat">
+                                        </div>
+                                        
+
                                     </div><!-- /login-form -->
-                                    <a href="#" class="sub-btn d-inline-block text-center text-white theme-bg transition text-uppercase width100">Login now</a>
-                                    <div class="or text-center mt-30 mb-30">
-                                        <span class="d-block position-relative">or</span>
-                                    </div>
-                                    <a href="#" class="sub-btn d-inline-block text-center text-white theme-bg transition text-uppercase width100">register now</a>
-                                </form>
+                                    <button id="payButton" class="sub-btn d-inline-block text-center text-white theme-bg transition text-uppercase width100">Booking Now!</button>
+                                   
                             </div>
                         </div>
+                        
                     </div><!-- /row -->
                 </div><!-- /container -->
             </div>
@@ -92,6 +126,7 @@
 
 
 @push('after-script')
+   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         @foreach ($varJs as $varjsi)
             {!! $varjsi !!}
@@ -103,4 +138,5 @@
         <script src="{{ $file }}"></script>
     @endforeach
     <script src="{{ asset('template/admin2/assets/js/owlcarousel/owl.carousel.js') }}"></script>
+ 
 @endpush

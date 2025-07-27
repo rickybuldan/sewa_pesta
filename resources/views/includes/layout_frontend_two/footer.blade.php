@@ -24,9 +24,9 @@
                                 </li>
                             </ul>
                             <ul class="footer-menu text-center">
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="index.html">Tracking</a></li>
-                                <li><a href="index.html">Cart</a></li>
+                                <li><a href="/home">Home</a></li>
+                                <li><a href="#" class="btn-tracking">Tracking</a></li>
+                                <li><a href="#" class="btn-cart">Cart</a></li>
                             </ul><!-- /footer-menu -->
                         </div><!-- /footer-top-content -->
                     </div><!-- /col -->

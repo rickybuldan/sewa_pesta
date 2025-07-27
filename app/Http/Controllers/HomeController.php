@@ -345,7 +345,10 @@ class HomeController extends Controller
                 // }else{
                 //     DB::rollBack();
                 // }
-
+                $tab    = "transactions";
+                if (str_contains($data->tableName, $tab) == true) {
+                    $status['data'] =$saved['data'][0]->no_transaction;
+                }
                 $results = [
                     'code' => $status['code'],
                     'info' => $status['info'],
@@ -399,33 +402,48 @@ class HomeController extends Controller
 
                 $nowdate = now();
                 $notrx = Transaction::generateNoTransaction($nowdate);
-                $createdBy = !empty($data->uid) ? $data->uid : null;
+                $createdBy = $MasterClass->getSession(('user_id'));
                 $transaction = Transaction::create([
                     'customer_name' => $data->name,
-                    'transaction_start_date' => $data->date,
-                    'transaction_type' => $data->transaction_type,
-                    'no_transaction' => $notrx,
                     'address' => $data->address,
+                    'customer_phone' => $data->phone,
+                    'start_date' => $data->start_date,
+                    'end_date' => $data->end_date,
+                    'no_transaction' => $notrx,
                     'created_by' => $createdBy,
-                    'phone' => $data->phone,
-                    'price_total' => $data->price_total,
-                    'bukti' => $imagePath,
-                    'status' => 40,
+                    'updated_by' => $createdBy,
+                    'price_total' => $data->grand_total,
+                    'file_path' => $imagePath,
+                    'status' => 10,
                 ]);
 
-                $saved1 = $MasterClass->checkErrorModel($transaction);
+                $carts = Cart::where('id_user', $createdBy)->get();
+                foreach ($carts as $cart) {
+                    // Cek apakah stok produk cukup
+                    if ($cart->product && $cart->qty <= $cart->product->items) {
+                        
+                        $detailTransac = TransactionDetail::create([
+                            'id_transaction' => $transaction->id,
+                            'id_product' => $cart->id_product,
+                            'day' => $data->day,
+                            'item'=> $cart->qty,
+                            'sub_total' => $cart->product->price * $data->day * $cart->qty ,
+                        ]);
+                        $cart->product->items -= $cart->qty;
+                        $cart->product->save();
 
-                foreach ($data->data_pet as $pet) {
-                    $detailTransac = TransactionDetail::create([
-                        'transaction_id' => $transaction->id,
-                        'package_id' => $pet->package,
-                        'pet_name' => $pet->name,
-                        'karyawan_id' => $pet->karyawan_id,
-                        'pet_type' => $pet->type,
-                    ]);
-
-                    $saved2 = $MasterClass->checkErrorModel($detailTransac);
+                        $saved2 = $MasterClass->checkErrorModel($detailTransac);
+                        
+                    }else{
+                        DB::rollBack();
+                        $results = [
+                            'code' => '102',
+                            'info' => "Stok ". $cart->product->product_name . " tidak cukup. Stok sekarang : " . $cart->product->items . ". Silakan Hubungi admin.",
+                        ];
+                        return $MasterClass->Results($results);
+                    }
                 }
+                $deletecart = Cart::where('id_user', $createdBy)->delete();
 
                 $status = $saved2;
                 
@@ -436,11 +454,11 @@ class HomeController extends Controller
                 } else {
                     DB::rollBack();
                 }
-                $status = $saved1;
+
                 $results = [
                     'code' => $status['code'],
                     'info' => $status['info'],
-                    'data' => $status['data'],
+                    'data' => $notrx,
                 ];
 
             } else {

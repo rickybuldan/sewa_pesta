@@ -452,7 +452,7 @@ function loadCart() {
                                         totalPrice
                                     )}</span>
                             </div>
-                            <a href="#" class="sub-btn d-inline-block width100 text-white text-uppercase theme-bg border-0 ">checkout</a>
+                            <a href="/home/checkout" class="sub-btn d-inline-block width100 text-white text-uppercase theme-bg border-0 ">checkout</a>
                            `
                 el += elfooter;
 
@@ -479,4 +479,117 @@ function validationSwalFailed(param, isText) {
         return 1;
     }
 }
+
+function deleteCart(id_product) {
+    swal({
+        title: "Are you sure to delete ?",
+        text: "You will not be able to recover this imaginary file !!",
+        type: "warning",
+        showCancelButton: !0,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it !!",
+        cancelButtonText: "No, cancel it !!",
+        closeOnConfirm: !1,
+        closeOnCancel: !1,
+    }).then(function (e) {
+        console.log(e);
+        if (e.value) {
+            $.ajax({
+                url: baseURL + "/home/deleteGlobal",
+                type: "POST",
+                data: JSON.stringify({ id: id_product, tableName: "carts" }),
+                dataType: "json",
+                contentType: "application/json",
+                beforeSend: function () {
+                    // Swal.fire({
+                    //     title: "Loading",
+                    //     text: "Please wait...",
+                    // });
+                },
+                complete: function () { },
+                success: function (response) {
+                    // Handle response sukses
+                    if (response.code == 0) {
+                        swal("Deleted !", response.info, "success").then(
+                            function () {
+                                location.reload();
+                                // loadCart()
+                            }
+                        );
+                    } else {
+                        sweetAlert("Oops...", response.info, "error");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    // console.log(xhr.responseText);
+                    sweetAlert("Oops...", xhr.responseText, "error");
+                },
+            });
+        } else {
+            swal(
+                "Cancelled !!",
+                "Hey, your imaginary file is safe !!",
+                "error"
+            );
+        }
+    });
+}
+
+$(".btn-cart").on('click',function(){
+    $(".header-shopping-cart-details").toggle();
+});
+
+
+$(".btn-tracking").click(function () {
+    $(".header-search-details").addClass('open-search-info');
+});
+
+$(".btn-search").click(function () {
+    notransaction = $(this).prev('input').val();
+    console.log(notransaction);
+    
+        $.ajax({
+        url: baseURL + "/home/loadGlobal",
+        type: "POST",
+        data: JSON.stringify({
+            tableName: "transactions",
+            where: "no_transaction = '" + notransaction+"'",
+        }),
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: function () {
+            // Swal.fire({
+            //     title: "Loading",
+            //     text: "Please wait...",
+            // });
+        },
+        complete: function () {},
+        success: function (response) {
+            // console.log(response);
+            // Handle response sukses
+            if (response.code == 0) {
+                // swal("Saved !", response.info, "success").then(function () {
+                //     // location.reload();
+                //     location.href = baseURL+"/invoice?noinvoice="+response.data.no_transaction
+                // });
+                // Reset form
+                getinvoice(response.data);
+                function getinvoice(params) {
+                    location.href = baseURL + "/invoice?noinvoice=" + params;
+                }
+                
+            } else {
+                sweetAlert("Oops...", response.info + " - Tidak ditemukan, Maaf silakan coba lagi.", "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+});
+
+
 

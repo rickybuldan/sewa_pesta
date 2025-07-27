@@ -14,8 +14,8 @@
                                      <li><a class="active" href="#">Menu</a>
                                          <ul class="mega-menu border-gray pt-30 pb-20 pl-30 pr-30">
                                              <li><a href="/home">Home</a></li>
-                                             <li><a href="#">Tracking</a></li>
-                                             <li><a href="#">Cart</a></li>
+                                             <li><a href="#" class="btn-tracking">Tracking</a></li>
+                                             <li><a href="#" class="btn-cart">Cart</a></li>
                                              {{-- <li><a href="index2.html">Home page 2</a></li>
                                              <li><a href="index3.html">Home page 3</a></li>
                                              <li><a href="index4.html">Home page 4</a></li>
@@ -293,8 +293,8 @@
              <li><a href="shop.html">Ceiling lights</a></li>
          </ul> --}}
          <form action="contact.html" class="position-relative pt-10 pb-15">
-             <input class="form-control" type="text" placeholder="Cari Transaksi...">
-             <a class="position-absolute" href="#"><span class="icon-search"></span></a>
+             <input class="form-control input-no-transaction" type="text" placeholder="Cari Transaksi...">
+             <a class="position-absolute btn-search" href="#"><span class="icon-search"></span></a>
          </form>
      </div>
     
@@ -371,8 +371,8 @@
              <li><a href="shop.html">Ceiling lights</a></li> --}}
          </ul>
          <form action="#" class="position-relative pt-50">
-             <input class="form-control" type="text" placeholder="Cari Transaksi...">
-             <a class="position-absolute" href="#"><span class="icon-search"></span></a>
+             <input class="form-control input-no-transaction" type="text" placeholder="Cari Transaksi...">
+             <a class="position-absolute btn-search" href="#"><span class="icon-search"></span></a>
          </form>
      </div>
  </div><!-- /extra-info -->

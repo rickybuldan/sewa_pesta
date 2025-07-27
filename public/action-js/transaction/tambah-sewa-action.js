@@ -61,6 +61,7 @@ function getListData() {
         data: JSON.stringify({
             where: wherestate,
             tableName: "products",
+            where:"status = 0 and items > 0"
         }),
         dataType: "json",
         contentType: "application/json",
@@ -76,7 +77,7 @@ function getListData() {
         success: function (response) {
             // Handle response sukses
             if (response.code == 0) {
-                
+
                 if (response.data.length == 0) {
                     sweetAlert("Oops...", "Tidak ada data!", "error");
                     return;
@@ -119,9 +120,9 @@ function getListData() {
                                         ${$defaultimg}
                                         <div class="d-grid gap-2 mt-3">
                                             <span class="badge text-bg-secondary mb-3">${formatRupiah(
-                                                pc
-                                            )} / hari</span>
-                                            <button type="button" onclick='addToCart(this,${idp})' class="btn btn-outline-info rounded-pill">Tambah</button>
+                        pc
+                    )} / hari</span>
+                                            <button type="button" onclick='addToCart(this,${idp})' class="btn btn-outline-info tambah-item-btn-${idp} rounded-pill">Tambah</button>
                                         </div>
                                     </div> <!-- end card-body -->
                                     
@@ -190,50 +191,68 @@ flatpickr("#dateRange", {
     allowInput: true,
 });
 
-function countSubTotal(prc, day) {
-    return prc * day;
+function countSubTotal(prc, day, items) {
+    return prc * day * items;
 }
 
 function addToCart(el, params) {
     // alert(1)
-    resprod = getProductFromArr(params);
-    // console.log(resprod);
-    globArrCart.push(resprod[0]);
+    console.log(el);
+    $("#add-item-btn").html("Tambah");
+    $(".tambah-item-btn-"+params).html("Tambah");
+    if ($(el).attr("id") != "add-item-btn") {
+        $("#add-item-btn").attr("onclick", `addToCart(this,${params})`);
+        $("#modal-data").modal("show")
+    } else {
+        resprod = getProductFromArr(params);
+        // console.log(resprod);
+        resprod[0]['qty'] = items = $("#form-item").val()
+        globArrCart.push(resprod[0]);
+        console.log(globArrCart);
+        
+        $("#add-item-btn").attr("onclick", `deleteCart(this,${params})`);
+        $("#add-item-btn").html("Hapus");
 
-    $(el).attr("onclick", `deleteCart(this,${params})`);
-    $(el).html("Hapus");
-    ctAllProd();
+        $(".tambah-item-btn-"+params).attr("onclick", `deleteCart(this,${params})`);
+        $(".tambah-item-btn-"+params).html("Hapus");
+        ctAllProd();
+    }
+
+
+
 }
 
 function ctSubProd(resprod) {
+    
     htcontent = `
         <div class="row content-it-${resprod.id}">
             <div class="col-xl-4">
                 ${resprod.product_name}
             </div>
             <div class="col-xl-4 text-end">
-                ${formatRupiah(resprod.price)}
-                * ${globSumDay}
+                ${formatRupiah(resprod.price)}*${globSumDay}*${resprod.qty}
             </div>
             <div class="col-xl-4 text-end">
-                ${formatRupiah(countSubTotal(resprod.price, globSumDay))}
+                ${formatRupiah(countSubTotal(resprod.price, globSumDay, resprod.qty))}
             </div>
         </div>
     `;
+    
     return htcontent;
 }
 
 globGrandTotal = 0;
 function ctAllProd() {
     htcontent = "";
-    console.log(globArrCart[0]["price"]);
+
     total = 0;
 
     for (let index = 0; index < globArrCart.length; index++) {
         pnm = globArrCart[index];
         prc = pnm.price;
+        items = pnm.items;
 
-        total += parseInt(prc) * globSumDay;
+        total += parseInt(prc) * globSumDay * parseInt(items);
         htcontent += ctSubProd(pnm);
     }
     globGrandTotal = total;
@@ -243,14 +262,17 @@ function ctAllProd() {
 }
 
 function deleteCart(el, params) {
-    $(`.content-it-${params}`).remove();
 
+    $(`.content-it-${params}`).remove();
+    $("#add-item-btn").html("Tambah");
+    $(".tambah-item-btn-"+params).html("Tambah");
+    
+    $("#add-item-btn").attr("onclick", `addToCart(this,${params})`);
+    $(".tambah-item-btn-"+params).attr("onclick", `addToCart(this,${params})`);
+    
     globArrCart = globArrCart.filter(function (obj) {
         return obj.id !== params;
-    });
-
-    $(el).attr("onclick", `addToCart(this,${params})`);
-    $(el).html("Tambah");
+    });    
 
     ctAllProd();
 }
@@ -433,7 +455,7 @@ function deleteData(data) {
                         showConfirmButton: false,
                     });
                 },
-                complete: function () {},
+                complete: function () { },
                 success: function (response) {
                     // Handle response sukses
                     if (response.code == 0) {
@@ -518,7 +540,7 @@ function saveData() {
                 showConfirmButton: false,
             });
         },
-        complete: function () {},
+        complete: function () { },
         success: function (response) {
             // Handle response sukses
             if (response.code == 0) {
@@ -529,7 +551,7 @@ function saveData() {
                         location.href = baseURL + "/invoice?noinvoice=" + params;
                     }
                 });
-                
+
                 // Reset form
             } else {
                 sweetAlert("Oops...", response.info, "error");

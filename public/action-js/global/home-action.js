@@ -4,11 +4,13 @@
 loadProduct();
 loadCart()
 
+
+
 function loadProduct() {
     $.ajax({
         url: baseURL + "/home/loadGlobal",
         type: "POST",
-        data: JSON.stringify({ tableName: "products", where: "status = 0" }),
+        data: JSON.stringify({ tableName: "products", where: "status = 0" + " and items > 0" }),
         dataType: "json",
         contentType: "application/json",
         beforeSend: function () {
@@ -66,7 +68,7 @@ function loadProduct() {
                                     <div class="single-product-action d-flex position-relative transition-3">
                                         <ul class="single-product-price d-flex">
                                             <li>
-                                                <span>${formatRupiah(data[index]["price"])}</span>
+                                                <span>${formatRupiah(data[index]["price"])}/Hari</span>
                                             </li>
                                         </ul>
                                         <div class="add-to-cart position-absolute transition-3">
@@ -193,61 +195,6 @@ function selectedProduct(params) {
 //     saveData();
 // }
 
-function deleteCart(id_product) {
-    swal({
-        title: "Are you sure to delete ?",
-        text: "You will not be able to recover this imaginary file !!",
-        type: "warning",
-        showCancelButton: !0,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, delete it !!",
-        cancelButtonText: "No, cancel it !!",
-        closeOnConfirm: !1,
-        closeOnCancel: !1,
-    }).then(function (e) {
-        console.log(e);
-        if (e.value) {
-            $.ajax({
-                url: baseURL + "/home/deleteGlobal",
-                type: "POST",
-                data: JSON.stringify({ id: id_product, tableName: "carts" }),
-                dataType: "json",
-                contentType: "application/json",
-                beforeSend: function () {
-                    // Swal.fire({
-                    //     title: "Loading",
-                    //     text: "Please wait...",
-                    // });
-                },
-                complete: function () { },
-                success: function (response) {
-                    // Handle response sukses
-                    if (response.code == 0) {
-                        swal("Deleted !", response.info, "success").then(
-                            function () {
-                                // location.reload();
-                                loadCart()
-                            }
-                        );
-                    } else {
-                        sweetAlert("Oops...", response.info, "error");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Handle error response
-                    // console.log(xhr.responseText);
-                    sweetAlert("Oops...", xhr.responseText, "error");
-                },
-            });
-        } else {
-            swal(
-                "Cancelled !!",
-                "Hey, your imaginary file is safe !!",
-                "error"
-            );
-        }
-    });
-}
 
 function saveCart(id_product, qty) {
     isObject = {};

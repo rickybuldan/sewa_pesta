@@ -10,4 +10,9 @@ class Cart extends Model
     use HasFactory;
     // protected $table = "obat";
     protected $fillable = ['id_product','id_user','qty','is_checkout'];
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'id_product');
+    }
 }
+

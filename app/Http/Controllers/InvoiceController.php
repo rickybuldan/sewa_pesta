@@ -31,6 +31,7 @@ class InvoiceController extends Controller
                 $sql = " 
                         SELECT
                             t.*,
+                            td.qty,
                             COALESCE(d.denda, 0) AS denda
                         FROM transactions t
                         LEFT JOIN (

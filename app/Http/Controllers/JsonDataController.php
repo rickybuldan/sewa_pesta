@@ -1185,13 +1185,30 @@ class JsonDataController extends Controller
                     $saved1 = $MasterClass->checkErrorModel($transaction);
 
                     foreach ($data->items as $pdr) {
+                        $product = Product::where('id', $pdr->id)->first();
+                        if ($pdr->qty && $pdr->qty <= $product->items) {
+                        
+                            $detailTransac = TransactionDetail::create([
+                                'id_transaction' => $transaction->id,
+                                'id_product' => $pdr->id,
+                                'day' => $data->day,
+                                'sub_total' => ($pdr->price * $data->day * $pdr->qty),
+                                'item' => $pdr->qty,
+                            ]);
+                            $product->items -= $pdr->qty;
+                            $product->save();
 
-                        $detailTransac = TransactionDetail::create([
-                            'id_transaction' => $transaction->id,
-                            'id_product' => $pdr->id,
-                            'day' => $data->day,
-                            'sub_total' => ($pdr->price * $data->day),
-                        ]);
+                            $saved2 = $MasterClass->checkErrorModel($detailTransac);
+                            
+                        }else{
+                            DB::rollBack();
+                            $results = [
+                                'code' => '102',
+                                'info' => "Stok ". $product->product_name . " tidak cukup. Stok sekarang : " . $product->items . ". Silakan Hubungi admin.",
+                            ];
+                            return $MasterClass->Results($results);
+                        }
+                       
 
                         $saved2 = $MasterClass->checkErrorModel($detailTransac);
                         // $saveProd = Product::where( [

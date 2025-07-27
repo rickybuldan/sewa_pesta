@@ -43,7 +43,7 @@ Route::post('/home/loadGlobal', [HomeController::class, 'loadGlobal']);
 Route::post('/home/loadProductSell', [HomeController::class, 'loadProductSell']);
 Route::post('/home/saveCart', [HomeController::class, 'saveCart']);
 Route::post('/home/deleteGlobal', [HomeController::class, 'deleteGlobal']);
-
+Route::post('/home/saveTransaction', [HomeController::class, 'saveTransaction']);
 Route::get('/home/checkout', [HomeController::class, 'checkout'])->name('checkout');
 // Route::get('/home/loadProvinces', [HomeController::class, 'loadProvinces'])->name('loadProvinces');
 // Route::post('/home/loadCities', [HomeController::class, 'loadCities'])->name('loadCities');
