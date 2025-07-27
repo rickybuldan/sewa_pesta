@@ -70,15 +70,15 @@
                                         <a href="images/product/p-tab-large-img6.jpg"
                                             class="zoom-gallery dark-black-color bg-white d-inline-block"
                                             data-fancybox="images"><i class="fas fa-search"></i>
-                                            <img class="width100 d-none details-img" src="images/product/p-tab-large-img6.jpg"
-                                                alt=""></a>
+                                            <img class="width100 d-none details-img"
+                                                src="images/product/p-tab-large-img6.jpg" alt=""></a>
                                     </div><!-- /product-gallery-btn -->
                                     <div class="product-img">
-                                        <img class="width100 height100 details-img mb-50" src="images/product/p-tab-large-img6.jpg"
-                                            alt="">
+                                        <img class="width100 height100 details-img mb-50"
+                                            src="images/product/p-tab-large-img6.jpg" alt="">
                                     </div><!-- /product-img -->
                                 </div>
-                               
+
                             </div><!-- /tab-content -->
                         </div><!-- /product-left-img-tab -->
                     </div><!-- /col -->
@@ -89,7 +89,7 @@
                                     <a href="#" class="primary-color mr-1">Product</a>
                                     {{-- <a href="product-details.html" class="primary-color">Flowerpots</a> --}}
                                 </div>
-                                <h3 class="details-name">Wood design bedroom clock</h3>
+                                <h3 class="details-name">Product Name</h3>
                                 {{-- <div class="rating rating-shop mb-15">
                                             <ul class="d-inline-block">
                                                 <li><span><i class="far fa-star"></i></span></li>
@@ -101,47 +101,59 @@
                                             <span class="add-review"><a href="#">2 customer reviews</a></span>
                                         </div> --}}
                                 <div class="p-info-img-price mt-25 mb-25">
-                                    <span class="d-block details-price">$96.00</span>
+                                    <span class="d-block details-price">Rp 0</span>
                                 </div>
-                                <p class="details-desc pb-50">Typi non habent claritatem insitam, est usus legentis in iis qui facit
+                                 <div class="p-info-img-price mt-25 mb-25">
+                                    <span class="d-block details-stock">0 in Stock</span>
+                                </div>
+                                <p class="details-desc pb-50">Typi non habent claritatem insitam, est usus legentis in iis
+                                    qui facit
                                     eorum claritatem. Investigationes demonstraverunt lectores legere me
                                     lius quod ii legunt saepius. Claritas est etiam processus.</p>
-                               
-                                {{-- <div class="all-info d-sm-flex align-items-center border-t-light-gray border-b-light-gray pb-50 pt-30">
-                                            <div class="quick-add-to-cart d-lg-flex align-items-center">
-                                                <div class="quantity-field position-relative d-inline-block mt-15 mr-15">
-                                                    <input type="text" name="select1" value="1" class="quantity-input-arrow quantity-input-2 border-light-gray2 text-center"> 
-                                                </div>
-                                                <a href="#" class="sub-btn dark-black-bg d-inline-block text-white mt-15 mr-15">Add to cart</a>
-                                            </div><!-- /quick-add-to-cart -->
-                                            <ul class="single-product-list-button d-flex align-items-center mt-15">
-                                                <li data-toggle="tooltip" data-placement="top" title="Add to Wishlist">
-                                                   <a href="wishlist.html" class="d-block border-light-gray2 text-dark"><span class="icon-heart"></span></a>
-                                                </li>
-                                                <li data-toggle="tooltip" data-placement="top" title="Compare">
-                                                    <a href="#" class="d-block border-light-gray2 text-dark"><span><i class="fas fa-compress"></i></span></a>
-                                                </li>
-                                            </ul><!-- /single-product-list-button -->
+
+                                <div
+                                    class="all-info d-sm-flex align-items-center border-t-light-gray border-b-light-gray pb-50 pt-30">
+                                    <div class="quick-add-to-cart d-lg-flex align-items-center">
+                                        <div class="quantity-field position-relative d-inline-block mt-15 mr-15">
+                                            <input type="text" id="f-cart-item" name="select1" value="1" min="1"
+                                                class="quantity-input-arrow quantity-input-2 border-light-gray2 text-center">
                                         </div>
-                                        <div class="sku mt-20">
-                                            <span class="text-uppercase">SKU: <span class="primary-color">3-1</span></span>                               
-                                        </div>
-                                        <div class="mega-product pt-2 pr-150">
-                                            <ul>
-                                                <li class="theme-color"><span>Categories:</span></li>
-                                                <li><a href="product-details.html" class="primary-color">Chair & Tables,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Chest of Drawers,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Deco,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Floor,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Home Accessories,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Lighting,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Outdoor,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Tables lamp,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Wall lights,</a></li>
-                                                <li><a href="product-details.html" class="primary-color">Bedroom</a></li>
-                                                <li><a href="product-detils.html" class="primary-color">Chair & Tables H6,</a></li>
-                                            </ul>
-                                        </div> --}}
+                                        <a href="#"
+                                            class="add-cart-btn sub-btn dark-black-bg d-inline-block text-white mt-15 mr-15">Add to
+                                            cart</a>
+                                    </div><!-- /quick-add-to-cart -->
+                                    {{-- <ul class="single-product-list-button d-flex align-items-center mt-15">
+                                        <li data-toggle="tooltip" data-placement="top" title="Add to Wishlist">
+                                            <a href="wishlist.html" class="d-block border-light-gray2 text-dark"><span
+                                                    class="icon-heart"></span></a>
+                                        </li>
+                                        <li data-toggle="tooltip" data-placement="top" title="Compare">
+                                            <a href="#" class="d-block border-light-gray2 text-dark"><span><i
+                                                        class="fas fa-compress"></i></span></a>
+                                        </li>
+                                    </ul> --}}
+                                    <!-- /single-product-list-button -->
+                                </div>
+                                {{-- <div class="sku mt-20">
+                                    <span class="text-uppercase">SKU: <span class="primary-color">3-1</span></span>
+                                </div> --}}
+                                <div class="mega-product pt-2 pr-150">
+                                    <ul>
+                                        <li class="theme-color"><span>Categories:</span></li>
+                                        <li><a href="#" class="primary-color">Product,</a></li>
+                                        {{-- <li><a href="product-details.html" class="primary-color">Chest of Drawers,</a></li>
+                                        <li><a href="product-details.html" class="primary-color">Deco,</a></li>
+                                        <li><a href="product-details.html" class="primary-color">Floor,</a></li>
+                                        <li><a href="product-details.html" class="primary-color">Home Accessories,</a></li>
+                                        <li><a href="product-details.html" class="primary-color">Lighting,</a></li>
+                                        <li><a href="product-details.html" class="primary-color">Outdoor,</a></li>
+                                        <li><a href="product-details.html" class="primary-color">Tables lamp,</a></li>
+                                        <li><a href="product-details.html" class="primary-color">Wall lights,</a></li>
+                                        <li><a href="product-details.html" class="primary-color">Bedroom</a></li>
+                                        <li><a href="product-detils.html" class="primary-color">Chair & Tables H6,</a> --}}
+                                        </li>
+                                    </ul>
+                                </div>
                                 {{-- <ul class="p-tags theme-color mt-2 pb-20 border-b-light-gray">
                                             <li><span>Tags:</span></li>
                                             <li><a href="product-details.html" class="primary-color">Decor,</a></li>

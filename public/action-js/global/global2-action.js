@@ -592,4 +592,12 @@ $(".btn-search").click(function () {
 });
 
 
+function selectedProduct(params) {
+    // alert(1)
+    id = params;
 
+    getinvoice(id);
+    function getinvoice(params) {
+        location.href = baseURL + "/home/productdetails?id_product=" + params;
+    }
+}

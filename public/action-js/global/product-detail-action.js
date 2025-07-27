@@ -19,8 +19,8 @@
 
 loadOrderCart()
 
+maxStock = 0
 function loadOrderCart() {
-    let xid = uid || 0;
 
     $.ajax({
         url: baseURL + "/home/loadGlobal",
@@ -50,11 +50,13 @@ function loadOrderCart() {
                 $('.details-name').html(data.product_name);
                 $('.details-price').html(formatRupiah(data.price)+"/Hari");
                 $('.details-desc').html(data.desc);
+                $('.details-stock').html(data.items + " In Stock");
+                maxStock = data.items
                 // $('.total-transfer').html(formatRupiah(grandTotal));
                 
             } else {
                 Swal.fire({
-                    title: "Oops...",
+                    title: "Oops...", 
                     text: response.info + "",
                     icon: "error",
                 })
@@ -66,5 +68,54 @@ function loadOrderCart() {
     });
 }
 
+$('.add-cart-btn').click(function () {
+    saveCart(id_product_glob)
+});
 
+
+function saveCart(id_product) {
+    isObject = {};
+    qty = $("#f-cart-item").val()
+
+    if (qty > maxStock || qty <= 0) {
+        sweetAlert("Oops...", "Input stok cart salah atau stok tidak cukup.", "warning");
+        return false;
+    }
+
+    isObject.id_product = id_product;
+    isObject.id_user = uid;
+    isObject.qty = qty;
+
+    $.ajax({
+        url: baseURL + "/home/saveCart",
+        type: "POST",
+        data: JSON.stringify(isObject),
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: function () {
+            // Swal.fire({
+            //     title: "Loading",
+            //     text: "Please wait...",
+            // });
+        },
+        complete: function () { },
+        success: function (response) {
+            // Handle response sukses
+            if (response.code == 0) {
+                swal("Saved !", response.info, "success").then(function () {
+                    // location.reload();
+                    loadCart()
+                });
+                // Reset form
+            } else {
+                sweetAlert("Oops...", response.info, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+}
 

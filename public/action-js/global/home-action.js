@@ -43,7 +43,7 @@ function loadProduct() {
 
                     el += `
                             
-                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 mb-100">
                             <div class="single-product mb-40">
                                 <div class="single-product-img position-relative over-hidden">
                                     <div class="single-product-label position-absolute">
@@ -72,7 +72,7 @@ function loadProduct() {
                                             </li>
                                         </ul>
                                         <div class="add-to-cart position-absolute transition-3">
-                                            <a onclick="saveCart(${data[index]["id"]},1)" href="#" class="d-block theme-color text-uppercase" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart" tabindex="0">
+                                            <a onclick="selectedProduct(${data[index]["id"]})" href="#" class="d-block theme-color text-uppercase" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to cart" tabindex="0">
                                                 <span class="mr-2"><span class="icon-shopping-bag"></span></span>add to cart
                                             </a>
                                         </div>
@@ -128,15 +128,7 @@ function loadProduct() {
     });
 }
 
-function selectedProduct(params) {
-    // alert(1)
-    id = params;
 
-    getinvoice(id);
-    function getinvoice(params) {
-        location.href = baseURL + "/home/productdetails?id_product=" + params;
-    }
-}
 
 // function checkValidation() {
 //     // console.log($el);

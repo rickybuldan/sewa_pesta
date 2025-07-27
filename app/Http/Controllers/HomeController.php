@@ -6,6 +6,7 @@ use App\Helpers\Master;
 use App\Models\Cart;
 use App\Models\Pengadaan;
 use App\Models\Transaction;
+use App\Models\Product;
 use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -616,6 +617,17 @@ class HomeController extends Controller
                     $qty = $getResults['data'][0]->qty;
                     $qty += $data->qty ;
                 };
+                
+                $product = Product::where('id', $data->id_product)->first();
+              
+                if ($qty > $product->items){
+                    DB::rollBack();
+                    $results = [
+                        'code' => $MasterClass::CODE_FAILED,
+                        'info' => "Total cart sebelumnya ".$qty.", Stok tersisa ". $product->items .", Silakan hapus cart sebelumnya dan tambahkan cart barang baru",
+                    ];
+                    return $MasterClass->Results($results);
+                }
 
                 $saved = Cart::updateOrCreate(
                     [
