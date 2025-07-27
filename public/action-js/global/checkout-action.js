@@ -104,7 +104,7 @@ function loadOrderCart() {
                         <tr>
                             <td class="image product-thumbnail text-center">
                                 <img src="${imgSrc}" alt="Product Image" style="max-width: 80px;">
-                                <h5 class="single-product-name"><a href="#" onclick="selectedProduct(${item.id_product})" tabindex="0">${item.product_name} @${formatRupiah(price)}</a></h5>
+                                <h5 class="single-product-name"><a href="#" onclick="selectedProduct(${1231231})" tabindex="0">${item.product_name} @${formatRupiah(price)}</a></h5>
                        
                             </td>
                             <td class="text-center">
