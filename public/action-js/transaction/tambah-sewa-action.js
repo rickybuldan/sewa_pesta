@@ -151,6 +151,7 @@ function getListData() {
 globSumDay = 1;
 globStartDate = null;
 globEndDate = null;
+
 flatpickr("#dateRange", {
     mode: "range",
     enableTime: true,
@@ -169,24 +170,25 @@ flatpickr("#dateRange", {
             globStartDate = start;
             globEndDate = end;
 
-            // Hitung selisih hari
-            let diffTime = end - start;
-            let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            globSumDay = diffDays;
+            let diffTime = end.getTime() - start.getTime();
 
-            if (diffDays < 1) {
-                // Minimal harus beda 1 hari
+            if (diffTime < 24 * 60 * 60 * 1000) {
                 validationSwalFailed(null, "Minimal penyewaan satu hari.");
 
-                // Atur ulang end date = start date + 1 hari
-                let newEnd = new Date(
-                    start.getTime() + 1 * 24 * 60 * 60 * 1000
-                );
-
-                instance.setDate([start, newEnd], true); // true = trigger change again
+                let newEnd = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+                instance.setDate([start, newEnd], true);
+                return;
             }
+
+            globSumDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            ctAllProd();
         }
-        ctAllProd();
+    },
+    onClose: function (selectedDates, dateStr, instance) {
+        if (selectedDates.length < 2) {
+            validationSwalFailed(null, "Silakan pilih tanggal mulai dan tanggal akhir.");
+            instance.clear(); // Reset input
+        }
     },
     allowInput: true,
 });
