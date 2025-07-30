@@ -209,6 +209,7 @@ function sendBackTransaction() {
         its = $(this).data('its');
         let ck  = $(this).is(':checked')
         obj = {
+            id_transaction:its,
             id_product: idp,
             good_condition:ck
         }

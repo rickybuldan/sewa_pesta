@@ -90,6 +90,19 @@
                                             </table>
                                         </div>
 
+                                        <p>Notes: Transaksi menggunakan DP harus melakukan pelunasan 1 hari sebelum tanggal awal penyewaan</p>
+                                        <label class="mt-25">Tipe Pembayaran<span class="secondary-color">**</span></label>
+                                        <div>
+                                            <select class="custom-select" id="s-type-pay">
+                                                <option value="1">Cash</option>
+                                                <option value="0">DP - Down Payment</option>
+                                            </select>
+                                        </div>
+                                        <label class="mt-25 ct-nominal-dp">Nominal<span class="secondary-color">**</span></label>
+                                        <div class="ct-nominal-dp">
+                                            <input type="text" class="form-control rounded-0 border-light-gray2 pl-20"  id="f-nominal-dp" placeholder="Nominal" readonly>
+                                        </div>
+                                        
                                         <label class="mt-25">Transfer Ke:<span class="secondary-color"></span></label>
                                         <div class="">
                                             <table class="table table-striped" >
@@ -110,6 +123,8 @@
                                         <div class="">
                                             <input type="file" class="form-control rounded-0 border-light-gray2 pl-20"  id="form-img" placeholder="Alamat">
                                         </div>
+
+                                        
                                         
 
                                     </div><!-- /login-form -->

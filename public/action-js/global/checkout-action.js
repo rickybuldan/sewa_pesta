@@ -18,21 +18,23 @@ globSumDay = 1;
 globStartDate = null;
 globEndDate = null;
 globGrandTotal = 0;
-globArrCart = []
+globArrCart = [];
 flatpickr("#dateRange", {
     mode: "range",
-    enableTime: true,
-    enableSeconds: true,
-    dateFormat: "Y-m-d H:i:S",
+    dateFormat: "Y-m-d", // hanya tanggal
     minDate: new Date(),
     defaultDate: [
-        new Date(), // hari ini
-        new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000), // +1 hari
+        new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000), // start: besok
+        new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000),
     ],
     onChange: function (selectedDates, dateStr, instance) {
         if (selectedDates.length === 2) {
             let start = selectedDates[0];
             let end = selectedDates[1];
+
+            // Pastikan jam di-set ke 00:00:00 untuk akurasi
+            start.setHours(0, 0, 0, 0);
+            end.setHours(0, 0, 0, 0);
 
             globStartDate = start;
             globEndDate = end;
@@ -53,16 +55,17 @@ flatpickr("#dateRange", {
     },
     onClose: function (selectedDates, dateStr, instance) {
         if (selectedDates.length < 2) {
-            validationSwalFailed(null, "Silakan pilih tanggal mulai dan tanggal akhir.");
+            validationSwalFailed(
+                null,
+                "Silakan pilih tanggal mulai dan tanggal akhir."
+            );
             instance.clear(); // Reset input
         }
     },
     allowInput: true,
 });
 
-
-
-loadOrderCart()
+loadOrderCart();
 
 function loadOrderCart() {
     let xid = uid || 0;
@@ -72,8 +75,9 @@ function loadOrderCart() {
         type: "POST",
         data: JSON.stringify({
             tableName: "carts c LEFT JOIN products p ON p.id = c.id_product",
-            where: "c.id_user = " + xid ,
+            where: "c.id_user = " + xid,
         }),
+
         dataType: "json",
         contentType: "application/json",
         beforeSend: function () {
@@ -85,12 +89,12 @@ function loadOrderCart() {
         success: function (response) {
             if (response.code == 0) {
                 const data = response.data;
-                $('.pro-count').text(data.length);
+                $(".pro-count").text(data.length);
 
                 let rows = "";
                 let grandTotal = 0;
 
-                data.forEach(item => {
+                data.forEach((item) => {
                     price = parseFloat(item.price || 0);
                     quantity = parseInt(item.qty || 0);
 
@@ -105,28 +109,34 @@ function loadOrderCart() {
                         <tr>
                             <td class="image product-thumbnail text-center">
                                 <img src="${imgSrc}" alt="Product Image" style="max-width: 80px;">
-                                <h5 class="single-product-name"><a href="#" onclick="selectedProduct(${item.id_product})" tabindex="0">${item.product_name} @${formatRupiah(price)}</a></h5>
+                                <h5 class="single-product-name"><a href="#" onclick="selectedProduct(${item.id_product
+                        })" tabindex="0">${item.product_name
+                        } @${formatRupiah(price)}</a></h5>
                        
                             </td>
                             <td class="text-center">
                                 <h6 class="mb-0"><span class="product-qty">${globSumDay} Hari x ${quantity}</span> Qty</h6>
                             </td>
-                            <td class="text-right">${formatRupiah(totalItem)}</td>
+                            <td class="text-right">${formatRupiah(
+                            totalItem
+                        )}</td>
                         </tr>
                     `;
                 });
-                globGrandTotal = grandTotal
+                globGrandTotal = grandTotal;
 
                 rows += `
                     <tr>
                         <th colspan="2" class="text-right">Grand Total</th>
-                        <td class="text-right fw-bold text-brand">${formatRupiah(grandTotal)}</td>
+                        <td class="text-right fw-bold text-brand">${formatRupiah(
+                    grandTotal
+                )}</td>
                     </tr>
                 `;
 
-                $('.order_table tbody').html(rows);
-                $('.total-transfer').html(formatRupiah(grandTotal));
-                
+                $(".order_table tbody").html(rows);
+                $(".total-transfer").html(formatRupiah(grandTotal));
+                $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
             } else {
                 Swal.fire({
                     title: "Oops...",
@@ -143,8 +153,7 @@ function loadOrderCart() {
     });
 }
 
-
-loadUserOrder()
+loadUserOrder();
 function loadUserOrder() {
     xid = uid;
     if (uid == "") {
@@ -166,10 +175,10 @@ function loadUserOrder() {
             //     title: "Loading",
             //     text: "Please wait...",
             // });
-            loadBlockUI()
+            loadBlockUI();
         },
         complete: function () {
-            unblockUI()
+            unblockUI();
         },
         success: function (response) {
             // console.log(response);
@@ -181,11 +190,11 @@ function loadUserOrder() {
                 // });
                 // Reset form
                 data = response.data;
-                $('#f-name').val(data[0].name)
-                $('#f-phone').val(data[0].phone)
-                $('#f-email').val(data[0].email)
-                $('#f-address').val(data[0].address)
-                $('#f-note-order').html()
+                $("#f-name").val(data[0].name);
+                $("#f-phone").val(data[0].phone);
+                $("#f-email").val(data[0].email);
+                $("#f-address").val(data[0].address);
+                $("#f-note-order").html();
             } else {
                 sweetAlert("Oops...", response.info, "error");
             }
@@ -198,7 +207,7 @@ function loadUserOrder() {
     });
 }
 
-isObject = {}
+isObject = {};
 function checkValidation() {
     // console.log($el);
     if (
@@ -224,7 +233,7 @@ function checkValidation() {
         )
     )
         return false;
-
+    isObject["type_pay"] = $("#s-type-pay").val();
     isObject["day"] = globSumDay;
     isObject["grand_total"] = globGrandTotal;
 
@@ -238,17 +247,14 @@ function checkValidation() {
 
     isObject["start_date"] = globStartDate;
     isObject["end_date"] = globEndDate;
+    isObject["nominal_payment"] = unformatRupiah($("#f-nominal-dp").val())
 
-
-    return true
+    return true;
 }
 
-$('#payButton').click(function () {
-
+$("#payButton").click(function () {
     if (checkValidation() != false) {
-
-
-        saveData()
+        saveData();
         function saveData() {
             // formdata
             var formData = new FormData();
@@ -256,11 +262,12 @@ $('#payButton').click(function () {
 
             if (
                 validationSwalFailed(
-                    (file),
+                    file,
                     "Bukti pembayaran tidak boleh kosong"
                 )
             )
                 return false;
+
             formData.append("image", file);
             formData.append("data", JSON.stringify(isObject));
 
@@ -282,13 +289,12 @@ $('#payButton').click(function () {
                 success: function (response) {
                     // Handle response sukses
                     if (response.code == 0) {
-                        swal("Saved !", response.info, "success").then(function () {
-                            // location.reload();
-                            getinvoice(response.data);
-                            function getinvoice(params) {
-                                location.href = baseURL + "/invoice?noinvoice=" + params;
+                        swal("Saved !", response.info, "success").then(
+                            function () {
+                                location.reload();
+                                
                             }
-                        });
+                        );
 
                         // Reset form
                     } else {
@@ -302,8 +308,18 @@ $('#payButton').click(function () {
                 },
             });
         }
-
     }
 });
 
-
+$(".ct-nominal-dp").hide();
+$("#s-type-pay").change(function () {
+    var selectedValue = $(this).val();
+    if (selectedValue == 0) {
+        $("#f-nominal-dp").val(formatRupiah(globGrandTotal*30/100))
+        $(".ct-nominal-dp").show();
+    } else {
+        $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
+        $(".ct-nominal-dp").hide();
+    }
+    console.log("Nilai yang dipilih: " + selectedValue);
+});

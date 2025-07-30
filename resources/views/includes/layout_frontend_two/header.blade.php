@@ -194,11 +194,11 @@
                              <ul class="header-search d-none d-lg-block">
                                  <li><span class="icon-search"></span></li>
                              </ul>
-                             {{-- <ul class="header-heart d-none d-lg-block">
-                                 <li><a href="wishlist.html" data-toggle="tooltip" data-selector="true"
-                                         data-placement="bottom" title="View wishlist"><span
-                                             class="icon-heart"></span></a></li>
-                             </ul> --}}
+                             <ul class="header-heart d-none d-lg-block">
+                                 <li><a href="/home/history" data-toggle="tooltip" data-selector="true"
+                                         data-placement="bottom" title="View History"><span
+                                             class="icon-grid"></span></a></li>
+                             </ul>
                              <ul>
                                  <li class="position-relative">
                                      <div class="header-shopping-cart"><span class="icon-shopping-bag"></span><sup

@@ -146,12 +146,22 @@ function getHistoryTransaction() {
                     if (sstatus == 10) {
                         $rowData = ` Proses`;
                     }
+                    if (sstatus == 11) {
+                        $rowData = ` Verifikasi DP Berhasil`;
+                    }
+                    if (sstatus == 12) {
+                        $rowData = ` Lunas`;
+                    }
                      if (sstatus == 20) {
                         $rowData = ` Kirim`;
                     }
                     if (sstatus == 30) {
                         $rowData = `Selesai`;
                     }
+                     if (sstatus == 50) {
+                        $rowData = `Ditolak`;
+                    }
+
 
                     galleryprods += `
                             <tr>
@@ -222,10 +232,11 @@ function getDetailProducts() {
                     nm = prods[index].product_name;
                     dsc = prods[index].sub_total;
                     img = prods[index].denda;
+                    dtel = prods[index].denda_telat;
                     idp = prods[index].id;
                     sstatus = prods[index].status;
                     valuedenda = prods[index].value
-                    gt += dsc+img
+                    gt += dsc+img+dtel
                     $rowData  = ''
                     if (sstatus == 10) {
                         $rowData = ` Proses`;
@@ -243,7 +254,8 @@ function getDetailProducts() {
                                 <td>${nm}</td>
                                 <td>${formatRupiah(dsc)}</td>
                                 <td>${formatRupiah(img)}</td>
-                                <td>${formatRupiah(dsc+img)}</td>
+                                <td>${formatRupiah(dtel)}</td>
+                                <td>${formatRupiah(dsc+img+dtel)}</td>
                             </tr>
                         `;
 

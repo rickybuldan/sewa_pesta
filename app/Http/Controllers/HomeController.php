@@ -182,80 +182,6 @@ class HomeController extends Controller
 
     }
 
-    public function checkCost(Request $request)
-    {
-
-        $MasterClass = new Master();
-
-
-        try {
-            if ($request->isMethod('post')) {
-
-                DB::beginTransaction();
-
-                $status = [];
-                $data   = json_decode($request->getContent());
-                $data   = $data->obj;
-                // dd($data);
-
-                $response = Http::asForm()->withHeaders([
-                    'content-type' => 'application/x-www-form-urlencoded',
-                    'key' => 'd3e05c8c3582deda2a7e74b630825127',
-                ])->post('https://api.rajaongkir.com/starter/cost', 
-                [
-                    'origin' => $data->origin,          // ID kota/kabupaten asal (contoh: Jakarta)
-                    'destination' => $data->destination,     // ID kota/kabupaten tujuan (contoh: Bandung)
-                    'weight' => $data->weight,           // Berat kiriman dalam gram
-                    'courier' => $data->courier          // Kode kurir (contoh: jne, tiki, pos)
-                ]);
-              
-                if ($response->failed()) {
-                    $saved['code']= $MasterClass::CODE_FAILED;
-                    $saved['info']= "Error: " . $response->status();
-                    $saved['data']= null;
-                }else{
-                    $res = $response->json();
-                   
-                    $saved['code']= $MasterClass::CODE_SUCCESS;
-                    $saved['info']= $MasterClass::INFO_SUCCESS;
-                    $saved['data']= $res['rajaongkir']['results'];
-                }
-            
-                $status = $saved;
-
-                // if($status['code'] == $MasterClass::CODE_SUCCESS){
-                //     DB::commit();
-                // }else{
-                //     DB::rollBack();
-                // }
-
-                $results = [
-                    'code' => $status['code'],
-                    'info' => $status['info'],
-                    'data' => $status['data'],
-                ];
-
-
-
-            } else {
-                $results = [
-                    'code' => '103',
-                    'info' => "Method Failed",
-                ];
-            }
-        } catch (\Exception $e) {
-            // Roll back the transaction in case of an exception
-            $results = [
-                'code' => '102',
-                'info' => $e->getMessage(),
-            ];
-
-        }
-
-        return $MasterClass->Results($results);
-
-    }
-
     // end rajaongkir
 
     public function checkout(Request $request)
@@ -290,6 +216,45 @@ class HomeController extends Controller
             ];
 
             return view('pages.landing3.checkout')
+                ->with($data);
+        }
+    
+        return redirect('/login');
+        
+    }
+
+    public function history(Request $request)
+    {
+        if(Auth::check()){
+            $javascriptFiles = [
+                asset('action-js/global/global2-action.js'),
+                asset('action-js/global/history-action.js')
+                // asset('action-js/generate/generate-action.js'),
+                // asset('action-js/masterdata/house-action.js'),
+            ];
+
+            $cssFiles = [
+                // asset('css/main.css'),
+                // asset('css/custom.css'),
+            ];
+            $userId = Auth::id();
+            $baseURL = url('/');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+                'const uid = "' . $userId . '"',
+            ];
+
+
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs' => $varJs,
+                'title' => "Checkout",
+                'subtitle' => "Index",
+                // Menambahkan base URL ke dalam array
+            ];
+
+            return view('pages.landing3.history')
                 ->with($data);
         }
     
@@ -343,12 +308,10 @@ class HomeController extends Controller
 
         $MasterClass = new Master();
 
-
         try {
             if ($request->isMethod('post')) {
 
                 DB::beginTransaction();
-
 
                 $status = [];
 
@@ -387,10 +350,77 @@ class HomeController extends Controller
                 // }else{
                 //     DB::rollBack();
                 // }
+
                 $tab    = "transactions";
+
                 if (str_contains($data->tableName, $tab) == true) {
-                    $status['data'] =$saved['data'][0]->no_transaction;
+                    if (empty($data->isHistory)){
+                        $status['data'] =$saved['data'][0]->no_transaction;
+                    }
                 }
+                $results = [
+                    'code' => $status['code'],
+                    'info' => $status['info'],
+                    'data' => $status['data'],
+                ];
+
+
+
+            } else {
+                $results = [
+                    'code' => '103',
+                    'info' => "Method Failed",
+                ];
+            }
+        } catch (\Exception $e) {
+            // Roll back the transaction in case of an exception
+            $results = [
+                'code' => '102',
+                'info' => $e->getMessage(),
+            ];
+
+        }
+
+
+
+        return $MasterClass->Results($results);
+
+    }
+
+    public function checkBillTransaction(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        try {
+            if ($request->isMethod('post')) {
+
+                DB::beginTransaction();
+
+                $status = [];
+
+                $data   = json_decode($request->getContent());
+                $query = "SELECT *,
+
+                            CASE
+                                WHEN status = 11 AND DATEDIFF(start_date, CURDATE()) >= 1 THEN true
+                                ELSE false
+                            END AS is_bill
+                        FROM transactions t WHERE t.created_by = ".$data->id;
+                
+                
+                $saved = DB::select($query);
+                $saved = $MasterClass->checkErrorModel($saved);
+
+                $status = $saved;
+
+                // if($status['code'] == $MasterClass::CODE_SUCCESS){
+                //     DB::commit();
+                // }else{
+                //     DB::rollBack();
+                // }
+
+
                 $results = [
                     'code' => $status['code'],
                     'info' => $status['info'],
@@ -456,7 +486,9 @@ class HomeController extends Controller
                     'updated_by' => $createdBy,
                     'price_total' => $data->grand_total,
                     'file_path' => $imagePath,
+                    'type_pay' => $data->type_pay,
                     'status' => 10,
+                    'nominal_payment'=>$data->nominal_payment
                 ]);
 
                 $carts = Cart::where('id_user', $createdBy)->get();
@@ -523,6 +555,82 @@ class HomeController extends Controller
         return $MasterClass->Results($results);
 
     }
+
+    public function saveBuktiPaid(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+
+        try {
+            if ($request->isMethod('post')) {
+
+                DB::beginTransaction();
+
+                $data = json_decode($request->input('data'));
+
+                $status = [];
+              
+
+                $image = $request->file('image');
+                $imagePath = null;
+                
+                if($image){
+                    $imagePath = $image->store('images', 'public');
+                }
+
+                $transaction = Transaction::find($data->id);
+
+                if ($transaction) {
+                    $newNominal = $transaction->nominal_payment + $data->nominal_payment;
+                    $saved = Transaction::where('id', $data->id)->update([
+                        'status' => 12,
+                        'file_path_paid' => $imagePath,
+                        'updated_by' => $MasterClass->getSession('user_id'),
+                        'nominal_payment' => $newNominal
+                    ]);
+
+                    $saved = $MasterClass->checkErrorModelUpdate($saved);
+                }
+              
+                $status = $saved;
+                
+
+                if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                    DB::commit();
+                    
+                } else {
+                    DB::rollBack();
+                }
+
+
+                $results = [
+                    'code' => $status['code'],
+                    'info' => $status['info'],
+                    'data' => $status['data'],
+                ];
+
+            } else {
+                $results = [
+                    'code' => '103',
+                    'info' => "Method Failed",
+                ];
+            }
+        } catch (\Exception $e) {
+            // Roll back the transaction in case of an exception
+            $results = [
+                'code' => '102',
+                'info' => $e->getMessage(),
+            ];
+
+        }
+
+
+
+        return $MasterClass->Results($results);
+
+    }
+
 
     public function loadProductSell(Request $request)
     {

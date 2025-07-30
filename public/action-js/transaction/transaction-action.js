@@ -79,11 +79,23 @@ function getListData() {
                     if (row.status == 10) {
                         $rowData += ` <span class="badge rounded-pill text-bg-primary">Proses</span>`;
                     }
-                     if (row.status == 20) {
-                        $rowData += ` <span class="badge rounded-pill text-bg-danger">Kirim</span>`;
+                    if (row.status == 11) {
+
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Verifikasi DP Berhasil</span>`;
+                    }
+                    if (row.status == 12) {
+
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Lunas</span>`;
+                    }
+          
+                    if (row.status == 20) {
+                        $rowData += ` <span class="badge rounded-pill text-bg-warning">Kirim</span>`;
                     }
                     if (row.status == 30) {
                         $rowData += ` <span class="badge rounded-pill text-bg-dark">Selesai</span>`;
+                    }
+                    if (row.status == 50) {
+                        $rowData += ` <span class="badge rounded-pill text-bg-danger">Ditolak</span>`;
                     }
                     return $rowData;
                 },
@@ -113,12 +125,14 @@ function getListData() {
             },
             {
                 mRender: function (data, type, row) {
-                  
-                    
-                    $rowData = `<a href="/storage/${row.file_path}"> Lihat </a>`;
+
+
+                    $rowData = `<a href="/storage/${row.file_path}">Bukti DP </a>`;
+                    $rowData += `<a href="/storage/${row.file_path_paid}">Bukti Lunas </a>`;
 
                     return $rowData;
                 },
+
                 visible: true,
                 targets: 4,
                 className: "text-center",
@@ -135,6 +149,13 @@ function getListData() {
             {
                 mRender: function (data, type, row) {
                     var $rowData = `<button type="button" class="btn btn-info btn-sm me-2 edit-btn">Invoice</button>`;
+                    if (row.status == 10) {
+                        $rowData += `<button type="button" class="btn btn-primary btn-sm me-2 verif-btn">Verifikasi</i></button>`;
+                    }
+                    if (row.status == 10 || row.status == 11 || row.status == 12) {
+                        $rowData += `<button type="button" class="btn btn-danger btn-sm me-2 tolak-btn">Tolak</i></button>`;
+                    }
+
                     // $rowData += `<button type="button" class="btn btn-danger btn-sm me-2 delete-btn">Hapus</i></button>`;
                     // $rowData += `<button type="button" class="btn btn-dark btn-sm print-barcode-btn"><i class="fa fa-print" aria-hidden="true"></i></button>`;
                     return $rowData;
@@ -144,38 +165,48 @@ function getListData() {
                 className: "text-center",
             },
         ],
+
         drawCallback: function (settings) {
-            var api = this.api();
-            var rows = api.rows({ page: "current" }).nodes();
-            var last = null;
 
-            $('body').on('click', '.edit-btn', function () {
-                var tr = $(this).closest('tr');
-                if (tr.hasClass('child')) tr = tr.prev(); // jika tombol ada di child row responsive
-                var rowData = dtpr.row(tr).data();
-                // console.log(rowData);
-                getinvoice(rowData);
-            });
-
-            $('body').on('click', '.delete-btn', function () {
-                var tr = $(this).closest('tr');
-                if (tr.hasClass('child')) tr = tr.prev();
-                var rowData = dtpr.row(tr).data();
-                deleteData(rowData);
-            });
-
-            $('body').on('click', '.print-barcode-btn', function () {
-                var tr = $(this).closest('tr');
-                if (tr.hasClass('child')) tr = tr.prev();
-                var rowData = dtpr.row(tr).data();
-
-                $("#form-barcode-br").val(rowData.prod_code);
-                $("#modal-data-barcode").modal("show");
-            });
 
 
 
         },
+    });
+
+    // var api = this.api();
+    // var rows = api.rows({ page: "current" }).nodes();
+    // var last = null;
+
+    $('body').on('click', '.edit-btn', function () {
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev(); // jika tombol ada di child row responsive
+        var rowData = dtpr.row(tr).data();
+        // console.log(rowData);
+        getinvoice(rowData);
+    });
+
+    $('body').on('click', '.verif-btn', function () {
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev();
+        var rowData = dtpr.row(tr).data();
+        verifTransaction(rowData);
+    });
+
+    $('body').on('click', '.tolak-btn', function () {
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev();
+        var rowData = dtpr.row(tr).data();
+        denyTransaction(rowData);
+    });
+
+    $('body').on('click', '.print-barcode-btn', function () {
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev();
+        var rowData = dtpr.row(tr).data();
+
+        $("#form-barcode-br").val(rowData.prod_code);
+        $("#modal-data-barcode").modal("show");
     });
 }
 
@@ -377,6 +408,7 @@ $("#form-img").change(function () {
     }
 });
 
+
 function saveData() {
     // formdata
     console.log(isObject);
@@ -479,7 +511,7 @@ function setNullProd() {
 //             await generateProdCode($("#form-barcode-br").val())
 //         }
 //     }
-    
+
 //     Swal.close();
 
 //     if (imgUrls.length == 0) {
@@ -495,7 +527,7 @@ function setNullProd() {
 //     printWindow.document.write(`
 //         <html>
 //         <head>
-          
+
 //             <style>
 //                 body {
 //                     text-align: center;
@@ -529,3 +561,93 @@ function setNullProd() {
 
 
 
+function denyTransaction(paramObj) {
+    // formdata
+
+    isReq = {}
+    isReq.id = paramObj.id
+    isReq.status = 50
+
+
+    var formData = new FormData();
+    formData.append("data", JSON.stringify(isReq));
+
+    $.ajax({
+        url: baseURL + "/verifTransaction",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        processData: false, // Important: prevent jQuery from automatically processing the data
+        contentType: false,
+        beforeSend: function () {
+            Swal.fire({
+                title: "Loading",
+                text: "Please wait...",
+            });
+        },
+        complete: function () { },
+        success: function (response) {
+            // Handle response sukses
+            if (response.code == 0) {
+                swal("Saved !", response.message, "success").then(function () {
+                    location.reload();
+                });
+                // Reset form
+            } else {
+                sweetAlert("Oops...", response.message, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+}
+
+function verifTransaction(paramObj) {
+    // formdata
+
+    isReq = {}
+    isReq.id = paramObj.id
+    isReq.status = 11
+
+    if (paramObj.type_pey == 1) {
+        isReq.status = 12
+    }
+
+    var formData = new FormData();
+    formData.append("data", JSON.stringify(isReq));
+
+    $.ajax({
+        url: baseURL + "/verifTransaction",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        processData: false, // Important: prevent jQuery from automatically processing the data
+        contentType: false,
+        beforeSend: function () {
+            Swal.fire({
+                title: "Loading",
+                text: "Please wait...",
+            });
+        },
+        complete: function () { },
+        success: function (response) {
+            // Handle response sukses
+            if (response.code == 0) {
+                swal("Saved !", response.message, "success").then(function () {
+                    location.reload();
+                });
+                // Reset form
+            } else {
+                sweetAlert("Oops...", response.message, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+}

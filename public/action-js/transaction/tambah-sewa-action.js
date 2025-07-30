@@ -61,7 +61,7 @@ function getListData() {
         data: JSON.stringify({
             where: wherestate,
             tableName: "products",
-            where:"status = 0 and items > 0"
+            where: "status = 0 and items > 0"
         }),
         dataType: "json",
         contentType: "application/json",
@@ -154,18 +154,20 @@ globEndDate = null;
 
 flatpickr("#dateRange", {
     mode: "range",
-    enableTime: true,
-    enableSeconds: true,
-    dateFormat: "Y-m-d H:i:S",
+    dateFormat: "Y-m-d", // hanya tanggal
     minDate: new Date(),
     defaultDate: [
-        new Date(), // hari ini
-        new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000), // +1 hari
+        new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000), // start: besok
+        new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000),
     ],
     onChange: function (selectedDates, dateStr, instance) {
         if (selectedDates.length === 2) {
             let start = selectedDates[0];
             let end = selectedDates[1];
+
+            // Kunci waktu ke 00:00:00
+            start.setHours(0, 0, 0, 0);
+            end.setHours(0, 0, 0, 0);
 
             globStartDate = start;
             globEndDate = end;
@@ -193,6 +195,9 @@ flatpickr("#dateRange", {
     allowInput: true,
 });
 
+
+
+
 function countSubTotal(prc, day, items) {
     return prc * day * items;
 }
@@ -201,7 +206,7 @@ function addToCart(el, params) {
     // alert(1)
     console.log(el);
     $("#add-item-btn").html("Tambah");
-    $(".tambah-item-btn-"+params).html("Tambah");
+    $(".tambah-item-btn-" + params).html("Tambah");
     if ($(el).attr("id") != "add-item-btn") {
         $("#add-item-btn").attr("onclick", `addToCart(this,${params})`);
         $("#modal-data").modal("show")
@@ -211,12 +216,12 @@ function addToCart(el, params) {
         resprod[0]['qty'] = items = $("#form-item").val()
         globArrCart.push(resprod[0]);
         console.log(globArrCart);
-        
+
         $("#add-item-btn").attr("onclick", `deleteCart(this,${params})`);
         $("#add-item-btn").html("Hapus");
 
-        $(".tambah-item-btn-"+params).attr("onclick", `deleteCart(this,${params})`);
-        $(".tambah-item-btn-"+params).html("Hapus");
+        $(".tambah-item-btn-" + params).attr("onclick", `deleteCart(this,${params})`);
+        $(".tambah-item-btn-" + params).html("Hapus");
         ctAllProd();
     }
 
@@ -225,7 +230,7 @@ function addToCart(el, params) {
 }
 
 function ctSubProd(resprod) {
-    
+
     htcontent = `
         <div class="row content-it-${resprod.id}">
             <div class="col-xl-4">
@@ -239,7 +244,7 @@ function ctSubProd(resprod) {
             </div>
         </div>
     `;
-    
+
     return htcontent;
 }
 
@@ -267,14 +272,14 @@ function deleteCart(el, params) {
 
     $(`.content-it-${params}`).remove();
     $("#add-item-btn").html("Tambah");
-    $(".tambah-item-btn-"+params).html("Tambah");
-    
+    $(".tambah-item-btn-" + params).html("Tambah");
+
     $("#add-item-btn").attr("onclick", `addToCart(this,${params})`);
-    $(".tambah-item-btn-"+params).attr("onclick", `addToCart(this,${params})`);
-    
+    $(".tambah-item-btn-" + params).attr("onclick", `addToCart(this,${params})`);
+
     globArrCart = globArrCart.filter(function (obj) {
         return obj.id !== params;
-    });    
+    });
 
     ctAllProd();
 }

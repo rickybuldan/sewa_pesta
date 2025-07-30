@@ -177,7 +177,8 @@
             <th>BANYAKNYA</th>
             <th>BARANG</th>
             <th>HARGA</th>
-            <th>DENDA</th>
+            <th>DENDA KERUSAKAN</th>
+            <th>DENDA KETERLAMBATAN PENGEMBALIAN</th>
             <th>SUBTOTAL</th>
         </tr>
 

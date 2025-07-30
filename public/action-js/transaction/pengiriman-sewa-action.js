@@ -23,8 +23,7 @@ function search_transaction() {
 }
 
 async function getListData() {
-    let available_status = 10;
-    let wherestate = "status = " + available_status;
+    let wherestate = "status = 12";
 
     if ($("#search_data").val()) {
         wherestate +=

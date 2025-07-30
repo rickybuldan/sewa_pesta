@@ -934,6 +934,7 @@ class JsonDataController extends Controller
                             t.file_path,
                             t.created_at,
                             t.updated_at,
+                            t.file_path_paid,
                             (t.price_total + COALESCE(d.denda, 0)) as grand_total, 
                             COALESCE(d.denda, 0) AS denda
                         FROM transactions t
@@ -957,7 +958,7 @@ class JsonDataController extends Controller
                         ) d ON d.id_transaction = t.id
                         ORDER BY t.created_at ASC;
                     ";
-                
+
 
                     $saved = DB::select($query);
                     $saved = $MasterClass->checkErrorModel($saved);
@@ -990,17 +991,17 @@ class JsonDataController extends Controller
                             COUNT(*) total_rent
                         FROM transactions
                     ";
-                
+
 
                     $saved2 = DB::select($query2);
                     $saved2 = $MasterClass->checkErrorModel($saved2);
-                    
+
                     $query3 = "
                         SELECT
                             sum(price_total) total_revenue_rent
                         FROM transactions
                     ";
-                
+
 
                     $saved3 = DB::select($query3);
                     $saved3 = $MasterClass->checkErrorModel($saved3);
@@ -1010,7 +1011,7 @@ class JsonDataController extends Controller
                             COUNT(*) total_customers
                         FROM users where role_id = 14
                     ";
-                
+
 
                     $saved4 = DB::select($query4);
                     $saved4 = $MasterClass->checkErrorModel($saved4);
@@ -1025,9 +1026,9 @@ class JsonDataController extends Controller
                         'code' => $status['code'],
                         'info' => $status['info'],
                         'data' => $status['data'],
-                        'total_rent'=> $saved2['data'][0]->total_rent,
-                        'total_revenue_rent'=> $saved3['data'][0]->total_revenue_rent,
-                        'total_customers'=> $saved4['data'][0]->total_customers,
+                        'total_rent' => $saved2['data'][0]->total_rent,
+                        'total_revenue_rent' => $saved3['data'][0]->total_revenue_rent,
+                        'total_customers' => $saved4['data'][0]->total_customers,
                     ];
 
 
@@ -1136,6 +1137,75 @@ class JsonDataController extends Controller
 
     }
 
+    public function verifTransaction(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data = json_decode($request->input('data'));
+
+                    $status = [];
+
+                    $saved = Transaction::where([
+                        'id' => $data->id
+                    ])->update([
+                                'status' => $data->status,
+                                'updated_by' => $MasterClass->getSession('user_id')
+                            ]);
+                    // dd($saved);
+
+                    $saved = $MasterClass->checkerrorModelUpdate($saved);
+                    $status = $saved;
+
+                    // dd($saved3);
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
     // transaction
     public function saveTransaction(Request $request)
     {
@@ -1151,13 +1221,13 @@ class JsonDataController extends Controller
                     DB::beginTransaction();
 
                     $data = json_decode($request->input('data'));
-                    
+
                     $status = [];
 
                     $image = $request->file('image');
                     $status = [];
                     $imagePath = null;
-                    
+
                     if ($image) {
                         // dd( $image->getRealPath());
                         $imagePath = $image->store('images', 'public');
@@ -1179,7 +1249,7 @@ class JsonDataController extends Controller
                         'address' => $data->address,
                         'customer_phone' => $data->phone_number,
                         'status' => 10,
-                        'file_path'=> $imagePath
+                        'file_path' => $imagePath
                     ]);
 
                     $saved1 = $MasterClass->checkErrorModel($transaction);
@@ -1187,7 +1257,7 @@ class JsonDataController extends Controller
                     foreach ($data->items as $pdr) {
                         $product = Product::where('id', $pdr->id)->first();
                         if ($pdr->qty && $pdr->qty <= $product->items) {
-                        
+
                             $detailTransac = TransactionDetail::create([
                                 'id_transaction' => $transaction->id,
                                 'id_product' => $pdr->id,
@@ -1199,16 +1269,16 @@ class JsonDataController extends Controller
                             $product->save();
 
                             $saved2 = $MasterClass->checkErrorModel($detailTransac);
-                            
-                        }else{
+
+                        } else {
                             DB::rollBack();
                             $results = [
                                 'code' => '102',
-                                'info' => "Stok ". $product->product_name . " tidak cukup. Stok sekarang : " . $product->items . ". Silakan Hubungi admin.",
+                                'info' => "Stok " . $product->product_name . " tidak cukup. Stok sekarang : " . $product->items . ". Silakan Hubungi admin.",
                             ];
                             return $MasterClass->Results($results);
                         }
-                       
+
 
                         $saved2 = $MasterClass->checkErrorModel($detailTransac);
                         // $saveProd = Product::where( [
@@ -1298,6 +1368,22 @@ class JsonDataController extends Controller
                         SELECT
                             *,
                             COALESCE(
+                                CASE 
+                                    WHEN t.status = 30 
+                                    AND td.late > 0 
+                                    AND td.late IS NOT NULL 
+                                    AND mc.value IS NOT NULL 
+                                    AND mc.value != 0 THEN
+                                        CASE 
+                                            WHEN mc.type = 1 THEN (td.sub_total + td.late *  mc.value)
+                                            WHEN mc.type = 2 THEN td.late * (td.sub_total * mc.value / 100)
+                                            ELSE 0
+                                        END
+                                    ELSE 0
+                                END,
+                            0) AS denda_telat,
+
+                            COALESCE(
                                     CASE 
                                         WHEN td.good_condition = 0 AND td.good_condition IS NOT NULL AND mc.value is not null AND mc.value != 0 THEN
                                             CASE 
@@ -1311,7 +1397,7 @@ class JsonDataController extends Controller
                         FROM
 
                         " . $data->tableName;
-                        
+
                     }
 
                     $whereClause = isset($data->where) ? " WHERE " . $data->where : "";
@@ -1320,7 +1406,7 @@ class JsonDataController extends Controller
                         $query = $query . " WHERE " . $data->where;
                     }
 
-                    
+
                     // dd($query);
 
                     $saved = DB::select($query);
@@ -1454,11 +1540,11 @@ class JsonDataController extends Controller
                     $data = json_decode($request->input('data'));
                     $status = [];
                     $imagePath = null;
-                    
+
                     if ($data->id) {
                         $product = Product::find($data->id);
                         $currentFilePath = $product->file_path;
-                       
+
                         if (empty($image)) {
                             $imagePath = $currentFilePath;
                         } else {
@@ -1473,7 +1559,7 @@ class JsonDataController extends Controller
                             // dd($imagePath);
                         }
                     }
-                    
+
                     $saved = Product::updateOrCreate(
                         [
                             'id' => $data->id,
@@ -1555,9 +1641,9 @@ class JsonDataController extends Controller
 
                     DB::beginTransaction();
 
-                    $data       = json_decode($request->input('data'));
-                    $status     = [];
-                    
+                    $data = json_decode($request->input('data'));
+                    $status = [];
+
                     if ($data->id) {
 
                         $saved = Constant::query()->update([
@@ -1567,8 +1653,8 @@ class JsonDataController extends Controller
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
 
                         $saved = Constant::updateOrCreate(
-                        [
-                            'id' => $data->id,
+                            [
+                                'id' => $data->id,
                             ],
                             [
                                 'is_active' => 1,
@@ -1577,8 +1663,8 @@ class JsonDataController extends Controller
 
                     } else {
                         $saved = Constant::updateOrCreate(
-                        [
-                            'id' => $data->id,
+                            [
+                                'id' => $data->id,
                             ],
                             [
                                 'constant_name' => $data->const_name,
@@ -1736,13 +1822,13 @@ class JsonDataController extends Controller
 
                     $data = json_decode($request->input('data'));
                     $status = [];
-                    
+
                     $saved = Transaction::where([
                         'id' => $data->id,
                     ])->update([
-                        'status' => 20,
-                        'updated_by' => $MasterClass->getSession('user_id')
-                    ]);
+                                'status' => 20,
+                                'updated_by' => $MasterClass->getSession('user_id')
+                            ]);
 
                     $saved = $MasterClass->checkerrorModelUpdate($saved);
 
@@ -1805,26 +1891,42 @@ class JsonDataController extends Controller
                     $data = json_decode($request->input('data'));
                     $status = [];
                     // dd($data);
+
+
                     foreach ($data->items as $it) {
 
                         $saved = TransactionDetail::where([
                             'id_product' => $it->id_product,
+                            'id_transaction' => $it->id_transaction,
                         ])->update([
-                            'good_condition' => $it->good_condition
-                        ]);
-                        
-                        $saved = $MasterClass->checkerrorModelUpdate($saved);
-                        
-                        $status_product = 2;
-                        if( $it->good_condition == 1){
-                            $status_product = 0;
-                        }
+                                    'good_condition' => $it->good_condition
+                                ]);
 
-                        $saved = Product::where([
-                            'id' => $it->id_product,
-                        ])->update([
-                            'status' => $status_product,
-                        ]);
+                        $saved = $MasterClass->checkerrorModelUpdate($saved);
+
+                        if ($it->good_condition == 1) {
+
+                            $detail = TransactionDetail::where([
+                                'id_product' => $it->id_product,
+                                'id_transaction' => $it->id_transaction,
+                            ])->first();
+                            $header_trans = Transaction::where([
+                                'id_transaction' => $it->id_transaction,
+                            ])->first();
+
+                            $endDate = Carbon::parse($header_trans->end_date)->startOfDay(); 
+                            $today = Carbon::today();
+                            $diff = $today->diffInDays($endDate, false); 
+                            $late = $diff > 0 ? $diff : 0;
+            
+                            $product = Product::find($it->id_product);
+
+                            if ($product) {
+                                $product->increment('items', $detail->item);
+                                $product->late=$late;
+                                $product->save();
+                            }
+                        }
 
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
 
@@ -1839,9 +1941,9 @@ class JsonDataController extends Controller
                     $saved = Transaction::where([
                         'id' => $data->id_transaction,
                     ])->update([
-                        'status' => 30,
-                        'updated_by' => $MasterClass->getSession('user_id')
-                    ]);
+                                'status' => 30,
+                                'updated_by' => $MasterClass->getSession('user_id')
+                            ]);
 
                     $saved = $MasterClass->checkerrorModelUpdate($saved);
 

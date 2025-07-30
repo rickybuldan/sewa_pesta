@@ -601,3 +601,12 @@ function selectedProduct(params) {
         location.href = baseURL + "/home/productdetails?id_product=" + params;
     }
 }
+
+function unformatRupiah(el) {
+    
+    let value = el;
+    value = value.replace(/[^0-9]/g, '');
+    number = parseFloat(value);
+    
+    return number
+}

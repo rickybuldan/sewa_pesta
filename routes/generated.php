@@ -38,3 +38,4 @@ Route::post('/setSendTransaction', [JsonDataController::class, 'setSendTransacti
 Route::post('/setSendBackTransaction', [JsonDataController::class, 'setSendBackTransaction'])->name('');
 Route::get('/constantlist', [GeneralController::class, 'constantlist'])->name('');
 Route::post('/saveConstant', [JsonDataController::class, 'saveConstant'])->name('');
+Route::post('/verifTransaction', [JsonDataController::class, 'verifTransaction'])->name('');
