@@ -448,6 +448,101 @@ class GeneralController extends Controller
             return redirect('/login');
         }
     }
+
+    public function additemproduct(Request $request){
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
+
+        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+
+
+            $javascriptFiles = [
+                asset('action-js/global/global-action.js'),
+                // asset('action-js/generate/generate-action.js'),
+                asset('action-js/transaction/productitem-action.js'),
+            ];
+        
+            $cssFiles = [
+                asset('template/globalcss/global.css'),
+                // asset('css/custom.css'),
+            ];
+            $baseURL = url('/');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+                
+                'const fullname_user = "' . $MasterClass->getSession('name') . '"',
+                'const fulladdress_user = "' .Auth::user()->address. '"',
+                'const fullphone_user = "' .Auth::user()->phone. '"',
+            ];
+
+
+            $menuData = $checkAuth['data'][0];
+    
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs'=> $varJs,
+                'title' => ucwords(strtolower($menuData->header_menu)),
+                'subtitle' => $menuData->menu_name,
+                 // Menambahkan base URL ke dalam array
+            ];
+        
+            return view('pages.admin.transaction.productitem')
+                ->with($data);
+        }else{
+            return redirect('/login');
+        }
+    }
+
+    public function procurement(Request $request){
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
+
+        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+
+
+            $javascriptFiles = [
+                asset('action-js/global/global-action.js'),
+                // asset('action-js/generate/generate-action.js'),
+                asset('action-js/transaction/procurement-action.js'),
+            ];
+        
+            $cssFiles = [
+                asset('template/globalcss/global.css'),
+                // asset('css/custom.css'),
+            ];
+            $baseURL = url('/');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+                'const roleid ='.$MasterClass->getSession('role_id'),
+                
+                'const fullname_user = "' . $MasterClass->getSession('name') . '"',
+                'const fulladdress_user = "' .Auth::user()->address. '"',
+                'const fullphone_user = "' .Auth::user()->phone. '"',
+            ];
+
+            $menuData = $checkAuth['data'][0];
+    
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs'=> $varJs,
+                'title' => ucwords(strtolower($menuData->header_menu)),
+                'subtitle' => $menuData->menu_name,
+                 // Menambahkan base URL ke dalam array
+            ];
+        
+            return view('pages.admin.transaction.procurement')
+                ->with($data);
+        }else{
+            return redirect('/login');
+        }
+    }
+
 }
 
 

@@ -57,6 +57,8 @@ Route::get('/home/productdetails', [HomeController::class, 'productdetails'])->n
 
 Route::get('/invoice', [InvoiceController::class, 'invoice']);
 Route::post('/invoice', [InvoiceController::class, 'invoice']);
+Route::get('/invoice_procurement', [InvoiceController::class, 'invoice_procurement']);
+Route::post('/invoice_procurement', [InvoiceController::class, 'invoice_procurement']);
 
 
 // Route::get('/done', [JobController::class, 'setStatusDone']);

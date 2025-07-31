@@ -103,35 +103,37 @@ function getListView() {
             var rows = api.rows({ page: "current" }).nodes();
             var last = null;
 
-            $('body').on('click', '.permissiondet-btn', function (e) {
-                e.preventDefault();
-                var tr = $(this).closest('tr');
-                if (tr.hasClass('child')) tr = tr.prev(); // kalau tombol ada di child row
-                var rowData = dtview.row(tr).data();
-                console.log(rowData);
-                settingPermissionMenu(rowData);
-            });
 
-            $('body').on('click', '.edit-btn', function (e) {
-                e.preventDefault();
-                var tr = $(this).closest('tr');
-                if (tr.hasClass('child')) tr = tr.prev();
-                var rowData = dtview.row(tr).data();
-                setDataMenu(rowData);
-            });
-
-            $('body').on('click', '.jsondata-btn', function (e) {
-                e.preventDefault();
-                var tr = $(this).closest('tr');
-                if (tr.hasClass('child')) tr = tr.prev();
-                var rowData = dtview.row(tr).data();
-                setJsonData(rowData);
-            });
 
         },
         initComplete: function () {
             loadRole(null, 2)
         },
+    });
+
+    $('body').on('click', '.permissiondet-btn', function (e) {
+        e.preventDefault();
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev(); // kalau tombol ada di child row
+        var rowData = dtview.row(tr).data();
+        console.log(rowData);
+        settingPermissionMenu(rowData);
+    });
+
+    $('body').on('click', '.edit-btn', function (e) {
+        e.preventDefault();
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev();
+        var rowData = dtview.row(tr).data();
+        setDataMenu(rowData);
+    });
+
+    $('body').on('click', '.jsondata-btn', function (e) {
+        e.preventDefault();
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev();
+        var rowData = dtview.row(tr).data();
+        setJsonData(rowData);
     });
 }
 
@@ -262,16 +264,20 @@ function loadRoleMenu(rowData) {
         success: function (response) {
             // console.log(response);
             // Handle response sukses
-            if (response.code == 0) {
-                // swal("Saved !", response.info, "success").then(function () {
-                //     location.reload();
-                // });
-                let data = response.data;
-                ArrCheckPermission = data;
-                loadRole(rowData);
-            } else {
-                sweetAlert("Oops...", response.info, "error");
-            }
+            // if (response.code == 0) {
+            //     // swal("Saved !", response.info, "success").then(function () {
+            //     //     location.reload();
+            //     // });
+            //     let data = response.data;
+            //     ArrCheckPermission = data;
+            //     loadRole(rowData);
+            // } 
+            // // else {
+            // //     sweetAlert("Oops...", response.info, "error");
+            // // }
+            let data = response.data;
+            ArrCheckPermission = data;
+            loadRole(rowData);
         },
         error: function (xhr, status, error) {
             // Handle error response

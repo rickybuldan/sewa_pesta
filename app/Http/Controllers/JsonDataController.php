@@ -6,6 +6,8 @@ use App\Models\House;
 use App\Models\Package;
 
 use App\Models\Pet;
+use App\Models\Procurement;
+use App\Models\ProcurementDetail;
 use App\Models\Product;
 use App\Models\Constant;
 use App\Models\Transaction;
@@ -1206,6 +1208,75 @@ class JsonDataController extends Controller
 
     }
 
+    public function verifProcurement(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data = json_decode($request->input('data'));
+
+                    $status = [];
+
+                    $saved = Procurement::where([
+                        'id' => $data->id
+                    ])->update([
+                                'status' => $data->status,
+                                'updated_by' => $MasterClass->getSession('user_id')
+                            ]);
+                    // dd($saved);
+
+                    $saved = $MasterClass->checkerrorModelUpdate($saved);
+                    $status = $saved;
+
+                    // dd($saved3);
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
     // transaction
     public function saveTransaction(Request $request)
     {
@@ -1366,38 +1437,10 @@ class JsonDataController extends Controller
                     if (isset($data->is_detail)) {
                         $query = "
                         SELECT
-                            *,
-                            COALESCE(
-                                CASE 
-                                    WHEN t.status = 30 
-                                    AND td.late > 0 
-                                    AND td.late IS NOT NULL 
-                                    AND mc.value IS NOT NULL 
-                                    AND mc.value != 0 THEN
-                                        CASE 
-                                            WHEN mc.type = 1 THEN (td.sub_total + td.late *  mc.value)
-                                            WHEN mc.type = 2 THEN td.late * (td.sub_total * mc.value / 100)
-                                            ELSE 0
-                                        END
-                                    ELSE 0
-                                END,
-                            0) AS denda_telat,
-
-                            COALESCE(
-                                    CASE 
-                                        WHEN td.good_condition = 0 AND td.good_condition IS NOT NULL AND mc.value is not null AND mc.value != 0 THEN
-                                            CASE 
-                                                WHEN mc.type = 1 THEN (td.sub_total + mc.value)
-                                                WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value / 100))
-                                                ELSE 0
-                                            END
-                                        ELSE 0
-                                    END
-                                ,0) AS denda
+                            *
                         FROM
 
                         " . $data->tableName;
-
                     }
 
                     $whereClause = isset($data->where) ? " WHERE " . $data->where : "";
@@ -1405,7 +1448,6 @@ class JsonDataController extends Controller
                     if ($whereClause) {
                         $query = $query . " WHERE " . $data->where;
                     }
-
 
                     // dd($query);
 
@@ -1425,8 +1467,6 @@ class JsonDataController extends Controller
                         'info' => $status['info'],
                         'data' => $status['data'],
                     ];
-
-
 
                 } else {
                     $results = [
@@ -1948,6 +1988,136 @@ class JsonDataController extends Controller
                     $saved = $MasterClass->checkerrorModelUpdate($saved);
 
                     $status = $saved;
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
+    public function saveProcurement(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data = json_decode($request->input('data'));
+
+                    $status = [];
+
+                    // $image = $request->file('image');
+                    $status = [];
+                    // $imagePath = null;
+
+                    // if ($image) {
+                    //     // dd( $image->getRealPath());
+                    //     $imagePath = $image->store('images', 'public');
+                    //     // dd($imagePath);
+                    // }
+
+                    $nowdate = now();
+                    $notrx = Procurement::generateNoTransaction($nowdate);
+                    // $start_date = Carbon::parse($data->start_date)->format('Y-m-d H:i:s');
+                    // $end_date = Carbon::parse($data->end_date)->format('Y-m-d H:i:s');
+                    $transaction = Procurement::create([
+                        'supplier_name' => $data->supplier_name,
+                        'supplier_phone' => $data->supplier_phone,
+                        'no_transaction' => $notrx,
+                        'created_by' => $MasterClass->getSession('user_id'),
+                        'updated_by' => $MasterClass->getSession('user_id'),
+                        'price_total' => $data->grand_total,
+                        'status' => 10,
+                        // 'file_path' => $imagePath
+                    ]);
+
+                    $saved1 = $MasterClass->checkErrorModel($transaction);
+
+                    foreach ($data->items as $pdr) {
+                        $product = Product::where('id', $pdr->id)->first();
+                        if ($pdr->qty && $pdr->qty <= $product->items) {
+
+                            $detailTransac = ProcurementDetail::create([
+                                'id_procurement' => $transaction->id,
+                                'id_product' => $pdr->id,
+                                // 'day' => $data->day,
+                                'sub_total' => ($pdr->price * $pdr->qty),
+                                'item' => $pdr->qty,
+                            ]);
+                            $product->items -= $pdr->qty;
+                            $product->save();
+
+                            $saved2 = $MasterClass->checkErrorModel($detailTransac);
+
+                        } else {
+                            DB::rollBack();
+                            $results = [
+                                'code' => '102',
+                                'info' => "Stok " . $product->product_name . " tidak cukup. Stok sekarang : " . $product->items . ". Silakan Hubungi admin.",
+                            ];
+                            return $MasterClass->Results($results);
+                        }
+
+
+                        $saved2 = $MasterClass->checkErrorModel($detailTransac);
+                        // $saveProd = Product::where( [
+                        //     'id' => $pdr->id,
+                        //     'status' => 0,
+                        // ])->update( [
+                        //             'status' => 1
+                        //         ]);
+                        // // dd($saveProd);
+                        // $saved3 = $MasterClass->checkerrorModelUpdate($saveProd);
+                        // if ($saved3['code'] != $MasterClass::CODE_SUCCESS){
+                        //     DB::rollBack();
+                        //     $saved3['info'] = 'Terdapat barang yang sudah disewa, silakan reload halaman.';
+                        //     return $MasterClass->Results($saved3);
+                        // }
+
+                    }
+                    $saved2['data'] = $notrx;
+                    $status = $saved2;
+
+                    // dd($saved3);
 
                     if ($status['code'] == $MasterClass::CODE_SUCCESS) {
                         DB::commit();

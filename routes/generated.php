@@ -39,3 +39,7 @@ Route::post('/setSendBackTransaction', [JsonDataController::class, 'setSendBackT
 Route::get('/constantlist', [GeneralController::class, 'constantlist'])->name('');
 Route::post('/saveConstant', [JsonDataController::class, 'saveConstant'])->name('');
 Route::post('/verifTransaction', [JsonDataController::class, 'verifTransaction'])->name('');
+Route::get('/additemproduct', [GeneralController::class, 'additemproduct'])->name('');
+Route::post('/saveProcurement', [JsonDataController::class, 'saveProcurement'])->name('');
+Route::get('/procurement', [GeneralController::class, 'procurement'])->name('');
+Route::post('/verifProcurement', [JsonDataController::class, 'verifProcurement'])->name('');

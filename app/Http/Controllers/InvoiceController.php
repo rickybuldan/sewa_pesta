@@ -122,5 +122,96 @@ class InvoiceController extends Controller
 
 
     }
+    
+    public function invoice_procurement(Request $request)
+    {
+        $MasterClass = new Master();
+        try {
+            if ($request->isMethod('post')) {
+             
+                $noinvoice = $request->get('noinvoice');
+                if(empty($noinvoice)){
+                    $results = [
+                        'code' => 1,
+                        'info' => 'Data TIdak Ditemukan',
+                        'data' => null,
+                    ];
+                    return $MasterClass->Results($results);
+                }
+                DB::beginTransaction();
+
+
+                $status = [];
+                $sql = " 
+                        SELECT
+                            t.*,
+                            us1.name as submitted_by,
+                            us2.name as approver
+                        FROM procurements t
+                        
+                        LEFT JOIN procurement_details td ON td.id_procurement = t.id
+                        LEFT JOIN users us1 ON us1.id = t.created_by
+                        LEFT JOIN users us2 ON us2.id = t.updated_by
+                        
+                        WHERE t.no_transaction ='" . $noinvoice . "'";
+             
+                
+                    $saved = DB::select($sql);
+
+             
+                $saved = $MasterClass->checkErrorModel($saved);
+               
+                $status = $saved;
+
+                $results = [
+                    'code' => $status['code'],
+                    'info' => $status['info'],
+                    'data' => $status['data'],
+                ];
+
+                return $MasterClass->Results($results);
+
+            } else {
+                $noinvoice = $request->query('noinvoice');
+                // dd($noinvoice);
+                $javascriptFiles = [
+                    asset('action-js/global/global-action.js'),
+                    asset('action-js/invoice/invoice-procurement-action.js'),
+                ];
+
+                $cssFiles = [
+                    // asset('css/main.css'),
+                    // asset('css/custom.css'),
+                ];
+                $baseURL = url('/');
+                $varJs = [
+                    'const baseURL = "' . $baseURL . '"',
+                    'const no_invoice = "' . $noinvoice . '"',
+                ];
+
+                $data = [
+                    'javascriptFiles' => $javascriptFiles,
+                    'cssFiles' => $cssFiles,
+                    'varJs' => $varJs,
+                    'title' => "Invoice",
+                    'subtitle' => "Detail Invoice",
+                ];
+
+                return view('pages.admin.invoice.invoice_procurement')
+                    ->with($data);
+            }
+        } catch (\Exception $e) {
+
+            $results = [
+                'code' => '102',
+                'info' => $e->getMessage(),
+            ];
+
+        }
+
+
+
+
+    }
 
 }
