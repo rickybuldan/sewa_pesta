@@ -1231,8 +1231,21 @@ class JsonDataController extends Controller
                                 'status' => $data->status,
                                 'updated_by' => $MasterClass->getSession('user_id')
                             ]);
-                    // dd($saved);
 
+                    if($data->status == 20){
+
+                        $detailTransac = ProcurementDetail::where('id_procurement', $data->id)->get();
+                        
+                        foreach ($detailTransac as $pdr) {
+                            $product = Product::where('id', $pdr->id_product)->first();
+
+                            if ($product) {
+                                $product->items += $pdr->items;
+                                $product->save();
+                            }
+                        }
+                    }
+                   
                     $saved = $MasterClass->checkerrorModelUpdate($saved);
                     $status = $saved;
 
