@@ -939,7 +939,7 @@ class JsonDataController extends Controller
                             t.file_path_paid,
                             (t.price_total + COALESCE(d.denda, 0)) as grand_total, 
                             COALESCE(d.denda, 0) AS denda,
-                            COALESCE(t.type_pay, 0) AS type_pay,
+                            COALESCE(t.type_pay, 0) AS type_pay
                         FROM transactions t
                         LEFT JOIN (
                             SELECT
