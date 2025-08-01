@@ -2131,7 +2131,7 @@ class JsonDataController extends Controller
                                 'sub_total' => ($pdr->price * $pdr->qty),
                                 'item' => $pdr->qty,
                             ]);
-                            $product->items -= $pdr->qty;
+                            $product->items += $pdr->qty;
                             $product->save();
 
                             $saved2 = $MasterClass->checkErrorModel($detailTransac);
