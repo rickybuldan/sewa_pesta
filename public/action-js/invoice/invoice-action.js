@@ -37,6 +37,7 @@ function loadInvoice() {
                 $("#f-no-transaksi").text(data[0].no_transaction);
                 $("#f-name-customer").text(data[0].customer_name);
                 $("#f-phone-customer").text(data[0].customer_phone);
+                $("#f-address-customer").text(data[0].address);
                 $("#f-rent-date").text(data[0].start_date +'-'+data[0].end_date );
                 $(".no_invoice").text("#" + data[0].no_transaction);
                 $(".date_invoice").text(data[0].created_date_formatted);

@@ -141,6 +141,7 @@
             <strong>No Transaksi:</strong><b id="f-no-transaksi">-</b><br>
             <strong>No HP Customer:</strong><b id="f-phone-customer">-</b><br>
             <strong>Yth:</strong> Bapak/Ibu <b id="f-name-customer">-</b><br>
+            <strong>Alamat:</strong><b id="f-address-customer">-</b><br>
         </div>
         <div>
             <strong>Singaparna,</strong> 30 Juni 2025<br>
