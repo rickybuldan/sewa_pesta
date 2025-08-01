@@ -197,7 +197,7 @@ function getDetailProducts() {
         data: JSON.stringify({
             where: wherestate,
             is_detail:true,
-            tableName: "transactions t LEFT JOIN users us ON us.id = t.updated_by LEFT JOIN transaction_details td ON td.id_transaction = t.id LEFT JOIN products p ON p.id = td.id_product LEFT JOIN master_constants mc ON mc.is_active = 1",
+            tableName: "transactions t LEFT JOIN users us ON us.id = t.updated_by LEFT JOIN transaction_details td ON td.id_transaction = t.id LEFT JOIN products p ON p.id = td.id_product LEFT JOIN master_constants mc ON mc.is_active = 1 LEFT JOIN units u ON u.id = p.id_unit",
         }),
         dataType: "json",
         contentType: "application/json",
@@ -229,7 +229,7 @@ function getDetailProducts() {
                     console.log(prods);
                     
                     nt = prods[index].updated_at;
-                    nm = prods[index].product_name;
+                    nm = prods[index].product_name +" - "+prods[index].unit_name;
                     dsc = prods[index].sub_total;
                     img = prods[index].denda;
                     dtel = prods[index].denda_telat;

@@ -10,7 +10,7 @@ function loadProduct() {
     $.ajax({
         url: baseURL + "/home/loadGlobal",
         type: "POST",
-        data: JSON.stringify({ tableName: "products", where: "status = 0" + " and items > 0" }),
+        data: JSON.stringify({ tableName: "products p LEFT JOIN units u ON u.id = p.id_unit", where: "p.status = 0" + " and p.items > 0" , is_product:true}),
         dataType: "json",
         contentType: "application/json",
         beforeSend: function () {
@@ -64,7 +64,7 @@ function loadProduct() {
                                     <div class="single-product-tag">
                                         <a href="#" class="primary-color mr-1" tabindex="0">Product</a>
                                     </div>
-                                    <h5 class="single-product-name"><a href="#" tabindex="0">${data[index]["product_name"]}</a></h5>
+                                    <h5 class="single-product-name"><a href="#" tabindex="0">${data[index]["product_name"]} - ${data[index]["unit_name"]}</a></h5>
                                     <div class="single-product-action d-flex position-relative transition-3">
                                         <ul class="single-product-price d-flex">
                                             <li>
@@ -127,6 +127,8 @@ function loadProduct() {
         },
     });
 }
+
+
 
 
 

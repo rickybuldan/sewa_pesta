@@ -333,6 +333,26 @@ class HomeController extends Controller
 
                                 FROM " . $data->tableName;
                 }
+                
+                
+                if(isset($data->is_product) == true){
+                    $query = "
+                                SELECT
+                                    p.*,
+                                    u.unit_name
+
+                                FROM " . $data->tableName;
+                }
+
+                if(isset($data->is_carts) == true){
+                    $query = "
+                                SELECT
+                                    c.*,
+                                    p.*,
+                                    u.unit_name
+
+                                FROM " . $data->tableName;
+                }
 
                 $whereClause = isset($data->where) ? " WHERE " . $data->where : "";
 

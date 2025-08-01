@@ -43,3 +43,5 @@ Route::get('/additemproduct', [GeneralController::class, 'additemproduct'])->nam
 Route::post('/saveProcurement', [JsonDataController::class, 'saveProcurement'])->name('');
 Route::get('/procurement', [GeneralController::class, 'procurement'])->name('');
 Route::post('/verifProcurement', [JsonDataController::class, 'verifProcurement'])->name('');
+Route::get('/unitlist', [GeneralController::class, 'unitlist'])->name('');
+Route::post('/saveUnit', [JsonDataController::class, 'saveUnit'])->name('');

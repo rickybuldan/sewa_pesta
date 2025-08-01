@@ -26,8 +26,9 @@ function loadOrderCart() {
         url: baseURL + "/home/loadGlobal",
         type: "POST",
         data: JSON.stringify({
-            tableName: "products",
-            where: "id = " + id_product_glob ,
+            tableName: "products p LEFT JOIN units u ON u.id = p.id_unit",
+            where: "p.id = " + id_product_glob ,
+            is_product:true
         }),
         dataType: "json",
         contentType: "application/json",
@@ -47,7 +48,7 @@ function loadOrderCart() {
                 }
                 $(".zoom-gallery").attr("href",baseURL + $rowData);
                 $('.details-img').attr("src",$rowData);
-                $('.details-name').html(data.product_name);
+                $('.details-name').html(data.product_name +" - "+ data.unit_name);
                 $('.details-price').html(formatRupiah(data.price)+"/Hari");
                 $('.details-desc').html(data.desc);
                 $('.details-stock').html(data.items + " In Stock");

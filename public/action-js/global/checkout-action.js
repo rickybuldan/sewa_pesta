@@ -74,8 +74,9 @@ function loadOrderCart() {
         url: baseURL + "/home/loadGlobal",
         type: "POST",
         data: JSON.stringify({
-            tableName: "carts c LEFT JOIN products p ON p.id = c.id_product",
+            tableName: "carts c LEFT JOIN products p ON p.id = c.id_product LEFT JOIN units u ON u.id = p.id_unit",
             where: "c.id_user = " + xid,
+            is_carts:true
         }),
 
         dataType: "json",
@@ -111,7 +112,7 @@ function loadOrderCart() {
                                 <img src="${imgSrc}" alt="Product Image" style="max-width: 80px;">
                                 <h5 class="single-product-name"><a href="#" onclick="selectedProduct(${item.id_product
                         })" tabindex="0">${item.product_name
-                        } @${formatRupiah(price)}</a></h5>
+                        } ${item.unit_name} @${formatRupiah(price)}</a></h5>
                        
                             </td>
                             <td class="text-center">

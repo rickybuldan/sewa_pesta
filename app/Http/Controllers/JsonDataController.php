@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Constant;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
+use App\Models\Unit;
 use App\Models\UserAccess;
 use App\Models\UsersRole;
 use Illuminate\Http\Request;
@@ -1451,7 +1452,11 @@ class JsonDataController extends Controller
                    if (isset($data->is_detail)) {
                         $query = "
                         SELECT
-                            *,
+                            td.*,
+                            us.name,
+                            p.*,
+                            u.unit_name,
+
                             COALESCE(
                                 CASE 
                                     WHEN t.status = 30 
@@ -1655,6 +1660,7 @@ class JsonDataController extends Controller
                             'desc' => $data->desc,
                             'status' => $data->status,
                             'items' => $data->items,
+                            'id_unit' => $data->id_unit,
                             // 'stock_minimum' => $data->min,
                             // 'stock_maximum' => $data->max,
                             // 'stock' => $data->init,
@@ -2172,6 +2178,82 @@ class JsonDataController extends Controller
                         'info' => $status['info'],
                         'data' => $status['data'],
                     ];
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
+    public function saveUnit(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data = json_decode($request->input('data'));
+                    $status = [];
+                  
+                    $saved = Unit::updateOrCreate(
+                        [
+                            'id' => $data->id,
+                        ],
+                        [
+                            'unit_name' => $data->unit_name,
+                            // 'updated_by' => $MasterClass->getSession('user_id'),
+                            // 'created_by' => $MasterClass->getSession('user_id'),
+                        ]
+                    );
+
+                    // if ($imagePath && $data->id) {
+
+                    // }
+
+                    $saved = $MasterClass->checkErrorModel($saved);
+
+                    $status = $saved;
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+
 
                 } else {
                     $results = [

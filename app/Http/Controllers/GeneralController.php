@@ -543,6 +543,48 @@ class GeneralController extends Controller
         }
     }
 
+     public function unitlist(Request $request){
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
+
+        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+
+
+            $javascriptFiles = [
+                asset('action-js/global/global-action.js'),
+                // asset('action-js/generate/generate-action.js'),
+                asset('action-js/masterdata/unitlist-action.js'),
+            ];
+        
+            $cssFiles = [
+                asset('template/globalcss/global.css'),
+                // asset('css/custom.css'),
+            ];
+            $baseURL = url('/');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+            ];
+
+            $menuData = $checkAuth['data'][0];
+    
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs'=> $varJs,
+                'title' => ucwords(strtolower($menuData->header_menu)),
+                'subtitle' => $menuData->menu_name,
+                 // Menambahkan base URL ke dalam array
+            ];
+        
+            return view('pages.admin.masterdata.unitlist')
+                ->with($data);
+        }else{
+            return redirect('/login');
+        }
+    }
+
 }
 
 

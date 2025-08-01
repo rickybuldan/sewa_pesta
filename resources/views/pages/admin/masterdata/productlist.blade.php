@@ -29,7 +29,7 @@
                                         <th>Nama Produk</th>
                                         <th>Item</th>
                                         <th>Harga</th>
-                                        <th>Deskripsi</th>
+                                        {{-- <th>Deskripsi</th> --}}
                                         <th>Gambar</th>
                                         {{-- <th>Berat</th> --}}
                                         <th>Aksi</th>
@@ -99,6 +99,15 @@
                                     <select class="form-select form-select-sm" id="form-status">
                                         <option value="0">Aktif</option>
                                         <option value="1">Inaktif</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Satuan</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select form-select-sm" id="form-satuan">
+                                        {{-- <option value="0">Aktif</option>
+                                        <option value="1">Inaktif</option> --}}
                                     </select>
                                 </div>
                             </div>

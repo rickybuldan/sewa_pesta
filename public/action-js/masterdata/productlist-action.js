@@ -63,7 +63,7 @@ function getListData() {
             { data: "product_name" },
             { data: "items" },
             { data: "price" },
-            { data: "desc" },
+            // { data: "desc" },
             { data: "file_path" },
 
             { data: "id" },
@@ -104,7 +104,7 @@ function getListData() {
                     return $rowData;
                 },
                 visible: true,
-                targets: 5,
+                targets: 4,
                 className: "text-center",
             },
             // {
@@ -124,7 +124,7 @@ function getListData() {
                     return $rowData;
                 },
                 visible: true,
-                targets: 6,
+                targets: 5,
                 className: "text-center",
             },
         ],
@@ -159,6 +159,9 @@ function getListData() {
 
 
         },
+        initComplete: function () {
+            loadRole()
+        },
     });
 }
 
@@ -179,6 +182,8 @@ function editdata(rowData) {
     $("#form-items").val(rowData.items)
     $("#form-status").val(rowData.status).trigger('change')
     
+    $("#form-satuan").val(rowData.id_unit).trigger('change')
+    
     // generateProdCode($("#form-code").val())
     $("#modal-data").modal("show");
 }
@@ -197,6 +202,7 @@ $("#add-btn").on("click", function (e) {
     $("#form-max").val("");
     $("#form-min").val("");
     $("#form-init").val("");
+    $("#form-satuan").val("").trigger('change')
     $("#form-code").val("")
 
     $("#modal-data").modal("show");
@@ -280,6 +286,14 @@ function checkValidation() {
         validationSwalFailed(
             (isObject["desc"] = $("#form-desc").val()),
             "Deskripsi tidak boleh kosong"
+        )
+    )
+        return false;
+
+    if (
+        validationSwalFailed(
+            (isObject["id_unit"] = $("#form-satuan").val()),
+            "Satuan produk tidak boleh kosong."
         )
     )
         return false;
@@ -517,4 +531,42 @@ function setNullProd() {
 //         };
 //     };
 // }
+
+
+
+async function loadRole() {
+    try {
+        const response = await $.ajax({
+            url: baseURL + "/home/loadGlobal",
+            type: "POST",
+            data: JSON.stringify({ tableName: "units"}),
+            dataType: "json",
+            contentType: "application/json",
+            beforeSend: function () {
+                // Swal.fire({
+                //     title: "Loading",
+                //     text: "Please wait...",
+                // });
+            },
+        });
+
+        const res = response.data.map(function (item) {
+            return {
+                id: item.id,
+                text: item.unit_name,
+            };
+        });
+
+        $("#form-satuan").select2({
+            // theme: "bootstrap-5",
+            // width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+   
+            data: res,
+            placeholder: "Please choose an option",
+            dropdownParent: $("#modal-data"),
+        });
+    } catch (error) {
+        sweetAlert("Oops...", error.responseText, "error");
+    }
+}
 
