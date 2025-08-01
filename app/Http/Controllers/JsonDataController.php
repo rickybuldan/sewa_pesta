@@ -1447,13 +1447,41 @@ class JsonDataController extends Controller
                         FROM
 
                     " . $data->tableName;
-                    if (isset($data->is_detail)) {
+                   if (isset($data->is_detail)) {
                         $query = "
                         SELECT
-                            *
+                            *,
+                            COALESCE(
+                                CASE 
+                                    WHEN t.status = 30 
+                                    AND td.late > 0 
+                                    AND td.late IS NOT NULL 
+                                    AND mc.value IS NOT NULL 
+                                    AND mc.value != 0 THEN
+                                        CASE 
+                                            WHEN mc.type = 1 THEN (td.sub_total + td.late *  mc.value)
+                                            WHEN mc.type = 2 THEN td.late * (td.sub_total * mc.value / 100)
+                                            ELSE 0
+                                        END
+                                    ELSE 0
+                                END,
+                            0) AS denda_telat,
+
+                            COALESCE(
+                                    CASE 
+                                        WHEN td.good_condition = 0 AND td.good_condition IS NOT NULL AND mc.value is not null AND mc.value != 0 THEN
+                                            CASE 
+                                                WHEN mc.type = 1 THEN (td.sub_total + mc.value)
+                                                WHEN mc.type = 2 THEN (td.sub_total + (td.sub_total * mc.value / 100))
+                                                ELSE 0
+                                            END
+                                        ELSE 0
+                                    END
+                                ,0) AS denda
                         FROM
 
                         " . $data->tableName;
+
                     }
 
                     $whereClause = isset($data->where) ? " WHERE " . $data->where : "";

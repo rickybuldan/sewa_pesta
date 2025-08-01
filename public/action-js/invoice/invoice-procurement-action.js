@@ -199,7 +199,7 @@ function getDetailProducts() {
         type: "POST",
         data: JSON.stringify({
             where: wherestate,
-            is_detail:true,
+            // is_detail:false,
             tableName: "procurements t LEFT JOIN users us ON us.id = t.updated_by LEFT JOIN procurement_details td ON td.id_procurement = t.id LEFT JOIN products p ON p.id = td.id_product",
         }),
         dataType: "json",
