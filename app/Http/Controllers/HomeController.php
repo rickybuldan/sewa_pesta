@@ -495,7 +495,7 @@ class HomeController extends Controller
                 $nowdate = now();
                 $notrx = Transaction::generateNoTransaction($nowdate);
                 $createdBy = $MasterClass->getSession(('user_id'));
-                $fbukti = "file_path_paid";
+                $fbukti = "file_path";
                 if($data->type_pay == 1){
                     $fbukti = "file_path_paid";
                 }

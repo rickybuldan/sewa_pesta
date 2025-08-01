@@ -316,7 +316,7 @@ $(".ct-nominal-dp").hide();
 $("#s-type-pay").change(function () {
     var selectedValue = $(this).val();
     if (selectedValue == 0) {
-        $("#f-nominal-dp").val(formatRupiah(globGrandTotal*30/100))
+        $("#f-nominal-dp").val(formatRupiah(globGrandTotal*50/100))
         $(".ct-nominal-dp").show();
     } else {
         $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
