@@ -34,5 +34,10 @@
             background-color: rgba(255, 255, 255, 0.9); 
         }
 
+        .h-shop-cart-contetn {
+            max-height: 300px; /* atau tinggi sesuai kebutuhan */
+            overflow-y: auto;
+        }
+
     </style>
 </head>

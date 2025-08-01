@@ -475,6 +475,10 @@ class HomeController extends Controller
                 $nowdate = now();
                 $notrx = Transaction::generateNoTransaction($nowdate);
                 $createdBy = $MasterClass->getSession(('user_id'));
+                $fbukti = "file_path_paid";
+                if($data->type_pay == 1){
+                    $fbukti = "file_path_paid";
+                }
                 $transaction = Transaction::create([
                     'customer_name' => $data->name,
                     'address' => $data->address,
@@ -485,7 +489,7 @@ class HomeController extends Controller
                     'created_by' => $createdBy,
                     'updated_by' => $createdBy,
                     'price_total' => $data->grand_total,
-                    'file_path' => $imagePath,
+                    $fbukti => $imagePath,
                     'type_pay' => $data->type_pay,
                     'status' => 10,
                     'nominal_payment'=>$data->nominal_payment

@@ -612,7 +612,7 @@ function verifTransaction(paramObj) {
     isReq.id = paramObj.id
     isReq.status = 11
 
-    if (paramObj.type_pey == 1) {
+    if (paramObj.type_pay == 1) {
         isReq.status = 12
     }
 

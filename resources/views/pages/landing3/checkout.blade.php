@@ -94,7 +94,7 @@
                                         <label class="mt-25">Tipe Pembayaran<span class="secondary-color">**</span></label>
                                         <div>
                                             <select class="custom-select" id="s-type-pay">
-                                                <option value="1">Cash</option>
+                                                <option value="1" selected>Cash</option>
                                                 <option value="0">DP - Down Payment</option>
                                             </select>
                                         </div>
