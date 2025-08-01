@@ -560,7 +560,7 @@ async function loadRole() {
         $("#form-satuan").select2({
             // theme: "bootstrap-5",
             // width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-   
+            width: '100%' ,
             data: res,
             placeholder: "Please choose an option",
             dropdownParent: $("#modal-data"),
