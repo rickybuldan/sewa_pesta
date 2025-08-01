@@ -1993,7 +1993,7 @@ class JsonDataController extends Controller
                                 'id_transaction' => $it->id_transaction,
                             ])->first();
                             $header_trans = Transaction::where([
-                                'id_transaction' => $it->id_transaction,
+                                'id' => $it->id_transaction,
                             ])->first();
 
                             $endDate = Carbon::parse($header_trans->end_date)->startOfDay(); 
