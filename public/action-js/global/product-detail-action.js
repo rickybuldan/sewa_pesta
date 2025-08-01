@@ -49,7 +49,7 @@ function loadOrderCart() {
                 $(".zoom-gallery").attr("href",baseURL + $rowData);
                 $('.details-img').attr("src",$rowData);
                 $('.details-name').html(data.product_name +" - "+ data.unit_name);
-                $('.details-price').html(formatRupiah(data.price)+"/Hari");
+                $('.details-price').html(formatRupiah(data.price)+"/"+data.unit_name);
                 $('.details-desc').html(data.desc);
                 $('.details-stock').html(data.items + " In Stock");
                 maxStock = data.items

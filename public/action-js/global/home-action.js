@@ -68,7 +68,7 @@ function loadProduct() {
                                     <div class="single-product-action d-flex position-relative transition-3">
                                         <ul class="single-product-price d-flex">
                                             <li>
-                                                <span>${formatRupiah(data[index]["price"])}/Hari</span>
+                                                <span>${formatRupiah(data[index]["price"])}/${data[index]["unit_name"]}</span>
                                             </li>
                                         </ul>
                                         <div class="add-to-cart position-absolute transition-3">

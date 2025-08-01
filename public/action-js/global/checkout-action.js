@@ -112,11 +112,11 @@ function loadOrderCart() {
                                 <img src="${imgSrc}" alt="Product Image" style="max-width: 80px;">
                                 <h5 class="single-product-name"><a href="#" onclick="selectedProduct(${item.id_product
                         })" tabindex="0">${item.product_name
-                        } ${item.unit_name} @${formatRupiah(price)}</a></h5>
+                        } @${formatRupiah(price)}</a></h5>
                        
                             </td>
                             <td class="text-center">
-                                <h6 class="mb-0"><span class="product-qty">${globSumDay} Hari x ${quantity}</span> Qty</h6>
+                                <h6 class="mb-0"><span class="product-qty">${globSumDay} Hari x ${quantity} ${item.unit_name}</span> Qty</h6>
                             </td>
                             <td class="text-right">${formatRupiah(
                             totalItem

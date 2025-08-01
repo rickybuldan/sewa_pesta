@@ -229,7 +229,7 @@ function getDetailProducts() {
                     console.log(prods);
                     
                     nt = prods[index].updated_at;
-                    nm = prods[index].product_name +" - "+prods[index].unit_name;
+                    nm = prods[index].product_name;
                     dsc = prods[index].sub_total;
                     img = prods[index].denda;
                     dtel = prods[index].denda_telat;
@@ -250,7 +250,7 @@ function getDetailProducts() {
 
                     galleryprods += `
                             <tr>
-                                <td>${prods[index].item}</td>
+                                <td>${prods[index].item} ${prods[index].unit_name}</td>
                                 <td>${nm}</td>
                                 <td>${formatRupiah(dsc)}</td>
                                 <td>${formatRupiah(img)}</td>
