@@ -201,6 +201,5 @@
     @foreach ($javascriptFiles as $file)
         <script src="{{ $file }}"></script>
     @endforeach
-    <script src="{{ asset('template/admin2/assets/js/owlcarousel/owl.carousel.js') }}"></script>
 
 @endpush

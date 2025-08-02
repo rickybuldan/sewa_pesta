@@ -41,7 +41,7 @@
 
 
 <script src="{{ asset('template/admin/vendor/sweetalert2/dist/sweetalert2.min.js') }}" aria-hidden="true"></script>
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-wXqXapKNJqH3unCH"></script>
+{{-- <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-wXqXapKNJqH3unCH"></script> --}}
  {{-- <script type="text/javascript"
 		src="https://app.stg.midtrans.com/snap/snap.js"
     data-client-key="SET_YOUR_CLIENT_KEY_HERE"></script> --}}

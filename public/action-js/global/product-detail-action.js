@@ -72,16 +72,19 @@ function loadOrderCart() {
         },
     });
 }
-$(document).ready(function () {
-    $('#f-cart-item').on('input blur change', function () {
-        let val = parseInt($(this).val());
-        let max = parseInt($(this).attr("data-item")); // contoh: 100
+$('#f-cart-item').on('input blur change', function () {
+    let val = parseInt($(this).val());
+    let max = parseInt($(this).attr("data-item")); // contoh: 100
 
-        // Kalau bukan angka atau nilainya kurang dari atau sama dengan max → paksa jadi max + 1
-        if (isNaN(val) || val <= max) {
-            $(this).val(max);
-        }
-    });
+    // Kalau bukan angka atau nilainya kurang dari atau sama dengan max → paksa jadi max + 1
+    if (isNaN(val) || val <= max) {
+        $(this).val(max);
+    }
+});
+
+$(".header-shopping-cart").on('click', function () {
+
+    $(".header-shopping-cart-details").toggle();
 });
 
 $('.add-cart-btn').click(function () {
