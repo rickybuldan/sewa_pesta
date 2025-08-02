@@ -101,7 +101,7 @@ async function getListData() {
                                     <span class="badge text-bg-secondary mb-3">${formatRupiah(pc)}</span>
                                     <button type="button" onclick='sendTransaction(this,${idp})' class="btn btn-outline-info rounded-pill">Sudah dikirim</button>
                                 </div>
-                            </div>taek
+                            </div>
                         </div>
                     </div>
                 `;
