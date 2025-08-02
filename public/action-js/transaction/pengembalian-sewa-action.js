@@ -63,7 +63,7 @@ async function getListData() {
                 phone = item.customer_phone;
                 addr = item.address;
                 idp = item.id;
-                ca  = item.created_at
+                ca = item.created_at
 
                 dtproducts = "";
                 try {
@@ -91,8 +91,8 @@ async function getListData() {
                                 ${dtproducts}
                                 <div class="d-grid gap-2 mt-3">
                                     <span class="badge text-bg-secondary mb-3">${formatRupiah(
-                                        pc
-                                    )}</span>
+                    pc
+                )}</span>
                                     <button type="button" onclick='returnCheck(this,"${bsitem}")' class="btn btn-outline-info rounded-pill">Cek Pengembalian</button>
                                 </div>
                             </div>
@@ -110,14 +110,14 @@ async function getListData() {
     }
 }
 
-async function returnCheck(el,params) {
+async function returnCheck(el, params) {
     dto = JSON.parse(atob(bsitem));
     console.log(dto);
-    
+
     $("#form-no-transaction").val(dto.no_transaction)
     htco = await getReturProducts(dto.id)
     // console.log(htco);
-    
+
     $(".content-retur-prods").html(htco)
     $("#modal-data").modal("show");
 }
@@ -133,26 +133,32 @@ function getReturProducts(paramsid) {
             data: JSON.stringify({
                 where: wherestate,
                 tableName:
-                    " transaction_details td LEFT JOIN products p ON td.id_product = p.id ",
+                    " transaction_details td LEFT JOIN products p ON td.id_product = p.id  LEFT JOIN units u ON u.id = p.id_unit",
             }),
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
                 if (response.code == 0) {
                     let galleryprods = "";
+
                     response.data.forEach((item) => {
                         galleryprods += `
-                            <div class="col-xl-3">
-                                <div class="form-check">
-                                    <input class="form-check-input dt-items-retur-prod" type="checkbox" data-its="${paramsid}" data-idp="${item.id_product}" value="" checked="true">
-                                    <label class="form-check-label" for="flexCheckChecked" title="Ceklis jika kondisi Baik">
-                                        Kondisi Baik
-                                    </label>
-                                </div>
+                            <div class="col-xl-12">
+                                <div class='mb-3'> ${item.product_name} - ${item.item} ${item.unit_name}</div>
                             </div>
-                            <div class="col-xl-9">
-                                <div class='mb-0'>${item.product_name}</div>
+                            <div class="col-xl-12">
+                                
+                                <input class="form-check-input dt-items-retur-prod" type="hidden" data-max="${item.item}"  data-its="${paramsid}" data-idp="${item.id_product}" value="">
+                                    
+                                <label>Item Rusak</label>
+                                <input type="number" min='0' max='${item.item}' data-its="${paramsid}" data-idp="${item.id_product}" class="form-control input-rusak" value='0' placeholder="Rusak">
+                                <label>Item Baik</label>
+                                <input type="number" min='0' max='${item.item}' data-its="${paramsid}" data-idp="${item.id_product}" class="form-control input-baik" value="${item.item}" placeholder="Baik">
+                                <label>Denda Item Rusak</label>
+                                <input type="number" min='0' data-its="${paramsid}" data-idp="${item.id_product}" class="form-control denda-rusak" value='0' placeholder="Denda Item Rusak">
+                                
                             </div>
+                           
                             `;
                     });
                     resolve(galleryprods);
@@ -163,9 +169,45 @@ function getReturProducts(paramsid) {
             error: function (xhr) {
                 reject(xhr.responseText);
             },
+
+
         });
     });
+    
 }
+
+$('#retur-container').on('change', '.input-rusak, .input-baik', function () {
+    const $this = $(this);
+    const $container = $this.closest('.content-retur-prods');
+    const $hidden = $container.find('.dt-items-retur-prod');
+
+    const max = parseInt($hidden.data('max')) || 0;
+
+    const $inputRusak = $container.find('.input-rusak');
+    const $inputBaik  = $container.find('.input-baik');
+
+    let rusak = parseInt($inputRusak.val()) || 0;
+    let baik  = parseInt($inputBaik.val()) || 0;
+
+    if ($this.hasClass('input-rusak')) {
+        rusak = Math.min(rusak, max);
+        baik = max - rusak;
+        $inputBaik.val(baik);
+    } else if ($this.hasClass('input-baik')) {
+        baik = Math.min(baik, max);
+        rusak = max - baik;
+        $inputRusak.val(rusak);
+    }
+
+    console.log({ rusak, baik, max });
+});
+
+    
+
+
+
+
+
 
 function getListProducts(paramsid) {
     return new Promise(function (resolve, reject) {
@@ -202,22 +244,34 @@ function getListProducts(paramsid) {
 function sendBackTransaction() {
     var formData = new FormData();
     issend = []
-    let its 
-    $('.dt-items-retur-prod').each(function () {
-        
-        let idp = $(this).data('idp');
-        its = $(this).data('its');
-        let ck  = $(this).is(':checked')
-        obj = {
-            id_transaction:its,
-            id_product: idp,
-            good_condition:ck
-        }
-        issend.push(obj)
+    let its
+    $('#retur-container').each(function () {
+        $container = $(this);
+        $hidden = $container.find('.dt-items-retur-prod');
+
+        id_product = $hidden.data('idp');
+        id_transaction = $hidden.data('its');
+        its = id_transaction
+        max = parseInt($hidden.data('max')) || 0;
+        rusak = parseInt($container.find('.input-rusak').val()) || 0;
+        baik = parseInt($container.find('.input-baik').val()) || 0;
+        denda = parseInt($container.find('.denda-rusak').val()) || 0;
+
+        issend.push({
+            id_transaction: id_transaction,
+            id_product: id_product,
+            max: max,
+            rusak: rusak,
+            baik: baik,
+            penalty: denda
+        });
     });
 
-    formData.append("data", JSON.stringify({ id_transaction: its, items: issend }));
+    console.log(issend);
     
+
+    formData.append("data", JSON.stringify({ id_transaction: its, items: issend }));
+
     swal({
         title: "Apakah anda yakin ?",
         text: "Melakukan pengembalian ?",

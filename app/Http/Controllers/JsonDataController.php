@@ -1234,10 +1234,10 @@ class JsonDataController extends Controller
                                 'updated_by' => $MasterClass->getSession('user_id')
                             ]);
 
-                    if($data->status == 20){
+                    if ($data->status == 20) {
 
                         $detailTransac = ProcurementDetail::where('id_procurement', $data->id)->get();
-                        
+
                         foreach ($detailTransac as $pdr) {
                             $product = Product::where('id', $pdr->id_product)->first();
 
@@ -1247,7 +1247,7 @@ class JsonDataController extends Controller
                             }
                         }
                     }
-                   
+
                     $saved = $MasterClass->checkerrorModelUpdate($saved);
                     $status = $saved;
 
@@ -1449,13 +1449,14 @@ class JsonDataController extends Controller
                         FROM
 
                     " . $data->tableName;
-                   if (isset($data->is_detail)) {
+                    if (isset($data->is_detail)) {
                         $query = "
                         SELECT
                             td.*,
                             us.name,
                             p.*,
                             u.unit_name,
+                            td.penalty,
 
                             COALESCE(
                                 CASE 
@@ -1988,34 +1989,39 @@ class JsonDataController extends Controller
                             'id_product' => $it->id_product,
                             'id_transaction' => $it->id_transaction,
                         ])->update([
-                                    'good_condition' => $it->good_condition
+                                    'good' => $it->baik,
+                                    'damage' => $it->rusak,
+                                    'penalty' => $it->penalty
                                 ]);
 
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
 
-                        if ($it->good_condition == 1) {
 
-                            $detail = TransactionDetail::where([
-                                'id_product' => $it->id_product,
-                                'id_transaction' => $it->id_transaction,
-                            ])->first();
-                            $header_trans = Transaction::where([
-                                'id' => $it->id_transaction,
-                            ])->first();
 
-                            $endDate = Carbon::parse($header_trans->end_date)->startOfDay(); 
-                            $today = Carbon::today();
-                            $diff = $today->diffInDays($endDate, false); 
-                            $late = $diff > 0 ? $diff : 0;
-            
-                            $product = Product::find($it->id_product);
+                        $detail = TransactionDetail::where([
+                            'id_product' => $it->id_product,
+                            'id_transaction' => $it->id_transaction,
+                        ])->first();
+                        $header_trans = Transaction::where([
+                            'id' => $it->id_transaction,
+                        ])->first();
 
-                            if ($product) {
+                        $endDate = Carbon::parse($header_trans->end_date)->startOfDay();
+                        $today = Carbon::today();
+                        $diff = $today->diffInDays($endDate, false);
+                        $late = $diff > 0 ? $diff : 0;
+
+                        
+                        $product = Product::find($it->id_product);
+
+                        if ($product) {
+                            if ($it->baik > 0) {
                                 $product->increment('items', $detail->item);
-                                $product->late=$late;
-                                $product->save();
                             }
+                            $product->late = $late;
+                            $product->save();
                         }
+                        
 
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
 
@@ -2222,7 +2228,7 @@ class JsonDataController extends Controller
 
                     $data = json_decode($request->input('data'));
                     $status = [];
-                  
+
                     $saved = Unit::updateOrCreate(
                         [
                             'id' => $data->id,

@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="mb-3 row content-retur-prods">
+                            <div id="retur-container" class="mb-3 row content-retur-prods">
 
                             </div>
                             {{-- <div class="mb-3 row">

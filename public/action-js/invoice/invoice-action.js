@@ -227,12 +227,12 @@ function getDetailProducts() {
                 gt = 0
                 $("#data-products").html();
                 for (let index = 0; index < prods.length; index++) {
-                    console.log(prods);
+                   
                     
                     nt = prods[index].updated_at;
                     nm = prods[index].product_name;
                     dsc = prods[index].sub_total;
-                    img = prods[index].denda;
+                    img = prods[index].penalty;
                     dtel = prods[index].denda_telat;
                     idp = prods[index].id;
                     sstatus = prods[index].status;
@@ -254,7 +254,7 @@ function getDetailProducts() {
                                 <td>${prods[index].item} ${prods[index].unit_name}</td>
                                 <td>${nm}</td>
                                 <td>${formatRupiah(dsc)}</td>
-                                <td>${formatRupiah(img)}</td>
+                                <td>${prods[index].damage} ${prods[index].unit_name} - ${formatRupiah(img)}</td>
                                 <td>${formatRupiah(dtel)}</td>
                                 <td>${formatRupiah(dsc+img+dtel)}</td>
                             </tr>
