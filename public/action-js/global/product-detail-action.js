@@ -52,8 +52,8 @@ function loadOrderCart() {
                 $('.details-price').html(formatRupiah(data.price) + "/" + data.unit_name);
                 $('.details-desc').html(data.desc);
                 $('.details-stock').html(data.items + " In Stock");
-                $('#f-cart-item').attr('min', data.min_rent ? data.min_rent : 0);
-                $('#f-cart-item').attr('data-item', data.min_rent ? data.min_rent : 0);
+                $('#f-cart-item').attr('min', data.min_rent ? data.min_rent : 1);
+                $('#f-cart-item').attr('data-item', data.min_rent ? data.min_rent : 1);
                 $('#f-cart-item').val(data.min_rent ? data.min_rent : 1);
 
                 maxStock = data.items
