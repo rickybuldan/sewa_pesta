@@ -178,7 +178,7 @@ function getReturProducts(paramsid) {
 
 $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
     const $this = $(this);
-    const $container = $this.closest('.content-retur-prods');
+    const $container = $this.closest('.retur-product-block');
     const $hidden = $container.find('.dt-items-retur-prod');
 
     const max = parseInt($hidden.data('max')) || 0;
@@ -201,6 +201,7 @@ $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
 
     console.log({ rusak, baik, max });
 });
+
 
     
 
