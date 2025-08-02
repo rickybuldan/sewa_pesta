@@ -426,7 +426,7 @@ class HomeController extends Controller
                                 WHEN status = 11 AND DATEDIFF(start_date, CURDATE()) >= 1 THEN true
                                 ELSE false
                             END AS is_bill
-                        FROM transactions t WHERE t.created_by = ".$data->id;
+                        FROM transactions t WHERE t.created_by = ".$data->id." ORDER BY 1 DESC";
                 
                 
                 $saved = DB::select($query);
