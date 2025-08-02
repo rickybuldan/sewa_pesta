@@ -144,7 +144,7 @@
         </div>
 
         <div class="col-xl-7 d-none d-xl-inline-block">
-            <div class="account-page-bg rounded-4">
+            <div class="account-page-bg rounded-4" style="background-image: url('{{ asset('template/frontend2/images/bg.jpeg') }}');">
                 <div class="auth-user-review text-center">
                     <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
                         <div class="carousel-inner">
