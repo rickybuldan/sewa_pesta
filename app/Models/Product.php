@@ -9,5 +9,5 @@ class Product extends Model
 {
     use HasFactory;
     // protected $table = "obat";
-    protected $fillable = ['product_name','price','file_path','stock','desc','weight','stock_minimum','status','prod_code','items','id_unit'];
+    protected $fillable = ['product_name','price','file_path','stock','desc','weight','stock_minimum','status','prod_code','items','id_unit','min_rent'];
 }

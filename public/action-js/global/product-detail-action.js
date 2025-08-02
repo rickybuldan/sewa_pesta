@@ -27,8 +27,8 @@ function loadOrderCart() {
         type: "POST",
         data: JSON.stringify({
             tableName: "products p LEFT JOIN units u ON u.id = p.id_unit",
-            where: "p.id = " + id_product_glob ,
-            is_product:true
+            where: "p.id = " + id_product_glob,
+            is_product: true
         }),
         dataType: "json",
         contentType: "application/json",
@@ -42,22 +42,26 @@ function loadOrderCart() {
             if (response.code == 0) {
                 const data = response.data[0];
                 console.log(data);
-                 $rowData = `/template/admin2/assets/images/lightgallry/01.jpg`;
+                $rowData = `/template/admin2/assets/images/lightgallry/01.jpg`;
                 if (data.file_path) {
                     $rowData = `/storage/${data.file_path}`;
                 }
-                $(".zoom-gallery").attr("href",baseURL + $rowData);
-                $('.details-img').attr("src",$rowData);
-                $('.details-name').html(data.product_name +" - "+ data.unit_name);
-                $('.details-price').html(formatRupiah(data.price)+"/"+data.unit_name);
+                $(".zoom-gallery").attr("href", baseURL + $rowData);
+                $('.details-img').attr("src", $rowData);
+                $('.details-name').html(data.product_name + " - " + data.unit_name);
+                $('.details-price').html(formatRupiah(data.price) + "/" + data.unit_name);
                 $('.details-desc').html(data.desc);
                 $('.details-stock').html(data.items + " In Stock");
+                $('#f-cart-item').attr('min', data.min_rent ? data.min_rent : 0);
+                $('#f-cart-item').attr('data-item', data.min_rent ? data.min_rent : 0);
+                $('#f-cart-item').val(data.min_rent ? data.min_rent : 1);
+
                 maxStock = data.items
                 // $('.total-transfer').html(formatRupiah(grandTotal));
-                
+
             } else {
                 Swal.fire({
-                    title: "Oops...", 
+                    title: "Oops...",
                     text: response.info + "",
                     icon: "error",
                 })
@@ -68,6 +72,17 @@ function loadOrderCart() {
         },
     });
 }
+$(document).ready(function () {
+    $('#f-cart-item').on('input blur change', function () {
+        let val = parseInt($(this).val());
+        let max = parseInt($(this).attr("data-item")); // contoh: 100
+
+        // Kalau bukan angka atau nilainya kurang dari atau sama dengan max → paksa jadi max + 1
+        if (isNaN(val) || val <= max) {
+            $(this).val(max);
+        }
+    });
+});
 
 $('.add-cart-btn').click(function () {
     saveCart(id_product_glob)

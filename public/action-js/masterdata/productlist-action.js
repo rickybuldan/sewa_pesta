@@ -180,6 +180,7 @@ function editdata(rowData) {
     // $("#form-min").val(rowData.stock_minimum);
     // $("#form-init").val(rowData.stock);
     $("#form-items").val(rowData.items)
+    $("#form-min-rent").val(rowData.min_rent)
     $("#form-status").val(rowData.status).trigger('change')
     
     $("#form-satuan").val(rowData.id_unit).trigger('change')
@@ -202,6 +203,7 @@ $("#add-btn").on("click", function (e) {
     $("#form-max").val("");
     $("#form-min").val("");
     $("#form-init").val("");
+    $("#form-min-rent").val("")
     $("#form-satuan").val("").trigger('change')
     $("#form-code").val("")
 
@@ -297,6 +299,8 @@ function checkValidation() {
         )
     )
         return false;
+
+    isObject['min_rent'] = $("#form-min-rent").val()
     saveData();
 }
 

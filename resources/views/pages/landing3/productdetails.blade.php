@@ -115,7 +115,7 @@
                                     class="all-info d-sm-flex align-items-center border-t-light-gray border-b-light-gray pb-50 pt-30">
                                     <div class="quick-add-to-cart d-lg-flex align-items-center">
                                         <div class="quantity-field position-relative d-inline-block mt-15 mr-15">
-                                            <input type="text" id="f-cart-item" name="select1" value="1" min="1"
+                                            <input type="text" id="f-cart-item" name="select1" data-item='1'  min="1"
                                                 class="quantity-input-arrow quantity-input-2 border-light-gray2 text-center">
                                         </div>
                                         <a href="#"

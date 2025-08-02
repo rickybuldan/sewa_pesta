@@ -1661,6 +1661,7 @@ class JsonDataController extends Controller
                             'status' => $data->status,
                             'items' => $data->items,
                             'id_unit' => $data->id_unit,
+                            'min_rent' => $data->min_rent,
                             // 'stock_minimum' => $data->min,
                             // 'stock_maximum' => $data->max,
                             // 'stock' => $data->init,

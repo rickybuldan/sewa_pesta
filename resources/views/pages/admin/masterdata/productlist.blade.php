@@ -94,6 +94,13 @@
                                 </div>
                             </div>
                             <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Minimal Sewa</label>
+                                <div class="col-sm-9">
+                                    <input id="form-min-rent" type="number"
+                                        class="form-control" placeholder="Jumlah item">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
                                     <select class="form-select form-select-sm" id="form-status">
