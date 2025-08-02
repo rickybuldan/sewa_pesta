@@ -61,7 +61,16 @@ async function getListData() {
                 phone = item.customer_phone;
                 addr = item.address;
                 idp = item.id;
-                ca  = item.created_at
+                ca  = item.created_at;
+
+                // Ambil hanya tanggal bagian depan
+                let today = new Date().toISOString().split('T')[0]; // 2025-08-02
+                let startDate = sd.split(' ')[0]; // Ambil bagian tanggal saja dari '2025-08-02 00:00:00'
+
+                let badgeKirim = "";
+                if (startDate <= today) {
+                    badgeKirim = `<span class="badge bg-warning text-dark mb-2">Harus dikirim</span>`;
+                }
 
                 dtproducts = "";
                 try {
@@ -80,6 +89,7 @@ async function getListData() {
                                 <h6 class="card-title mb-0">${nm}</h6>
                             </div>
                             <div class="card-body h-75">
+                                ${badgeKirim}
                                 <div class='mb-0'>${cn}</div>
                                 <div class='mb-0'>${sd} - ${ed}</div>
                                 
@@ -88,12 +98,10 @@ async function getListData() {
                                 <hr>
                                 ${dtproducts}
                                 <div class="d-grid gap-2 mt-3">
-                                    <span class="badge text-bg-secondary mb-3">${formatRupiah(
-                                        pc
-                                    )}</span>
+                                    <span class="badge text-bg-secondary mb-3">${formatRupiah(pc)}</span>
                                     <button type="button" onclick='sendTransaction(this,${idp})' class="btn btn-outline-info rounded-pill">Sudah dikirim</button>
                                 </div>
-                            </div>
+                            </div>taek
                         </div>
                     </div>
                 `;
