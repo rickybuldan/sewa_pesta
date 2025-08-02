@@ -143,24 +143,23 @@ function getReturProducts(paramsid) {
 
                     response.data.forEach((item) => {
                         galleryprods += `
-                            <div class="col-xl-12">
-                                <div class='mb-3'> ${item.product_name} - ${item.item} ${item.unit_name}</div>
-                            </div>
-                            <div class="col-xl-12">
-                                
-                                <input class="form-check-input dt-items-retur-prod" type="hidden" data-max="${item.item}"  data-its="${paramsid}" data-idp="${item.id_product}" value="">
-                                    
+                            <div class="retur-product-block mb-4 p-3 border rounded content-retur-prods">
+                                <div class="mb-2 fw-bold">${item.product_name} - ${item.item} ${item.unit_name}</div>
+
+                                <input class="form-check-input dt-items-retur-prod" type="hidden" data-max="${item.item}" data-its="${paramsid}" data-idp="${item.id_product}" value="">
+
                                 <label>Item Rusak</label>
-                                <input type="number" min='0' max='${item.item}' data-its="${paramsid}" data-idp="${item.id_product}" class="form-control input-rusak" value='0' placeholder="Rusak">
+                                <input type="number" min="0" max="${item.item}" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control input-rusak mb-2" value="0" placeholder="Rusak">
+
                                 <label>Item Baik</label>
-                                <input type="number" min='0' max='${item.item}' data-its="${paramsid}" data-idp="${item.id_product}" class="form-control input-baik" value="${item.item}" placeholder="Baik">
+                                <input type="number" min="0" max="${item.item}" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control input-baik mb-2" value="${item.item}" placeholder="Baik">
+
                                 <label>Denda Item Rusak</label>
-                                <input type="number" min='0' data-its="${paramsid}" data-idp="${item.id_product}" class="form-control denda-rusak" value='0' placeholder="Denda Item Rusak">
-                                
+                                <input type="number" min="0" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control denda-rusak" value="0" placeholder="Denda Item Rusak">
                             </div>
-                           
-                            `;
+                        `;
                     });
+
                     resolve(galleryprods);
                 } else {
                     reject(response.message);
@@ -169,35 +168,40 @@ function getReturProducts(paramsid) {
             error: function (xhr) {
                 reject(xhr.responseText);
             },
-
-
         });
     });
-    
 }
 
+
 $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
-    const $this = $(this);
-    const $container = $this.closest('.retur-product-block');
-    const $hidden = $container.find('.dt-items-retur-prod');
+     $this = $(this);
+     $container = $this.closest('.retur-product-block');
 
-    const max = parseInt($hidden.data('max')) || 0;
+    if ($container.length === 0) {
+        console.warn('retur-product-block tidak ditemukan');
+        return;
+    }
 
-    const $inputRusak = $container.find('.input-rusak');
-    const $inputBaik  = $container.find('.input-baik');
+     $hidden = $container.find('.dt-items-retur-prod');
+     max = parseInt($hidden.data('max')) || 0;
+
+     $inputRusak = $container.find('.input-rusak');
+     $inputBaik = $container.find('.input-baik');
 
     let rusak = parseInt($inputRusak.val()) || 0;
-    let baik  = parseInt($inputBaik.val()) || 0;
+    let baik = parseInt($inputBaik.val()) || 0;
 
     if ($this.hasClass('input-rusak')) {
         rusak = Math.min(rusak, max);
         baik = max - rusak;
-        $inputBaik.val(baik);
     } else if ($this.hasClass('input-baik')) {
         baik = Math.min(baik, max);
         rusak = max - baik;
-        $inputRusak.val(rusak);
     }
+
+    // Set ulang agar tetap sinkron
+    $inputRusak.val(rusak);
+    $inputBaik.val(baik);
 
     console.log({ rusak, baik, max });
 });
