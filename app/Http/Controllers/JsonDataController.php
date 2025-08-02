@@ -1988,7 +1988,7 @@ class JsonDataController extends Controller
                         $saved = TransactionDetail::where([
                             'id_product' => $it->id_product,
                             'id_transaction' => $it->id_transaction,
-                        ])->update([
+                        ])->update(attributes: [
                                     'good' => $it->baik,
                                     'damage' => $it->rusak,
                                     'penalty' => $it->penalty
@@ -2016,7 +2016,7 @@ class JsonDataController extends Controller
 
                         if ($product) {
                             if ($it->baik > 0) {
-                                $product->increment('items', $detail->item);
+                                $product->increment('items', $detail->good);
                             }
                             $product->late = $late;
                             $product->save();
