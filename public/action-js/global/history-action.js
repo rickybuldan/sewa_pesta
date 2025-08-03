@@ -102,7 +102,7 @@ function loadOrderCart() {
                     }
 
                     if (item.status == 10) {
-                        $btnact = `Sedang diverifikasi`;
+                        $btnact = `<button onclick="getpayment('${item.no_transaction}')" type="button" class="btn btn-danger btn-sm me-2 ">Bayar Sekarang!</button>`;
                         $state = ` <span class="badge rounded-pill badge-primary">Proses</span>`;
                     }
                     if (item.status == 11) {
@@ -192,6 +192,10 @@ function loadOrderCart() {
 
 function getinvoice(params) {
     location.href = baseURL + "/invoice?noinvoice=" + params;
+}
+
+function getpayment(params) {
+    location.href = baseURL + "/home/payment?noinvoice=" + params;
 }
 
 

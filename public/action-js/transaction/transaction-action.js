@@ -569,7 +569,7 @@ function denyTransaction(paramObj) {
     // formdata
 
     isReq = {}
-    isReq.id = paramObj.id
+    isReq.no_transaction = paramObj.no_transaction
     isReq.status = 50
 
 
@@ -613,7 +613,7 @@ function verifTransaction(paramObj) {
     // formdata
 
     isReq = {}
-    isReq.id = paramObj.id
+    isReq.no_transaction = paramObj.no_transaction
     isReq.status = 11
 
     if (paramObj.type_pay == 1) {

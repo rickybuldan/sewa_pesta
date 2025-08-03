@@ -1159,7 +1159,7 @@ class JsonDataController extends Controller
                     $status = [];
 
                     $saved = Transaction::where([
-                        'id' => $data->id
+                        'no_transaction' => $data->no_transaction
                     ])->update([
                                 'status' => $data->status,
                                 'updated_by' => $MasterClass->getSession('user_id')

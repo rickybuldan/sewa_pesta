@@ -132,7 +132,7 @@ function loadOrderCart() {
                 // Jika hari ini >= start_date → countdown selesai
                 if (today.getTime() >= startDate.getTime()) {
                     $('#countdown-timer').text('Waktu pembayaran sudah berakhir');
-                    // denyTransaction(data[0].id_transaction)
+                    denyTransaction(data[0].no_transaction)
                     Swal.fire({
                         title: "Oops...",
                         text: "Waktu pembayaran sudah berakhir",
@@ -149,7 +149,7 @@ function loadOrderCart() {
                 countdownDate.setDate(countdownDate.getDate() - 1);
                 countdownDate.setHours(23, 59, 59, 999);
 
-                startCountdown(countdownDate, data[0].id_transaction);
+                startCountdown(countdownDate, data[0].no_transaction);
 
                 // if(data[0].status != 10){
                 //     location.href = "/home/history"
@@ -221,7 +221,7 @@ function denyTransaction(paramObj) {
     // formdata
 
     isReq = {}
-    isReq.id = paramObj
+    isReq.no_transaction = paramObj
     isReq.status = 50
 
 
