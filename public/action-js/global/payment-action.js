@@ -50,7 +50,7 @@ fp = flatpickr("#dateRange", {
             }
 
             globSumDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            loadOrderCart();
+            // loadOrderCart();
         }
     },
     onClose: function (selectedDates, dateStr, instance) {
