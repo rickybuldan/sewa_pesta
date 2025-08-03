@@ -174,19 +174,19 @@ function getReturProducts(paramsid) {
 
 
 $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
-     $this = $(this);
-     $container = $this.closest('.retur-product-block');
+    $this = $(this);
+    $container = $this.closest('.retur-product-block');
 
     if ($container.length === 0) {
         console.warn('retur-product-block tidak ditemukan');
         return;
     }
 
-     $hidden = $container.find('.dt-items-retur-prod');
-     max = parseInt($hidden.data('max')) || 0;
+    $hidden = $container.find('.dt-items-retur-prod');
+    max = parseInt($hidden.data('max')) || 0;
 
-     $inputRusak = $container.find('.input-rusak');
-     $inputBaik = $container.find('.input-baik');
+    $inputRusak = $container.find('.input-rusak');
+    $inputBaik = $container.find('.input-baik');
 
     let rusak = parseInt($inputRusak.val()) || 0;
     let baik = parseInt($inputBaik.val()) || 0;
@@ -207,7 +207,7 @@ $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
 });
 
 
-    
+
 
 
 
@@ -250,17 +250,16 @@ function sendBackTransaction() {
     var formData = new FormData();
     issend = []
     let its
-    $('#retur-container').each(function () {
-        $container = $(this);
-        $hidden = $container.find('.dt-items-retur-prod');
+    $('#retur-container .retur-product-block').each(function () {
+        var $container = $(this);
+        var $hidden = $container.find('.dt-items-retur-prod');
 
-        id_product = $hidden.data('idp');
-        id_transaction = $hidden.data('its');
-        its = id_transaction
-        max = parseInt($hidden.data('max')) || 0;
-        rusak = parseInt($container.find('.input-rusak').val()) || 0;
-        baik = parseInt($container.find('.input-baik').val()) || 0;
-        denda = parseInt($container.find('.denda-rusak').val()) || 0;
+        var id_product = $hidden.data('idp');
+        var id_transaction = $hidden.data('its');
+        var max = parseInt($hidden.data('max')) || 0;
+        var rusak = parseInt($container.find('.input-rusak').val()) || 0;
+        var baik = parseInt($container.find('.input-baik').val()) || 0;
+        var denda = parseInt($container.find('.denda-rusak').val()) || 0;
 
         issend.push({
             id_transaction: id_transaction,
@@ -273,54 +272,54 @@ function sendBackTransaction() {
     });
 
     console.log(issend);
-    
 
-    formData.append("data", JSON.stringify({ id_transaction: its, items: issend }));
 
-    swal({
-        title: "Apakah anda yakin ?",
-        text: "Melakukan pengembalian ?",
-        type: "warning",
-        showCancelButton: !0,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Oke !!",
-        cancelButtonText: "Tidak !!",
-        closeOnConfirm: !1,
-        closeOnCancel: !1,
-    }).then(function (e) {
-        // console.log(e);
-        if (e.value) {
-            $.ajax({
-                url: baseURL + "/setSendBackTransaction",
-                type: "POST",
-                data: formData,
-                processData: false, // ⬅️ wajib untuk FormData
-                contentType: false, // ⬅️ wajib untuk FormData
-                dataType: "json",
-                beforeSend: function () {
-                    Swal.fire({
-                        title: "Loading",
-                        text: "Please wait...",
-                        showConfirmButton: false,
-                    });
-                },
-                success: function (response) {
-                    if (response.code == 0) {
-                        swal("Success!", response.info, "success").then(
-                            function () {
-                                location.reload();
-                            }
-                        );
-                    } else {
-                        sweetAlert("Oops...", response.info, "error");
-                    }
-                },
-                error: function (xhr) {
-                    sweetAlert("Oops...", xhr.responseText, "error");
-                },
-            });
-        } else {
-            swal("Dibatalkan !!", "", "error");
-        }
-    });
+    // formData.append("data", JSON.stringify({ id_transaction: its, items: issend }));
+
+    // swal({
+    //     title: "Apakah anda yakin ?",
+    //     text: "Melakukan pengembalian ?",
+    //     type: "warning",
+    //     showCancelButton: !0,
+    //     confirmButtonColor: "#DD6B55",
+    //     confirmButtonText: "Oke !!",
+    //     cancelButtonText: "Tidak !!",
+    //     closeOnConfirm: !1,
+    //     closeOnCancel: !1,
+    // }).then(function (e) {
+    //     // console.log(e);
+    //     if (e.value) {
+    //         $.ajax({
+    //             url: baseURL + "/setSendBackTransaction",
+    //             type: "POST",
+    //             data: formData,
+    //             processData: false, // ⬅️ wajib untuk FormData
+    //             contentType: false, // ⬅️ wajib untuk FormData
+    //             dataType: "json",
+    //             beforeSend: function () {
+    //                 Swal.fire({
+    //                     title: "Loading",
+    //                     text: "Please wait...",
+    //                     showConfirmButton: false,
+    //                 });
+    //             },
+    //             success: function (response) {
+    //                 if (response.code == 0) {
+    //                     swal("Success!", response.info, "success").then(
+    //                         function () {
+    //                             location.reload();
+    //                         }
+    //                     );
+    //                 } else {
+    //                     sweetAlert("Oops...", response.info, "error");
+    //                 }
+    //             },
+    //             error: function (xhr) {
+    //                 sweetAlert("Oops...", xhr.responseText, "error");
+    //             },
+    //         });
+    //     } else {
+    //         swal("Dibatalkan !!", "", "error");
+    //     }
+    // });
 }
