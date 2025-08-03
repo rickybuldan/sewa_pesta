@@ -223,6 +223,48 @@ class HomeController extends Controller
         
     }
 
+    public function payment(Request $request)
+    {
+        if(Auth::check()){
+
+            $noinvoice = $request->query('noinvoice');
+            $javascriptFiles = [
+                asset('action-js/global/global2-action.js'),
+                asset('action-js/global/payment-action.js')
+                // asset('action-js/generate/generate-action.js'),
+                // asset('action-js/masterdata/house-action.js'),
+            ];
+
+            $cssFiles = [
+                // asset('css/main.css'),
+                // asset('css/custom.css'),
+            ];
+            $userId = Auth::id();
+            $baseURL = url('/');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+                'const uid = "' . $userId . '"',
+                'const no_invoice = "' . $noinvoice . '"',
+            ];
+
+
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs' => $varJs,
+                'title' => "Payment",
+                'subtitle' => "Index",
+                // Menambahkan base URL ke dalam array
+            ];
+
+            return view('pages.landing3.payment')
+                ->with($data);
+        }
+    
+        return redirect('/login');
+        
+    }
+
     public function history(Request $request)
     {
         if(Auth::check()){
@@ -495,10 +537,10 @@ class HomeController extends Controller
                 $nowdate = now();
                 $notrx = Transaction::generateNoTransaction($nowdate);
                 $createdBy = $MasterClass->getSession(('user_id'));
-                $fbukti = "file_path";
-                if($data->type_pay == 1){
-                    $fbukti = "file_path_paid";
-                }
+                // $fbukti = "file_path";
+                // if($data->type_pay == 1){
+                //     $fbukti = "file_path_paid";
+                // }
                 $transaction = Transaction::create([
                     'customer_name' => $data->name,
                     'address' => $data->address,
@@ -509,7 +551,7 @@ class HomeController extends Controller
                     'created_by' => $createdBy,
                     'updated_by' => $createdBy,
                     'price_total' => $data->grand_total,
-                    $fbukti => $imagePath,
+                    // $fbukti => $imagePath,
                     'type_pay' => $data->type_pay,
                     'status' => 10,
                     'nominal_payment'=>$data->nominal_payment
@@ -575,6 +617,82 @@ class HomeController extends Controller
         }
 
 
+
+        return $MasterClass->Results($results);
+
+    }
+
+    public function savePayment(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+
+        try {
+            if ($request->isMethod('post')) {
+
+                DB::beginTransaction();
+
+                $data = json_decode($request->input('data'));
+
+                $status = [];
+
+                $image = $request->file('image');
+                $imagePath = null;
+                
+                if($image){
+                    $imagePath = $image->store('images', 'public');
+                }
+
+                $createdBy = $MasterClass->getSession(('user_id'));
+                $fbukti = "file_path";
+                $statusd = 13;
+                if($data->type_pay == 1){
+                    $fbukti = "file_path_paid";
+                    $statusd = 12;
+                }
+
+                $transaction = Transaction::where('no_transaction', $data->no_transaction)->update([
+                   
+                    'updated_by' => $createdBy,
+                    $fbukti => $imagePath,
+                    'type_pay' => $data->type_pay,
+                    'status' => $statusd,
+
+                ]);
+
+                $saved2 = $MasterClass->checkerrorModelUpdate($transaction);
+
+                $status = $saved2;
+                
+
+                if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                    DB::commit();
+                    
+                } else {
+                    DB::rollBack();
+                }
+
+                $results = [
+                    'code' => $status['code'],
+                    'info' => $status['info'],
+                    'data' => $data->no_transaction,
+                ];
+
+            } else {
+                $results = [
+                    'code' => '103',
+                    'info' => "Method Failed",
+                ];
+            }
+        } catch (\Exception $e) {
+            // Roll back the transaction in case of an exception
+            $results = [
+                'code' => '102',
+                'info' => $e->getMessage(),
+            ];
+
+        }
 
         return $MasterClass->Results($results);
 

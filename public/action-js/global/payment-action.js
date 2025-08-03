@@ -19,7 +19,7 @@ globStartDate = null;
 globEndDate = null;
 globGrandTotal = 0;
 globArrCart = [];
-flatpickr("#dateRange", {
+fp = flatpickr("#dateRange", {
     mode: "range",
     dateFormat: "Y-m-d", // hanya tanggal
     minDate: new Date(),
@@ -65,6 +65,32 @@ flatpickr("#dateRange", {
     allowInput: true,
 });
 
+function startCountdown(targetDate, id_transaction) {
+    let timer = setInterval(function () {
+        const now = new Date().getTime();
+        const distance = targetDate.getTime() - now;
+
+        if (distance <= 0) {
+            clearInterval(timer);
+            $('#countdown-timer').text('Waktu pembayaran sudah berakhir');
+            // didie
+            denyTransaction(id_transaction)
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        $('#countdown-timer').text(
+            `Sisa waktu pembayaran: ${days}h ${hours}j ${minutes}m ${seconds}d`
+        );
+    }, 1000);
+}
+
+
+
 loadOrderCart();
 
 function loadOrderCart() {
@@ -74,9 +100,9 @@ function loadOrderCart() {
         url: baseURL + "/home/loadGlobal",
         type: "POST",
         data: JSON.stringify({
-            tableName: "carts c LEFT JOIN products p ON p.id = c.id_product LEFT JOIN units u ON u.id = p.id_unit",
-            where: "c.id_user = " + xid,
-            is_carts:true
+            tableName: "transactions t LEFT JOIN transaction_details c ON c.id_transaction = t.id LEFT JOIN products p ON p.id = c.id_product LEFT JOIN units u ON u.id = p.id_unit",
+            where: "t.no_transaction = '" + no_invoice + "'",
+            isHistory: true
         }),
 
         dataType: "json",
@@ -89,15 +115,49 @@ function loadOrderCart() {
         },
         success: function (response) {
             if (response.code == 0) {
-                const data = response.data;
+                data = response.data;
                 $(".pro-count").text(data.length);
 
                 let rows = "";
                 let grandTotal = 0;
+                fp.setDate([data[0].start_date, data[0].end_date], true);
+
+                startDateRaw = data[0].start_date;
+                startDate = new Date(startDateRaw);
+                startDate.setHours(0, 0, 0, 0); // Hanya tanggal
+
+                today = new Date();
+                today.setHours(0, 0, 0, 0); // Hanya tanggal
+
+                // Jika hari ini >= start_date → countdown selesai
+                if (today.getTime() >= startDate.getTime()) {
+                    $('#countdown-timer').text('Waktu pembayaran sudah berakhir');
+                    // denyTransaction(data[0].id_transaction)
+                    Swal.fire({
+                        title: "Oops...",
+                        text: "Waktu pembayaran sudah berakhir",
+                        icon: "error",
+                    }).then(() => {
+                        window.location.href = '/home/history';
+                    });
+
+                    return;
+                }
+
+                // Hitung waktu hingga H-1 23:59:59
+                countdownDate = new Date(startDate);
+                countdownDate.setDate(countdownDate.getDate() - 1);
+                countdownDate.setHours(23, 59, 59, 999);
+
+                startCountdown(countdownDate, data[0].id_transaction);
+
+                if(data[0].status != 10){
+                    location.href = "/home/history"
+                }
 
                 data.forEach((item) => {
                     price = parseFloat(item.price || 0);
-                    quantity = parseInt(item.qty || 0);
+                    quantity = parseInt(item.item || 0);
 
                     totalItem = price * quantity * globSumDay;
                     grandTotal += totalItem;
@@ -135,20 +195,68 @@ function loadOrderCart() {
                     </tr>
                 `;
 
+
+
                 $(".order_table tbody").html(rows);
                 $(".total-transfer").html(formatRupiah(grandTotal));
                 $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
+                $("#s-type-pay").val(data[0].type_pay.toString()).trigger("change")
             } else {
-                Swal.fire({
-                    title: "Oops...",
-                    text: response.info + "- Carts anda kosong !",
-                    icon: "error",
-                }).then(() => {
-                    window.location.href = "/home";
-                });
+                // Swal.fire({
+                //     title: "Oops...",
+                //     text: response.info + "- Carts anda kosong !",
+                //     icon: "error",
+                // }).then(() => {
+                //     window.location.href = "/home";
+                // });
             }
         },
         error: function (xhr) {
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+}
+
+function denyTransaction(paramObj) {
+    // formdata
+
+    isReq = {}
+    isReq.id = paramObj
+    isReq.status = 50
+
+
+    var formData = new FormData();
+    formData.append("data", JSON.stringify(isReq));
+
+    $.ajax({
+        url: baseURL + "/verifTransaction",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        processData: false, // Important: prevent jQuery from automatically processing the data
+        contentType: false,
+        beforeSend: function () {
+            Swal.fire({
+                title: "Loading",
+                text: "Please wait...",
+            });
+        },
+        complete: function () { },
+        success: function (response) {
+            // Handle response sukses
+            if (response.code == 0) {
+                // swal("Saved !", response.message, "success").then(function () {
+                //     location.reload();
+                // });
+                window.location.href = '/home/history';
+                // Reset form
+            } else {
+                sweetAlert("Oops...", response.message, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
             sweetAlert("Oops...", xhr.responseText, "error");
         },
     });
@@ -245,6 +353,7 @@ function checkValidation() {
         globStartDate = startDate;
         globEndDate = endDate;
     }
+    isObject["no_transaction"] = no_invoice;
 
     isObject["start_date"] = globStartDate;
     isObject["end_date"] = globEndDate;
@@ -259,21 +368,21 @@ $("#payButton").click(function () {
         function saveData() {
             // formdata
             var formData = new FormData();
-            // var file = $("#form-img")[0].files[0];
+            var file = $("#form-img")[0].files[0];
 
-            // if (
-            //     validationSwalFailed(
-            //         file,
-            //         "Bukti pembayaran tidak boleh kosong"
-            //     )
-            // )
-            //     return false;
+            if (
+                validationSwalFailed(
+                    file,
+                    "Bukti pembayaran tidak boleh kosong"
+                )
+            )
+                return false;
 
-            // formData.append("image", file);
+            formData.append("image", file);
             formData.append("data", JSON.stringify(isObject));
 
             $.ajax({
-                url: baseURL + "/home/saveTransaction",
+                url: baseURL + "/home/savePayment",
                 type: "POST",
                 data: formData,
                 dataType: "json",
@@ -290,11 +399,11 @@ $("#payButton").click(function () {
                 success: function (response) {
                     // Handle response sukses
                     if (response.code == 0) {
-                          // location.reload();
-                        getinvoice(response.data);
-                        function getinvoice(params) {
-                            location.href = baseURL + "/home/payment?noinvoice=" + params;
-                        }
+                        // location.reload();
+                        swal("Saved !", response.info, "success").then(function () {
+                            // location.reload();
+                            location.href = "/home/history"
+                        });
 
                         // Reset form
                     } else {
@@ -315,10 +424,12 @@ $(".ct-nominal-dp").hide();
 $("#s-type-pay").change(function () {
     var selectedValue = $(this).val();
     if (selectedValue == 0) {
-        $("#f-nominal-dp").val(formatRupiah(globGrandTotal*50/100))
+        $("#f-nominal-dp").val(formatRupiah(globGrandTotal * 50 / 100))
+        $(".total-transfer").html(formatRupiah(globGrandTotal * 50 / 100));
         $(".ct-nominal-dp").show();
     } else {
         $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
+        $(".total-transfer").html(formatRupiah(globGrandTotal));
         $(".ct-nominal-dp").hide();
     }
     console.log("Nilai yang dipilih: " + selectedValue);

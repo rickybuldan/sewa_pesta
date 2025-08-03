@@ -116,6 +116,10 @@ function loadOrderCart() {
                         $btnact = `<button onclick="getinvoice('${item.no_transaction}')" type="button" class="btn btn-info btn-sm me-2 ">Invoice</button>`;
                         $state = ` <span class="badge rounded-pill badge-info">Lunas</span>`;
                     }
+                    if (item.status == 13) {
+                        $btnact = `<button onclick="getinvoice('${item.no_transaction}')" type="button" class="btn btn-info btn-sm me-2 ">Invoice</button>`;
+                        $state = ` <span class="badge rounded-pill badge-info">Pembayaran Berhasil</span>`;
+                    }
                     if (item.status == 50) {
                         $btnact = `Ditolak, Anda Akan dihubungi Oleh Admin Untuk Proses Pengembalian Dana.`;
                         $state = ` <span class="badge rounded-pill badge-danger">Transaksi ditolak</span>`;

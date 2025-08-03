@@ -87,6 +87,10 @@ function getListData() {
 
                         $rowData += ` <span class="badge rounded-pill text-bg-info">Lunas</span>`;
                     }
+                     if (row.status == 13) {
+
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Pembayaran Berhasil</span>`;
+                    }
           
                     if (row.status == 20) {
                         $rowData += ` <span class="badge rounded-pill text-bg-warning">Kirim</span>`;
@@ -149,10 +153,10 @@ function getListData() {
             {
                 mRender: function (data, type, row) {
                     var $rowData = `<button type="button" class="btn btn-info btn-sm me-2 edit-btn">Invoice</button>`;
-                    if (row.status == 10) {
+                    if (row.status == 13) {
                         $rowData += `<button type="button" class="btn btn-primary btn-sm me-2 verif-btn">Verifikasi</i></button>`;
                     }
-                    if (row.status == 10 || row.status == 11 || row.status == 12) {
+                    if (row.status == 10 || row.status == 11 || row.status == 12 || row.status == 13) {
                         $rowData += `<button type="button" class="btn btn-danger btn-sm me-2 tolak-btn">Tolak</i></button>`;
                     }
 

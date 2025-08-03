@@ -153,6 +153,9 @@ function getHistoryTransaction() {
                     if (sstatus == 12) {
                         $rowData = ` Lunas`;
                     }
+                    if (sstatus == 13) {
+                        $rowData = ` Pembayaran Berhasil`;
+                    }
                      if (sstatus == 20) {
                         $rowData = ` Kirim`;
                     }
@@ -241,6 +244,15 @@ function getDetailProducts() {
                     $rowData  = ''
                     if (sstatus == 10) {
                         $rowData = ` Proses`;
+                    }
+                    if (sstatus == 11) {
+                        $rowData = ` Verifikasi DP`;
+                    }
+                    if (sstatus == 12) {
+                        $rowData = ` Lunas`;
+                    }
+                    if (sstatus == 13) {
+                        $rowData = ` Pembayaran Berhasil`;
                     }
                      if (sstatus == 20) {
                         $rowData = ` Kirim`;

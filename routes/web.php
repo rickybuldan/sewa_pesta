@@ -41,6 +41,7 @@ Route::post('/home/loadProductSell', [HomeController::class, 'loadProductSell'])
 Route::post('/home/saveCart', [HomeController::class, 'saveCart']);
 Route::post('/home/deleteGlobal', [HomeController::class, 'deleteGlobal']);
 Route::post('/home/saveTransaction', [HomeController::class, 'saveTransaction']);
+Route::post('/home/savePayment', [HomeController::class, 'savePayment']);
 Route::post('/home/saveBuktiPaid', [HomeController::class, 'saveBuktiPaid']);
 Route::post('/home/checkBillTransaction', [HomeController::class, 'checkBillTransaction']);
 
@@ -48,6 +49,7 @@ Route::post('/home/checkBillTransaction', [HomeController::class, 'checkBillTran
 Route::get('/', [GeneralController::class, 'based']);
 Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/home/checkout', [HomeController::class, 'checkout'])->name('checkout');
+Route::get('/home/payment', [HomeController::class, 'payment'])->name('payment');
 Route::get('/home/history', [HomeController::class, 'history'])->name('history');
 Route::get('/home/productdetails', [HomeController::class, 'productdetails'])->name('productdetails');
 
