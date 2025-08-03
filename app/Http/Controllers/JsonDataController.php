@@ -1988,7 +1988,7 @@ class JsonDataController extends Controller
                         $saved = TransactionDetail::where([
                             'id_product' => $it->id_product,
                             'id_transaction' => $it->id_transaction,
-                        ])->update(attributes: [
+                        ])->update( [
                                     'good' => $it->baik,
                                     'damage' => $it->rusak,
                                     'penalty' => $it->penalty
