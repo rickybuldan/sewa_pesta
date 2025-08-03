@@ -17,10 +17,10 @@
             <div class="col-xl-1 ">
                 <button class="btn btn-dark" type="button" onclick="search_transaction()">Cari</button>
             </div>
-              
+
         </div>
         <div class="row">
-            
+
             <div class="col-xl-8 ">
                 <div class="row content-gallery-products">
                 </div>
@@ -41,7 +41,7 @@
                             <label for="simpleinput" class="form-label">Phone Supplier</label>
                             <input type="number" id="supplier-phone" class="form-control">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="simpleinput" class="form-label">Diajukan Oleh</label>
                             <input type="text" id="tenant-name" class="form-control" readonly>
@@ -50,7 +50,7 @@
                             <label for="simpleinput" class="form-label">Hari</label>
                             <input type="text" id="dateRange" class="form-control">
                         </div> --}}
-{{-- 
+                        {{-- 
                         <div class="mb-3">
                             <label for="simpleinput" class="form-label">Phone</label>
                             <input type="text" id="phone-number" class="form-control">
@@ -63,13 +63,13 @@
                             <label for="simpleinput" class="form-label">Bukti Pembayaran</label>
                             <input id="form-img" type="file" accept="image/*" class="form-control">
                         </div> --}}
-                       
+
                         {{-- <div class="mb-">
                             <label for="simpleinput" class="form-label">List Barang</label>
                         </div> --}}
                         <hr>
                         <div class="mb-3 content-product-cart">
-                            
+
 
                         </div>
                         <hr>
@@ -81,17 +81,18 @@
                                 <b id="total-price">Rp 0</b>
                             </div>
                         </div>
-                       
-                        
+
+
                         <div class="d-grid gap-2 mt-3">
-                            <button type="button" class="btn btn-outline-info rounded-pill" onclick="checkValidation()">Simpan</button>
+                            <button type="button" class="btn btn-outline-info rounded-pill"
+                                onclick="checkValidation()">Simpan</button>
                         </div>
                     </div> <!-- end card-body -->
-                    
+
                 </div> <!-- end card-->
             </div> <!-- end col -->
         </div>
-        
+
         <div class="modal fade" id="modal-data" tabindex="-1" aria-labelledby="exampleModalCenter1" style="display: none;"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -106,10 +107,26 @@
                             <div class="mb-3 row">
                                 <label class="col-sm-4 col-form-label">Jumlah Item Barang</label>
                                 <div class="col-sm-8">
-                                    <input id="form-item" type="number" min="1" class="form-control" placeholder="Nama" value="1">
+                                    <input id="form-item" type="number" min="1" class="form-control"
+                                        placeholder="Nama" value="1">
                                 </div>
                             </div>
-                            
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label">Harga Item Barang</label>
+                                <div class="col-sm-8">
+                                    <input id="form-harga" type="number" min="1" class="form-control"
+                                        placeholder="Nama" value="0">
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label class="col-sm-4 col-form-label">Jml Item Barang yang diterima</label>
+                                <div class="col-sm-8">
+                                    <input id="form-accept-item" type="number" min="1" class="form-control"
+                                        placeholder="Nama" value="1">
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -120,7 +137,7 @@
             </div>
         </div>
 
-     
+
     </div>
     <!-- Container-fluid Ends-->
 @endsection

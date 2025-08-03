@@ -213,7 +213,10 @@ function addToCart(el, params) {
     } else {
         resprod = getProductFromArr(params);
         // console.log(resprod);
-        resprod[0]['qty'] = items = $("#form-item").val()
+        resprod[0]['qty'] = $("#form-item").val()
+        resprod[0]['price'] = $("#form-harga").val()
+        resprod[0]['accept_item'] = $("#form-accept-item").val()
+        
         globArrCart.push(resprod[0]);
         console.log(globArrCart);
 
@@ -237,7 +240,7 @@ function ctSubProd(resprod) {
                 ${resprod.product_name}
             </div>
             <div class="col-xl-4 text-end">
-                ${formatRupiah(resprod.price)}*${resprod.qty}
+                ${formatRupiah(resprod.price)}*${resprod.qty} (${resprod.accept_item})
             </div>
             <div class="col-xl-4 text-end">
                 ${formatRupiah(countSubTotal(resprod.price, resprod.qty))}

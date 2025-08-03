@@ -254,6 +254,7 @@ function getDetailProducts() {
                     galleryprods += `
                             <tr>
                                 <td>${prods[index].item} ${prods[index].unit_name}</td>
+                                <td>${prods[index].accept_item} ${prods[index].unit_name}</td>
                                 <td>${nm}</td>
                                 <td>${formatRupiah(dsc)}</td>
                                 <td>${formatRupiah(dsc)}</td>

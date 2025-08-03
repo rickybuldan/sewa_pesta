@@ -175,7 +175,8 @@
             <th colspan="5">BARANG YANG DISEWA</th>
         </tr>
         <tr>
-            <th>BANYAKNYA</th>
+            <th>JUMLAH DIAJUKAN</th>
+            <th>JUMLAH DITERIMA</th>
             <th>BARANG</th>
             <th>HARGA</th>
             {{-- <th>DENDA KERUSAKAN</th> --}}

@@ -2137,6 +2137,7 @@ class JsonDataController extends Controller
                                 // 'day' => $data->day,
                                 'sub_total' => ($pdr->price * $pdr->qty),
                                 'item' => $pdr->qty,
+                                'accept_item' => $pdr->accept_item,
                             ]);
                             $product->items += $pdr->qty;
                             $product->save();
