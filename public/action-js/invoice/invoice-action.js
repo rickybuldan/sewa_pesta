@@ -234,6 +234,7 @@ function getDetailProducts() {
                     
                     nt = prods[index].updated_at;
                     nm = prods[index].product_name;
+                    hrs = prods[index].price;
                     dsc = prods[index].sub_total;
                     img = prods[index].penalty;
                     dtel = prods[index].denda_telat;
@@ -264,7 +265,7 @@ function getDetailProducts() {
                     galleryprods += `
                             <tr>
                                 <td>${prods[index].item} ${prods[index].unit_name}</td>
-                                <td>${nm}</td>
+                                <td>${nm} @${formatRupiah(hrs)}</td>
                                 <td>${formatRupiah(dsc)}</td>
                                 <td>${prods[index].damage} ${prods[index].unit_name} - ${formatRupiah(img)}</td>
                                 <td>${formatRupiah(dtel)}</td>
