@@ -1980,11 +1980,11 @@ class JsonDataController extends Controller
 
                     $data = json_decode($request->input('data'));
                     $status = [];
-                    // dd($data);
+                  
 
 
                     foreach ($data->items as $it) {
-
+                        // dd($it->id_transaction);
                         $saved = TransactionDetail::where([
                             'id_product' => $it->id_product,
                             'id_transaction' => $it->id_transaction,
@@ -1994,18 +1994,22 @@ class JsonDataController extends Controller
                                     'penalty' => $it->penalty
                                 ]);
 
-                        $saved = $MasterClass->checkerrorModelUpdate($saved);
 
+                        $saved = $MasterClass->checkerrorModelUpdate($saved);
+                        
 
 
                         $detail = TransactionDetail::where([
                             'id_product' => $it->id_product,
                             'id_transaction' => $it->id_transaction,
                         ])->first();
+
                         $header_trans = Transaction::where([
                             'id' => $it->id_transaction,
                         ])->first();
-
+                        
+                        
+                        
                         $endDate = Carbon::parse($header_trans->end_date)->startOfDay();
                         $today = Carbon::today();
                         $diff = $today->diffInDays($endDate, false);

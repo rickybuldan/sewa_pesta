@@ -256,6 +256,7 @@ function sendBackTransaction() {
 
         var id_product = $hidden.data('idp');
         var id_transaction = $hidden.data('its');
+        its = id_transaction;
         var max = parseInt($hidden.data('max')) || 0;
         var rusak = parseInt($container.find('.input-rusak').val()) || 0;
         var baik = parseInt($container.find('.input-baik').val()) || 0;
