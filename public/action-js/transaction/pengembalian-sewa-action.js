@@ -274,52 +274,52 @@ function sendBackTransaction() {
     console.log(issend);
 
 
-    // formData.append("data", JSON.stringify({ id_transaction: its, items: issend }));
+    formData.append("data", JSON.stringify({ id_transaction: its, items: issend }));
 
-    // swal({
-    //     title: "Apakah anda yakin ?",
-    //     text: "Melakukan pengembalian ?",
-    //     type: "warning",
-    //     showCancelButton: !0,
-    //     confirmButtonColor: "#DD6B55",
-    //     confirmButtonText: "Oke !!",
-    //     cancelButtonText: "Tidak !!",
-    //     closeOnConfirm: !1,
-    //     closeOnCancel: !1,
-    // }).then(function (e) {
-    //     // console.log(e);
-    //     if (e.value) {
-    //         $.ajax({
-    //             url: baseURL + "/setSendBackTransaction",
-    //             type: "POST",
-    //             data: formData,
-    //             processData: false, // ⬅️ wajib untuk FormData
-    //             contentType: false, // ⬅️ wajib untuk FormData
-    //             dataType: "json",
-    //             beforeSend: function () {
-    //                 Swal.fire({
-    //                     title: "Loading",
-    //                     text: "Please wait...",
-    //                     showConfirmButton: false,
-    //                 });
-    //             },
-    //             success: function (response) {
-    //                 if (response.code == 0) {
-    //                     swal("Success!", response.info, "success").then(
-    //                         function () {
-    //                             location.reload();
-    //                         }
-    //                     );
-    //                 } else {
-    //                     sweetAlert("Oops...", response.info, "error");
-    //                 }
-    //             },
-    //             error: function (xhr) {
-    //                 sweetAlert("Oops...", xhr.responseText, "error");
-    //             },
-    //         });
-    //     } else {
-    //         swal("Dibatalkan !!", "", "error");
-    //     }
-    // });
+    swal({
+        title: "Apakah anda yakin ?",
+        text: "Melakukan pengembalian ?",
+        type: "warning",
+        showCancelButton: !0,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Oke !!",
+        cancelButtonText: "Tidak !!",
+        closeOnConfirm: !1,
+        closeOnCancel: !1,
+    }).then(function (e) {
+        // console.log(e);
+        if (e.value) {
+            $.ajax({
+                url: baseURL + "/setSendBackTransaction",
+                type: "POST",
+                data: formData,
+                processData: false, // ⬅️ wajib untuk FormData
+                contentType: false, // ⬅️ wajib untuk FormData
+                dataType: "json",
+                beforeSend: function () {
+                    Swal.fire({
+                        title: "Loading",
+                        text: "Please wait...",
+                        showConfirmButton: false,
+                    });
+                },
+                success: function (response) {
+                    if (response.code == 0) {
+                        swal("Success!", response.info, "success").then(
+                            function () {
+                                location.reload();
+                            }
+                        );
+                    } else {
+                        sweetAlert("Oops...", response.info, "error");
+                    }
+                },
+                error: function (xhr) {
+                    sweetAlert("Oops...", xhr.responseText, "error");
+                },
+            });
+        } else {
+            swal("Dibatalkan !!", "", "error");
+        }
+    });
 }
