@@ -104,7 +104,7 @@ function loadOrderCart() {
         type: "POST",
         data: JSON.stringify({
             tableName: "transactions t LEFT JOIN transaction_details c ON c.id_transaction = t.id LEFT JOIN products p ON p.id = c.id_product LEFT JOIN units u ON u.id = p.id_unit",
-            where: "t.no_transaction = '" + no_invoice + "'",
+            where: "t.no_transaction = '" + no_invoice + "' and t.created_by ="+xid,
             isHistory: true
         }),
 
@@ -208,13 +208,13 @@ function loadOrderCart() {
                 $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
                 $("#s-type-pay").val(data[0].type_pay.toString()).trigger("change")
             } else {
-                // Swal.fire({
-                //     title: "Oops...",
-                //     text: response.info + "- Carts anda kosong !",
-                //     icon: "error",
-                // }).then(() => {
-                //     window.location.href = "/home";
-                // });
+                Swal.fire({
+                    title: "Oops...",
+                    text: response.info + "- Data Not Found !",
+                    icon: "error",
+                }).then(() => {
+                    window.location.href = "/home";
+                });
             }
         },
         error: function (xhr) {
