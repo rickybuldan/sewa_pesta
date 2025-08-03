@@ -151,9 +151,9 @@ function loadOrderCart() {
 
                 startCountdown(countdownDate, data[0].id_transaction);
 
-                if(data[0].status != 10){
-                    location.href = "/home/history"
-                }
+                // if(data[0].status != 10){
+                //     location.href = "/home/history"
+                // }
 
                 data.forEach((item) => {
                     price = parseFloat(item.price || 0);
