@@ -144,7 +144,7 @@ function loadOrderCart() {
                         text: "Waktu pembayaran sudah berakhir",
                         icon: "error",
                     }).then(() => {
-                        window.location.href = '/home/history';
+                        window.location.replace('/home/history');
                     });
 
                     return;
@@ -254,7 +254,8 @@ function denyTransaction(paramObj) {
                 // swal("Saved !", response.message, "success").then(function () {
                 //     location.reload();
                 // });
-                window.location.href = '/home/history';
+                // window.location.href = '/home/history';
+                window.location.replace('/home/history');
                 // Reset form
             } else {
                 // sweetAlert("Oops...", response.message, "error");
