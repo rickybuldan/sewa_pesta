@@ -395,12 +395,36 @@ class HomeController extends Controller
 
                                 FROM " . $data->tableName;
                 }
-
+                $tab    = "transactions";
+                if (str_contains($data->tableName, $tab) == true) {
+                    if (isset($data->isHistory)){
+                        $query = "
+                        SELECT t.*, c.*, p.product_name, p.price,  p.product_name,
+                                p.price,
+                                p.`desc`,
+                                p.file_path,
+                                p.id_category,
+                                p.created_at,
+                                p.updated_at,
+                                p.items,
+                                p.late,
+                                p.id_unit,
+                                p.min_rent,
+                                u.unit_name
+                            FROM transactions t LEFT JOIN transaction_details c ON c.id_transaction = t.id LEFT JOIN products p ON p.id = c.id_product LEFT JOIN units u ON u.id = p.id_unit
+                        ";
+                    }
+                }
+                // dd($query);
                 $whereClause = isset($data->where) ? " WHERE " . $data->where : "";
 
                 if ($whereClause) {
                     $query = $query . " WHERE " . $data->where;
                 }
+
+               
+
+                
 
                 $saved = DB::select($query);
                 $saved = $MasterClass->checkErrorModel($saved);

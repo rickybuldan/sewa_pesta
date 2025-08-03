@@ -65,7 +65,7 @@ fp = flatpickr("#dateRange", {
     allowInput: true,
 });
 
-function startCountdown(targetDate, id_transaction) {
+function startCountdown(targetDate, id_transaction, statuss) {
     let timer = setInterval(function () {
         const now = new Date().getTime();
         const distance = targetDate.getTime() - now;
@@ -74,7 +74,10 @@ function startCountdown(targetDate, id_transaction) {
             clearInterval(timer);
             $('#countdown-timer').text('Waktu pembayaran sudah berakhir');
             // didie
-            denyTransaction(id_transaction)
+            if(statuss==10){
+                denyTransaction(id_transaction)
+            }
+            
             return;
         }
 
@@ -132,7 +135,10 @@ function loadOrderCart() {
                 // Jika hari ini >= start_date → countdown selesai
                 if (today.getTime() >= startDate.getTime()) {
                     $('#countdown-timer').text('Waktu pembayaran sudah berakhir');
-                    denyTransaction(data[0].no_transaction)
+                    if(data[0].status == 10){
+                        denyTransaction(data[0].no_transaction)
+                    }
+
                     Swal.fire({
                         title: "Oops...",
                         text: "Waktu pembayaran sudah berakhir",
@@ -149,7 +155,7 @@ function loadOrderCart() {
                 countdownDate.setDate(countdownDate.getDate() - 1);
                 countdownDate.setHours(23, 59, 59, 999);
 
-                startCountdown(countdownDate, data[0].no_transaction);
+                startCountdown(countdownDate, data[0].no_transaction, data[0].status);
 
                 // if(data[0].status != 10){
                 //     location.href = "/home/history"
@@ -251,7 +257,7 @@ function denyTransaction(paramObj) {
                 window.location.href = '/home/history';
                 // Reset form
             } else {
-                sweetAlert("Oops...", response.message, "error");
+                // sweetAlert("Oops...", response.message, "error");
             }
         },
         error: function (xhr, status, error) {
