@@ -159,6 +159,9 @@ function getHistoryTransaction() {
                      if (sstatus == 20) {
                         $rowData = ` Kirim`;
                     }
+                    if (sstatus == 21) {
+                        $rowData = `Tagihan Denda Berhasil dibayar`;
+                    }
                     if (sstatus == 30) {
                         $rowData = `Selesai`;
                     }

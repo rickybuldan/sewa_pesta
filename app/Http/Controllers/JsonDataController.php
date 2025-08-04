@@ -1980,42 +1980,39 @@ class JsonDataController extends Controller
 
                     $data = json_decode($request->input('data'));
                     $status = [];
-                  
+                    $header_trans = Transaction::where([
+                        'no_transaction' => $data->id_transaction,
+                    ])->first();
 
-
+                    $islate = false;
                     foreach ($data->items as $it) {
                         // dd($it->id_transaction);
                         $saved = TransactionDetail::where([
                             'id_product' => $it->id_product,
-                            'id_transaction' => $it->id_transaction,
-                        ])->update( [
+                            'id_transaction' => $header_trans->id,
+                        ])->update([
                                     'good' => $it->baik,
                                     'damage' => $it->rusak,
                                     'penalty' => $it->penalty
                                 ]);
 
-
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
-                        
-
 
                         $detail = TransactionDetail::where([
                             'id_product' => $it->id_product,
-                            'id_transaction' => $it->id_transaction,
+                            'id_transaction' => $header_trans->id,
                         ])->first();
 
-                        $header_trans = Transaction::where([
-                            'id' => $it->id_transaction,
-                        ])->first();
-                        
-                        
-                        
+                        // $header_trans = Transaction::where([
+                        //     'id' => $header_trans->id,
+                        // ])->first();
+
                         $endDate = Carbon::parse($header_trans->end_date)->startOfDay();
                         $today = Carbon::today();
-                        $diff = $today->diffInDays($endDate, false);
+
+                        $diff = $endDate->diffInDays($today, false); // dari endDate ke today
                         $late = $diff > 0 ? $diff : 0;
 
-                        
                         $product = Product::find($it->id_product);
 
                         if ($product) {
@@ -2025,9 +2022,13 @@ class JsonDataController extends Controller
                             $product->late = $late;
                             $product->save();
                         }
-                        
 
-                        $saved = $MasterClass->checkerrorModelUpdate($saved);
+                        if ($late > 0 || $it->penalty > 0) {
+                            $islate = true;
+                        }
+
+                        // dd($detail);
+                        // $saved = $MasterClass->checkerrorModelUpdate($saved);
 
                         $status = $saved;
 
@@ -2036,9 +2037,16 @@ class JsonDataController extends Controller
                         }
 
                     }
-
+                    if ($islate == true) {
+                        $saved = Transaction::where([
+                            'no_transaction' => $data->id_transaction,
+                        ])->update([
+                                    'status' => 21,
+                                    'updated_by' => $MasterClass->getSession('user_id')
+                                ]);
+                    }
                     $saved = Transaction::where([
-                        'id' => $data->id_transaction,
+                        'no_transaction' => $data->id_transaction,
                     ])->update([
                                 'status' => 30,
                                 'updated_by' => $MasterClass->getSession('user_id')
@@ -2144,7 +2152,7 @@ class JsonDataController extends Controller
                         // $product = Product::where('id', $pdr->id)->first();
                         // if ($pdr->qty && $pdr->qty <= $product->items) {
 
-                           
+
                         //     $product->items += $pdr->qty;
                         //     $product->save();
 
@@ -2235,7 +2243,7 @@ class JsonDataController extends Controller
 
                     $data = json_decode($request->input('data'));
                     $status = [];
-                  
+
 
                     $header_trans = Procurement::where([
                         'no_transaction' => $data->id_procurement,
@@ -2245,26 +2253,26 @@ class JsonDataController extends Controller
                         // dd($it->id_transaction);
                         $saved = ProcurementDetail::where([
                             'id_procurement' => $header_trans->id,
-                            'id_product'=>$it->id_product
-                        ])->update( [
+                            'id_product' => $it->id_product
+                        ])->update([
                                     'sub_total' => $it->subtotal,
                                     'items_price' => $it->price,
                                     'accept_item' => $it->accept_item
                                 ]);
-                        
+
 
 
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
 
                         $detail = ProcurementDetail::where([
                             'id_procurement' => $header_trans->id,
-                            'id_product'=>$it->id_product
+                            'id_product' => $it->id_product
                         ])->first();
-                        
+
                         $product = Product::find($it->id_product);
                         $product->increment('items', $detail->accept_item);
                         $product->save();
-                    
+
 
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
 

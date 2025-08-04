@@ -145,6 +145,9 @@ class InvoiceController extends Controller
                 $sql = " 
                         SELECT
                             td.*,
+                            t.supplier_name,
+                            t.supplier_phone,
+                            t.no_transaction,
                             u.unit_name,
                             p.product_name,
                             p.price,

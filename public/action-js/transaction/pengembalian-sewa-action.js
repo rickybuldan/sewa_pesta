@@ -275,7 +275,7 @@ function sendBackTransaction() {
     console.log(issend);
 
 
-    formData.append("data", JSON.stringify({ id_transaction: its, items: issend }));
+    formData.append("data", JSON.stringify({ id_transaction: $("#form-no-transaction").val(), items: issend }));
 
     swal({
         title: "Apakah anda yakin ?",
