@@ -2144,7 +2144,7 @@ class JsonDataController extends Controller
                             'id_procurement' => $transaction->id,
                             'id_product' => $pdr->id,
                             // 'day' => $data->day,
-                            'sub_total' => ($pdr->price * $pdr->qty),
+                            // 'sub_total' => ($pdr->price * $pdr->qty),
                             'item' => $pdr->qty,
                             // 'accept_item' => $pdr->accept_item,
                         ]);
