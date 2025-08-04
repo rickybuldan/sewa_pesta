@@ -74,11 +74,11 @@
                         </div>
                         <hr>
                         <div class="row mb-3">
-                            <div class="col-xl-6">
+                            <div class="col-xl-4">
                                 <b>Grand Total</b>
                             </div>
-                            <div class="col-xl-6 text-end">
-                                <b id="total-price">Rp 0</b>
+                            <div class="col-xl-8 text-center">
+                                <b id="total-price">0</b>
                             </div>
                         </div>
 
@@ -111,7 +111,7 @@
                                         placeholder="Nama" value="1">
                                 </div>
                             </div>
-                            <div class="mb-3 row">
+                            {{-- <div class="mb-3 row">
                                 <label class="col-sm-4 col-form-label">Harga Item Barang</label>
                                 <div class="col-sm-8">
                                     <input id="form-harga" type="number" min="1" class="form-control"
@@ -125,7 +125,7 @@
                                     <input id="form-accept-item" type="number" min="1" class="form-control"
                                         placeholder="Nama" value="1">
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>

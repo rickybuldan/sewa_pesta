@@ -23,7 +23,7 @@
                     <div class="card-body">
                         <div class="table-responsive  theme-scrollbar">
                             <table id="table-list" class="table table-striped table-bordered dt-responsive nowrap">
-                                <thead> 
+                                <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>No Pengadaan</th>
@@ -42,8 +42,8 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="modal-data" tabindex="-1" aria-labelledby="exampleModalCenter1" style="display: none;"
-            aria-hidden="true">
+        <div class="modal modal-xl fade" id="modal-data" tabindex="-1" aria-labelledby="exampleModalCenter1"
+            style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -57,17 +57,21 @@
                                 <label class="col-sm-3 col-form-label">Pengajuan Oleh</label>
                                 <div class="col-sm-9">
                                     <input id="form-name" type="text" class="form-control" placeholder="Nama" readonly>
+                                    <input id="form-id-procurement" type="hidden" class="form-control">
                                 </div>
                             </div>
 
                             <div class="table-responsive  theme-scrollbar">
                                 <table id="table-list2" class="table table-striped table-bordered dt-responsive nowrap">
-                                    <thead> 
+                                    <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Nama Barang</th>
-                                            <th>Jumlah Item</th>
+                                            <th>Jumlah Pengajuan</th>
+                                            <th>Jumlah Item Diterima</th>
                                             <th>Satuan</th>
+                                            <th>Harga Item</th>
+                                            <th>Subtotal</th>
                                             {{-- <th>Deskripsi</th> --}}
                                             {{-- <th>Bukti Bayar</th> --}}
                                             {{-- <th>Berat</th> --}}
@@ -76,6 +80,12 @@
                                     </thead>
                                     <tbody>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6" style="text-align:right;"><strong>Grand Total:</strong></td>
+                                            <td><strong id="grand-total">0.00</strong></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                             {{-- <div class="mb-3 row">
@@ -97,7 +107,7 @@
                                 <img src="/template/admin2/assets/images/lightgallry/01.jpg" style="width:50% "
                                     class="img-prod" itemprop="thumbnail" alt="Image description">
                             </div> --}}
-                            
+
                             {{-- <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Berat</label>
                                 <div class="col-sm-9">
@@ -116,12 +126,12 @@
                                     <input id="form-init" type="number" class="form-control" placeholder="Awal">
                                 </div>
                             </div> --}}
-                            
+
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                        {{-- <button type="button" id="save-btn" class="btn btn-primary">Save</button> --}}
+                        <button type="button" id="save-btn" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>
@@ -133,8 +143,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Form Data</h5>
-                        <button class="btn-close py-0" type="button" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                        <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="basic-form">
@@ -150,7 +159,7 @@
                             <div class="mb-3 row">
                                 <label class="col-sm-3 col-form-label">Jumlah Barcode</label>
                                 <div class="col-sm-9">
-                                    <input id="form-barcode-jml" type="number" class="form-control" >
+                                    <input id="form-barcode-jml" type="number" class="form-control">
                                 </div>
                             </div>
                         </div>

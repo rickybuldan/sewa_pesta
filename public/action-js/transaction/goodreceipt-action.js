@@ -33,12 +33,14 @@ function getListData() {
             data: function (d) {
                 return JSON.stringify({
                     tableName: "procurements",
+                    where: "status IN (20,30)"
                 });
             },
             dataSrc: function (response) {
                 if (response.code == 0) {
                     es = response.data;
                     // console.log(es);
+
 
                     return response.data;
                 } else {
@@ -80,7 +82,7 @@ function getListData() {
                         $rowData += ` <span class="badge rounded-pill text-bg-success">diverifikasi</span>`;
                     }
                     if (row.status == 30) {
-                        $rowData += ` <span class="badge rounded-pill text-bg-danger">ditolak</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Diterima</span>`;
                     }
                     return $rowData;
                 },
@@ -132,18 +134,26 @@ function getListData() {
             // },
             {
                 mRender: function (data, type, row) {
-                    $rowData = `<button type="button" class="btn btn-info btn-sm me-2 detail-btn">Detail</button>`;
-                    var allowedRoles = [6, 15];
-                    if (allowedRoles.includes(parseInt(roleid))) {
-                        if (row.status == 10) {
-                            $rowData += `<button type="button" class="btn btn-primary btn-sm me-2 verif-btn">Verifikasi</i></button>`;
-                            $rowData += `<button type="button" class="btn btn-danger btn-sm me-2 tolak-btn">Tolak</i></button>`;
-                        }
-                    }
-                    if (row.status == 30) {
-                        $rowData += `<button type="button" class="btn btn-info btn-sm me-2 edit-btn">Invoice</button>`;
+
+                    // var allowedRoles = [6,15];
+                    // if (allowedRoles.includes(parseInt(roleid))) {
+                    //     if (row.status == 10) {
+                    //         $rowData += `<button type="button" class="btn btn-primary btn-sm me-2 verif-btn">Verifikasi</i></button>`;
+                    //         $rowData += `<button type="button" class="btn btn-danger btn-sm me-2 tolak-btn">Tolak</i></button>`;
+                    //     }
+                    // }
+
+                    if (row.status == 10) {
+                        $rowData = `Menunggu Persetujuan`
                     }
 
+                    if (row.status == 20) {
+                        $rowData = `<button type="button" class="btn btn-info btn-sm me-2 detail-btn">Detail</button>`;
+                    }
+                    if (row.status == 30) {
+                        $rowData = `<button type="button" class="btn btn-info btn-sm me-2 edit-btn">Invoice</button>`;
+                    }
+                    
                     return $rowData;
                 },
                 visible: true,
@@ -183,15 +193,23 @@ function getListData() {
         denyTransaction(rowData);
     });
 
-    $('body').on('click', '.detail-btn', function () {
+    $('body').on('click', '.print-barcode-btn', function () {
         var tr = $(this).closest('tr');
         if (tr.hasClass('child')) tr = tr.prev();
         var rowData = dtpr.row(tr).data();
 
-        getListDataDetail(rowData.id)
+        $("#form-barcode-br").val(rowData.prod_code);
+        $("#modal-data-barcode").modal("show");
+    });
+
+    $('body').on('click', '.detail-btn', function () {
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev();
+        var rowData = dtpr.row(tr).data();
+        $("#form-id-procurement").val(rowData.no_transaction)
+        getListDataDetail(rowData.no_transaction)
     });
 }
-
 
 function getListDataDetail(id_transaction) {
     $("#modal-data").modal("show")
@@ -201,20 +219,20 @@ function getListDataDetail(id_transaction) {
 
     dtprs = $("#table-list2").DataTable({
         ajax: {
-            url: baseURL + "/loadGlobal",
+            url: baseURL + "/invoice_procurement?noinvoice=" + id_transaction,
             type: "POST",
             contentType: "application/json", // Set content type to JSON
-            data: function (d) {
-                return JSON.stringify({
-                    tableName: "procurement_details pd left join products p ON p.id=pd.id_product LEFT JOIN units u ON u.id = p.id_unit left join procurements ps on pd.id_procurement = ps.id left join users us ON us.id = ps.created_by",
-                    where: "pd.id_procurement = " + id_transaction
-                });
-            },
+            // data: function (d) {
+            //     return JSON.stringify({
+            //         tableName: "",
+            //         where: "pd.id_procurement = " + id_transaction
+            //     });
+            // },
             dataSrc: function (response) {
                 if (response.code == 0) {
                     es = response.data;
                     // console.log(es);
-                    $("#form-name").val(es[0].name)
+                    $("#form-name").val(es[0].submitted_by)
                     console.log(es[0].name);
 
                     return response.data;
@@ -244,26 +262,50 @@ function getListDataDetail(id_transaction) {
             },
             { data: "product_name" },
             { data: "item" },
+            {
+                data: "accept_item",
+                render: function (data, type, row, meta) {
+                    return `<input type="number" class="form-control form-control-xl accept-input" 
+                   name="accept_item_${row.id}" 
+                   data-id="${row.id}" 
+                   data-price="${row.price}" 
+                   data-id-product="${row.id_product}" 
+                   value="${data ?? 0}" 
+                   min="0" style="width: 100%;">`;
+                }
+            },
             { data: "unit_name" },
+            {
+                data: "price",
+                render: function (data, type, row, meta) {
+                    return `<input type="number" class="form-control form-control-sm price-input" 
+                   name="price_${row.id}" 
+                   data-id="${row.id}" 
+                   value="${data ?? 0}" 
+                   min="0" style="width: 100%;">`;
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    const subtotal = (row.accept_item ?? 0) * (row.price ?? 0);
+                    return `<input type="text" class="form-control subtotal-input" 
+                   name="sub_total_${row.id}" 
+                   data-id="${row.id}" 
+                   value="${subtotal.toFixed(2)}" 
+                   readonly />`;
+                }
+            }
+
         ],
         columnDefs: [
             // {
             //     mRender: function (data, type, row) {
-            //         $rowData = row.no_transaction;
-            //         if (row.status == 10) {
-            //             $rowData += ` <span class="badge rounded-pill text-bg-primary">Proses</span>`;
-            //         }
+            //         $rowData = row.item +" "+row.unit_name;
 
-            //         if (row.status == 20) {
-            //             $rowData += ` <span class="badge rounded-pill text-bg-success">diverifikasi</span>`;
-            //         }
-            //         if (row.status == 30) {
-            //             $rowData += ` <span class="badge rounded-pill text-bg-danger">ditolak</span>`;
-            //         }
-            //         return $rowData;
             //     },
             //     visible: true,
-            //     targets: 1,
+            //     targets: 2,
             //     className: "text-center",
             // },
             // {
@@ -369,7 +411,49 @@ function getListDataDetail(id_transaction) {
     //     $("#form-barcode-br").val(rowData.prod_code);
     //     $("#modal-data-barcode").modal("show");
     // });
+
+    // Saat jumlah diterima berubah
+    $('body').on('input change', '.accept-input', function () {
+        id = $(this).data('id');
+        qty = parseFloat($(this).val()) || 0;
+        price = parseFloat($(`input[name="price_${id}"]`).val()) || 0;
+        subtotal = qty * price;
+        console.log(id);
+
+
+        $(`input[name="sub_total_${id}"]`).val(subtotal.toFixed(2));
+        updateGrandTotal()
+    });
+
+    // Saat harga berubah
+    $('body').on('input change', '.price-input', function () {
+        id = $(this).data('id');
+        price = parseFloat($(this).val()) || 0;
+        qty = parseFloat($(`input[name="accept_item_${id}"]`).val()) || 0;
+        subtotal = qty * price;
+
+        $(`input[name="sub_total_${id}"]`).val(subtotal.toFixed(2));
+
+        // sinkronkan harga ke input qty (jika kamu mau)
+        $(`input[name="accept_item_${id}"]`).attr('data-price', price);
+        updateGrandTotal()
+    });
+
+    function updateGrandTotal() {
+        let total = 0;
+        $('.subtotal-input').each(function () {
+            const val = parseFloat($(this).val()) || 0;
+            total += val;
+        });
+
+        $('#grand-total').text(total.toFixed(2));
+    }
+
+
+
 }
+
+
 
 let isObject = {};
 
@@ -416,168 +500,47 @@ $("#save-btn").on("click", function (e) {
 
 function checkValidation() {
     // console.log($el);
-    if (
-        validationSwalFailed(
-            (isObject["product_name"] = $("#form-name").val()),
-            "Nama produk tidak boleh kosong."
-        )
-    )
-        return false;
+    function getItemsData() {
+        items = [];
 
-    // if (
-    //     validationSwalFailed(
-    //         (isObject["prod_code"] = $("#form-code").val()),
-    //         "Kode produk tidak boleh kosong."
-    //     )
-    // )
-    //     return false;
-    pricexx = unformatRupiah($("#form-price").val());
-    if (
-        validationSwalFailed(
-            (isObject["price"] = pricexx),
-            "Harga tidak boleh kosong"
-        )
-    )
-        return false;
+        $('#table-list2 tbody tr').each(function () {
+            row = $(this);
+            id = row.find('.accept-input').data('id');
+            id_product = row.find('.accept-input').data('id-product');
+            accept_item = parseFloat(row.find(`input[name="accept_item_${id}"]`).val()) || 0;
+            price = parseFloat(row.find(`input[name="price_${id}"]`).val()) || 0;
+            subtotal = parseFloat(row.find(`input[name="sub_total_${id}"]`).val()) || 0;
+            
 
-    if ($("#form-img").val == null) {
-        setImagePackage();
+            items.push({
+                id: id,
+                id_product:id_product,
+                accept_item: accept_item,
+                price: price,
+                subtotal: subtotal
+            });
+        });
+
+        return items;
     }
 
-    // if (
-    //     validationSwalFailed(
-    //         (isObject["weight"] = $("#form-weight").val()),
-    //         "Berat tidak boleh kosong"
-    //     )
-    // )
-    //     return false;
 
-    // if (
-    //     validationSwalFailed(
-    //         (isObject["min"] = $("#form-min").val()),
-    //         "Stok minimun tidak boleh kosong"
-    //     )
-    // )
-    //     return false;
-    // if (
-    //     validationSwalFailed(
-    //         (isObject["max"] = $("#form-max").val()),
-    //         "Stok maksimum tidak boleh kosong"
-    //     )
-    // )
-    //     return false;
-
-    // if (
-    //     validationSwalFailed(
-    //         (isObject["init"] = $("#form-init").val()),
-    //         "Stok awal tidak boleh kosong"
-    //     )
-    // )
-    //     return false;
-
-    if (
-        validationSwalFailed(
-            (isObject["desc"] = $("#form-desc").val()),
-            "Deskripsi tidak boleh kosong"
-        )
-    )
-        return false;
+    isObject['items'] = getItemsData()
+    isObject['id_procurement'] = $("#form-id-procurement").val()
     saveData();
 }
-
-function deleteData(data) {
-    swal({
-        title: "Are you sure to delete ?",
-        text: "You will not be able to recover this imaginary file !!",
-        type: "warning",
-        showCancelButton: !0,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, delete it !!",
-        cancelButtonText: "No, cancel it !!",
-        closeOnConfirm: !1,
-        closeOnCancel: !1,
-    }).then(function (e) {
-        console.log(e);
-        if (e.value) {
-            $.ajax({
-                url: baseURL + "/deleteGlobal",
-                type: "POST",
-                data: JSON.stringify({ id: data.id, tableName: "products" }),
-                dataType: "json",
-                contentType: "application/json",
-                beforeSend: function () {
-                    Swal.fire({
-                        title: "Loading",
-                        text: "Please wait...",
-                    });
-                },
-                complete: function () { },
-                success: function (response) {
-                    // Handle response sukses
-                    if (response.code == 0) {
-                        swal("Deleted !", response.message, "success").then(
-                            function () {
-                                location.reload();
-                            }
-                        );
-                    } else {
-                        sweetAlert("Oops...", response.message, "error");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Handle error response
-                    // console.log(xhr.responseText);
-                    sweetAlert("Oops...", xhr.responseText, "error");
-                },
-            });
-        } else {
-            swal(
-                "Cancelled !!",
-                "Hey, your imaginary file is safe !!",
-                "error"
-            );
-        }
-    });
-}
-
-$("#form-img").change(function () {
-    var file = $(this).prop("files")[0]; // Use $(this) to refer to the element that triggered the event
-    if (file) {
-        if (file) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                var imageUrl = e.target.result;
-
-                var img = $("<img>");
-                img.attr("class", "img-paket");
-                img.attr("src", imageUrl);
-                img.attr("style", "width:30%");
-
-                $(".img-paket").replaceWith(img);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    } else {
-        var img = $("<img>");
-        img.attr("class", "img-paket");
-        imageUrl = "/template/admin2/assets/images/lightgallry/01.jpg";
-        img.attr("src", imageUrl);
-    }
-});
 
 
 function saveData() {
     // formdata
     console.log(isObject);
     var formData = new FormData();
-    var file = $("#form-img")[0].files[0];
-    formData.append("image", file);
+    // var file = $("#form-img")[0].files[0];
+    // formData.append("image", file);
     formData.append("data", JSON.stringify(isObject));
 
     $.ajax({
-        url: baseURL + "/saveProduct",
+        url: baseURL + "/saveAcceptProcurement",
         type: "POST",
         data: formData,
         dataType: "json",

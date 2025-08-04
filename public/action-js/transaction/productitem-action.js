@@ -214,8 +214,8 @@ function addToCart(el, params) {
         resprod = getProductFromArr(params);
         // console.log(resprod);
         resprod[0]['qty'] = $("#form-item").val()
-        resprod[0]['price'] = $("#form-harga").val()
-        resprod[0]['accept_item'] = $("#form-accept-item").val()
+        // resprod[0]['price'] = $("#form-harga").val()
+        // resprod[0]['accept_item'] = $("#form-accept-item").val()
         
         globArrCart.push(resprod[0]);
         console.log(globArrCart);
@@ -239,11 +239,8 @@ function ctSubProd(resprod) {
             <div class="col-xl-4">
                 ${resprod.product_name}
             </div>
-            <div class="col-xl-4 text-end">
-                ${formatRupiah(resprod.price)}*${resprod.qty} (${resprod.accept_item})
-            </div>
-            <div class="col-xl-4 text-end">
-                ${formatRupiah(countSubTotal(resprod.price, resprod.qty))}
+            <div class="col-xl-8 text-center">
+                ${resprod.qty}
             </div>
         </div>
     `;
@@ -256,11 +253,12 @@ function ctAllProd() {
     htcontent = "";
 
     total = 0;
-
+    tit = 0
     for (let index = 0; index < globArrCart.length; index++) {
         pnm = globArrCart[index];
         prc = pnm.price;
         items = pnm.qty;
+        tit += parseInt(pnm.qty)
 
         total += parseInt(prc) * parseInt(items);
         console.log(total, prc,items);
@@ -268,9 +266,9 @@ function ctAllProd() {
         htcontent += ctSubProd(pnm);
     }
     globGrandTotal = total;
-    console.log(globGrandTotal);
+    // console.log(globGrandTotal);
     
-    $("#total-price").text(formatRupiah(total));
+    $("#total-price").text(tit);
     $(".content-product-cart").html(htcontent);
 }
 

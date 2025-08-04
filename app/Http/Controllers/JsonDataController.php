@@ -2132,30 +2132,32 @@ class JsonDataController extends Controller
                     $saved1 = $MasterClass->checkErrorModel($transaction);
 
                     foreach ($data->items as $pdr) {
-                        $product = Product::where('id', $pdr->id)->first();
-                        if ($pdr->qty && $pdr->qty <= $product->items) {
+                        $detailTransac = ProcurementDetail::create([
+                            'id_procurement' => $transaction->id,
+                            'id_product' => $pdr->id,
+                            // 'day' => $data->day,
+                            'sub_total' => ($pdr->price * $pdr->qty),
+                            'item' => $pdr->qty,
+                            // 'accept_item' => $pdr->accept_item,
+                        ]);
+                        $saved2 = $MasterClass->checkErrorModel($detailTransac);
+                        // $product = Product::where('id', $pdr->id)->first();
+                        // if ($pdr->qty && $pdr->qty <= $product->items) {
 
-                            $detailTransac = ProcurementDetail::create([
-                                'id_procurement' => $transaction->id,
-                                'id_product' => $pdr->id,
-                                // 'day' => $data->day,
-                                'sub_total' => ($pdr->price * $pdr->qty),
-                                'item' => $pdr->qty,
-                                'accept_item' => $pdr->accept_item,
-                            ]);
-                            $product->items += $pdr->qty;
-                            $product->save();
+                           
+                        //     $product->items += $pdr->qty;
+                        //     $product->save();
 
-                            $saved2 = $MasterClass->checkErrorModel($detailTransac);
 
-                        } else {
-                            DB::rollBack();
-                            $results = [
-                                'code' => '102',
-                                'info' => "Stok " . $product->product_name . " tidak cukup. Stok sekarang : " . $product->items . ". Silakan Hubungi admin.",
-                            ];
-                            return $MasterClass->Results($results);
-                        }
+
+                        // } else {
+                        //     DB::rollBack();
+                        //     $results = [
+                        //         'code' => '102',
+                        //         'info' => "Stok " . $product->product_name . " tidak cukup. Stok sekarang : " . $product->items . ". Silakan Hubungi admin.",
+                        //     ];
+                        //     return $MasterClass->Results($results);
+                        // }
 
 
                         $saved2 = $MasterClass->checkErrorModel($detailTransac);
@@ -2178,6 +2180,112 @@ class JsonDataController extends Controller
                     $status = $saved2;
 
                     // dd($saved3);
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
+    public function saveAcceptProcurement(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data = json_decode($request->input('data'));
+                    $status = [];
+                  
+
+                    $header_trans = Procurement::where([
+                        'no_transaction' => $data->id_procurement,
+                    ])->first();
+                    // dd($header_trans);
+                    foreach ($data->items as $it) {
+                        // dd($it->id_transaction);
+                        $saved = ProcurementDetail::where([
+                            'id_procurement' => $header_trans->id,
+                            'id_product'=>$it->id_product
+                        ])->update( [
+                                    'sub_total' => $it->subtotal,
+                                    'items_price' => $it->price,
+                                    'accept_item' => $it->accept_item
+                                ]);
+                        
+
+
+                        $saved = $MasterClass->checkerrorModelUpdate($saved);
+
+                        $detail = ProcurementDetail::where([
+                            'id_procurement' => $header_trans->id,
+                            'id_product'=>$it->id_product
+                        ])->first();
+                        
+                        $product = Product::find($it->id_product);
+                        $product->increment('items', $detail->accept_item);
+                        $product->save();
+                    
+
+                        $saved = $MasterClass->checkerrorModelUpdate($saved);
+
+                        $status = $saved;
+
+                        if ($status['code'] != $MasterClass::CODE_SUCCESS) {
+                            break;
+                        }
+
+                    }
+
+                    $saved = Procurement::where([
+                        'id' => $header_trans->id,
+                    ])->update([
+                                'status' => 30,
+                                'updated_by' => $MasterClass->getSession('user_id')
+                            ]);
+
+                    $saved = $MasterClass->checkerrorModelUpdate($saved);
+
+                    $status = $saved;
 
                     if ($status['code'] == $MasterClass::CODE_SUCCESS) {
                         DB::commit();

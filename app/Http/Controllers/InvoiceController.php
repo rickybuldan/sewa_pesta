@@ -144,12 +144,18 @@ class InvoiceController extends Controller
                 $status = [];
                 $sql = " 
                         SELECT
-                            t.*,
+                            td.*,
+                            u.unit_name,
+                            p.product_name,
+                            p.price,
                             us1.name as submitted_by,
-                            us2.name as approver
+                            us2.name as approver,
+                            u.unit_name
                         FROM procurements t
                         
                         LEFT JOIN procurement_details td ON td.id_procurement = t.id
+                        left join products p ON p.id=td.id_product 
+                        LEFT JOIN units u ON u.id = p.id_unit 
                         LEFT JOIN users us1 ON us1.id = t.created_by
                         LEFT JOIN users us2 ON us2.id = t.updated_by
                         
