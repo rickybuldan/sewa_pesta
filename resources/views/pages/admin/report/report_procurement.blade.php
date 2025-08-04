@@ -27,14 +27,12 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>No Transaksi</th>
-                                        
-                                        {{-- <th>Denda</th> --}}
-                                        <th>Total Harga</th>
+                                        <th>No Pengadaan</th>
+                                        <th>Supplier</th>
                                         {{-- <th>Deskripsi</th> --}}
                                         {{-- <th>Bukti Bayar</th> --}}
                                         {{-- <th>Berat</th> --}}
-                                        {{-- <th>Aksi</th> --}}
+                                        <th>Supplier Phone</th>
                                     </tr>
                                 </thead>
                                 <tbody>

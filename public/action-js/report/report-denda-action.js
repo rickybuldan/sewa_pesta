@@ -46,13 +46,13 @@ function getListData() {
             }
         ],
         ajax: {
-            url: baseURL + "/loadGlobal",
+            url: baseURL + "/getDenda",
             type: "POST",
             contentType: "application/json", // Set content type to JSON
             data: function (d) {
                 return JSON.stringify({
-                    tableName: "transactions",
-                    where: `DATE_FORMAT(created_at, '%Y-%m') = '${month}'`
+                    // tableName: "transactions",
+                    where: ` AND DATE_FORMAT(t.created_at, '%Y-%m') = '${month}'`
                 });
             },
             dataSrc: function (response) {
@@ -196,7 +196,7 @@ function getListData() {
             var last = null;
 
             // Calculate totals for specific columns
-            var totalColumn1 = api.column(4).data().reduce(function (a, b) {
+            var totalColumn1 = api.column(2).data().reduce(function (a, b) {
                 return parseInt(a) + parseInt(b);
             }, 0);
 

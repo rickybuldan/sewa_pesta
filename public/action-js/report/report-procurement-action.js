@@ -23,10 +23,10 @@ function setImagePackage(urlFile, elementID) {
         elementID.prop("src", urlFile);
     }
 }
-let month = null
 
+let month = null
 function getListData() {
-    dtpr = $("#table-list").DataTable({
+   dtpr = $("#table-list").DataTable({
         dom: 'Bfrtip', // Tambahkan ini agar tombol muncul
         buttons: [
             {
@@ -51,7 +51,7 @@ function getListData() {
             contentType: "application/json", // Set content type to JSON
             data: function (d) {
                 return JSON.stringify({
-                    tableName: "transactions",
+                    tableName: "procurements",
                     where: `DATE_FORMAT(created_at, '%Y-%m') = '${month}'`
                 });
             },
@@ -87,7 +87,8 @@ function getListData() {
             { data: "no_transaction" },
             // { data: "price_total" },
             // { data: "denda" },
-            { data: "price_total" },
+            { data: "supplier_name" },
+                        { data: "supplier_phone" },
             // { data: "file_path" },
             // { data: "weight" },
             // { data: "id" },
@@ -113,10 +114,10 @@ function getListData() {
                     }
 
                     if (row.status == 20) {
-                        $rowData += ` <span class="badge rounded-pill text-bg-warning">Kirim</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-warning">Verifikasi</span>`;
                     }
                     if (row.status == 30) {
-                        $rowData += ` <span class="badge rounded-pill text-bg-dark">Selesai</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-dark">Diterima</span>`;
                     }
                     if (row.status == 50) {
                         $rowData += ` <span class="badge rounded-pill text-bg-danger">Ditolak</span>`;

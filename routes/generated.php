@@ -47,3 +47,6 @@ Route::get('/unitlist', [GeneralController::class, 'unitlist'])->name('');
 Route::post('/saveUnit', [JsonDataController::class, 'saveUnit'])->name('');
 Route::get('/goodreceipt', [GeneralController::class, 'goodreceipt'])->name('');
 Route::post('/saveAcceptProcurement', [JsonDataController::class, 'saveAcceptProcurement'])->name('');
+Route::get('/reportprocurement', [GeneralController::class, 'reportprocurement'])->name('');
+Route::get('/reportdenda', [GeneralController::class, 'reportdenda'])->name('');
+Route::post('/getDenda', [JsonDataController::class, 'getDenda'])->name('');

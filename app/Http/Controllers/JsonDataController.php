@@ -1064,6 +1064,166 @@ class JsonDataController extends Controller
 
     }
 
+    public function getDenda(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+
+                    $status = [];
+
+                    $data = json_decode($request->getContent());
+                    $where = $data->where;
+
+
+                    $query = " 
+                        SELECT
+                            t.*,
+                            COALESCE(d.denda, 0) AS denda,
+                            COALESCE(d.denda_telat, 0) AS denda_telat,
+                            COALESCE(d.denda, 0) + COALESCE(d.denda_telat, 0) as tot_denda
+                        FROM transactions t
+                        LEFT JOIN (
+                            SELECT
+                                td.id_transaction,
+                                SUM(
+                                    CASE 
+                                        WHEN td.late > 0 AND td.late IS NOT NULL AND mc.value IS NOT NULL AND mc.value != 0 THEN
+                                            CASE 
+                                                WHEN mc.type = 1 THEN (td.sub_total + mc.value)
+                                                WHEN mc.type = 2 THEN (td.sub_total * mc.value / 100) * td.late
+                                                ELSE 0
+                                            END
+                                        ELSE 0
+                                    END
+                                ) AS denda_telat,
+                                SUM(
+                                    CASE 
+                                        WHEN td.penalty > 0 THEN td.penalty
+                                        ELSE 0
+                                    END
+                                ) AS denda
+                            FROM transaction_details td
+                            LEFT JOIN master_constants mc ON mc.is_active = 1
+                            GROUP BY td.id_transaction
+                        ) d ON d.id_transaction = t.id
+                        WHERE COALESCE(d.denda, 0) + COALESCE(d.denda_telat, 0) > 0
+                        
+                    ";
+
+                    if (isset($where)) {
+                        $query .= $where;
+                    }
+                    // dd($query);
+                    $saved = DB::select($query);
+
+                    $saved = $MasterClass->checkErrorModel($saved);
+
+                    // $response = [
+                    //     [
+                    //         'name' => 'Transaksi Success',
+                    //         'data' => array_map(function ($item) {
+                    //             return [
+                    //                 'day_of_week' => $item->day_of_week,
+                    //                 'count' => $item->success_count,
+                    //                 'total' => $item->success_total,
+                    //             ];
+                    //         }, $saved['data']),
+                    //     ],
+                    //     [
+                    //         'name' => 'Transaksi Failed',
+                    //         'data' => array_map(function ($item) {
+                    //             return [
+                    //                 'day_of_week' => $item->day_of_week,
+                    //                 'count' => $item->failed_count,
+                    //                 'total' => $item->failed_total,
+                    //             ];
+                    //         }, $saved[]),
+                    //     ],
+                    // ];
+                    $status = $saved;
+                    $query2 = "
+                        SELECT
+                            COUNT(*) total_rent
+                        FROM transactions
+                    ";
+
+
+                    $saved2 = DB::select($query2);
+                    $saved2 = $MasterClass->checkErrorModel($saved2);
+
+                    $query3 = "
+                        SELECT
+                            sum(price_total) total_revenue_rent
+                        FROM transactions
+                    ";
+
+
+                    $saved3 = DB::select($query3);
+                    $saved3 = $MasterClass->checkErrorModel($saved3);
+
+                    $query4 = "
+                        SELECT
+                            COUNT(*) total_customers
+                        FROM users where role_id = 14
+                    ";
+
+
+                    $saved4 = DB::select($query4);
+                    $saved4 = $MasterClass->checkErrorModel($saved4);
+                    // if($status['code'] == $MasterClass::CODE_SUCCESS){
+                    //     DB::commit();
+                    // }else{
+                    //     DB::rollBack();
+                    // }
+                    // dd($saved4);
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                        'total_rent' => $saved2['data'][0]->total_rent,
+                        'total_revenue_rent' => $saved3['data'][0]->total_revenue_rent,
+                        'total_customers' => $saved4['data'][0]->total_customers,
+                    ];
+
+
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
     public function getOverviewLastTransaction(Request $request)
     {
 
@@ -2249,6 +2409,8 @@ class JsonDataController extends Controller
                         'no_transaction' => $data->id_procurement,
                     ])->first();
                     // dd($header_trans);
+                    $total = 0;
+
                     foreach ($data->items as $it) {
                         // dd($it->id_transaction);
                         $saved = ProcurementDetail::where([
@@ -2260,7 +2422,7 @@ class JsonDataController extends Controller
                                     'accept_item' => $it->accept_item
                                 ]);
 
-
+                        $total += $it->accept_item * $it->items_price;
 
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
 
@@ -2288,7 +2450,8 @@ class JsonDataController extends Controller
                         'id' => $header_trans->id,
                     ])->update([
                                 'status' => 30,
-                                'updated_by' => $MasterClass->getSession('user_id')
+                                'updated_by' => $MasterClass->getSession('user_id'),
+                                'price_total' => $total
                             ]);
 
                     $saved = $MasterClass->checkerrorModelUpdate($saved);

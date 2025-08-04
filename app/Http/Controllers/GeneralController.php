@@ -10,39 +10,41 @@ class GeneralController extends Controller
 {
     //
 
-    public function based(Request $request){
+    public function based(Request $request)
+    {
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
-        
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
             $roled = $MasterClass->getSession('role_id');
-            if($roled == 14){
+            if ($roled == 14) {
                 return redirect('/home');
             }
 
             $getActive = $MasterClass->AuthenticatedViewIsActive();
             $urlredirect = $getActive['data'];
-            
 
-            return redirect( $urlredirect);
+
+            return redirect($urlredirect);
 
         }
-        
+
         return redirect('/home');
     }
-    public function dashboard(Request $request){
+    public function dashboard(Request $request)
+    {
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
-        
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
-           
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+
             $javascriptFiles = [
                 asset('action-js/global/global-action.js'),
                 asset('action-js/dashboard-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -57,26 +59,27 @@ class GeneralController extends Controller
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
                 // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.dashboard')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function userlist(Request $request){
+    public function userlist(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -84,7 +87,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/user/userlist-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -95,43 +98,44 @@ class GeneralController extends Controller
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.users.userlist')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function userrole(Request $request){
+    public function userrole(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
-        
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
-        
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+
 
             $javascriptFiles = [
                 asset('action-js/global/global-action.js'),
                 asset('action-js/user/userrole-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
             ];
             $baseURL = url('/');
-            
+
             $varJs = [
                 'const baseURL = "' . $baseURL . '"',
             ];
@@ -140,35 +144,36 @@ class GeneralController extends Controller
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
                 // Menambahkan base URL ke dalam array
             ];
 
             return view('pages.admin.users.userrole')
-            ->with($data);
-            
-        }else{
+                ->with($data);
+
+        } else {
             return redirect('/login');
         }
-    
-        
+
+
     }
 
-    public function transaction(Request $request){
+    public function transaction(Request $request)
+    {
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
-        
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
-           
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+
             $javascriptFiles = [
                 asset('action-js/global/global-action.js'),
                 asset('action-js/transaction/transaction-action.js'),
                 // asset('action-js/generate/generate-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -182,32 +187,33 @@ class GeneralController extends Controller
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
                 // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.transaction.transaction')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function report(Request $request){
+    public function report(Request $request)
+    {
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
-        
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
-           
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+
             $javascriptFiles = [
                 asset('action-js/global/global-action.js'),
                 asset('action-js/report/report-action.js'),
                 // asset('action-js/generate/generate-action.js'),
             ];
-        
+
             $cssFiles = [
                 // asset('css/main.css'),
                 // asset('css/custom.css'),
@@ -221,26 +227,112 @@ class GeneralController extends Controller
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
                 // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.report.report')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function productlist(Request $request){
+    public function reportdenda(Request $request)
+    {
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+
+            $javascriptFiles = [
+                asset('action-js/global/global-action.js'),
+                asset('action-js/report/report-denda-action.js'),
+                // asset('action-js/generate/generate-action.js'),
+            ];
+
+            $cssFiles = [
+                // asset('css/main.css'),
+                // asset('css/custom.css'),
+            ];
+            $baseURL = url('/');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+            ];
+
+            $menuData = $checkAuth['data'][0];
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs' => $varJs,
+                'title' => ucwords(strtolower($menuData->header_menu)),
+                'subtitle' => $menuData->menu_name,
+                // Menambahkan base URL ke dalam array
+            ];
+
+            return view('pages.admin.report.report_denda')
+                ->with($data);
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function reportprocurement(Request $request)
+    {
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+
+            $javascriptFiles = [
+                asset('action-js/global/global-action.js'),
+                asset('action-js/report/report-procurement-action.js'),
+                // asset('action-js/generate/generate-action.js'),
+            ];
+
+            $cssFiles = [
+                // asset('css/main.css'),
+                // asset('css/custom.css'),
+            ];
+            $baseURL = url('/');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+                'const roleid =' . $MasterClass->getSession('role_id'),
+
+                'const fullname_user = "' . $MasterClass->getSession('name') . '"',
+                'const fulladdress_user = "' . Auth::user()->address . '"',
+                'const fullphone_user = "' . Auth::user()->phone . '"',
+            ];
+
+            $menuData = $checkAuth['data'][0];
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs' => $varJs,
+                'title' => ucwords(strtolower($menuData->header_menu)),
+                'subtitle' => $menuData->menu_name,
+                // Menambahkan base URL ke dalam array
+            ];
+
+            return view('pages.admin.report.report_procurement')
+                ->with($data);
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function productlist(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -248,7 +340,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/masterdata/productlist-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -259,37 +351,38 @@ class GeneralController extends Controller
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.masterdata.productlist')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function constantlist(Request $request){
+    public function constantlist(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
             $javascriptFiles = [
                 asset('action-js/global/global-action.js'),
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/masterdata/constantlist-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -300,30 +393,31 @@ class GeneralController extends Controller
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.masterdata.constantlist')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function tambahSewa(Request $request){
-        
+    public function tambahSewa(Request $request)
+    {
+
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -331,7 +425,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/transaction/tambah-sewa-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -340,35 +434,36 @@ class GeneralController extends Controller
             $varJs = [
                 'const baseURL = "' . $baseURL . '"',
                 'const fullname_user = "' . $MasterClass->getSession('name') . '"',
-                'const fulladdress_user = "' .Auth::user()->address. '"',
-                'const fullphone_user = "' .Auth::user()->phone. '"',
+                'const fulladdress_user = "' . Auth::user()->address . '"',
+                'const fullphone_user = "' . Auth::user()->phone . '"',
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.transaction.tambah_sewa')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function pengembalianBarang(Request $request){
+    public function pengembalianBarang(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -376,7 +471,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/transaction/pengembalian-sewa-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -389,30 +484,31 @@ class GeneralController extends Controller
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.transaction.pengembalian_sewa')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function pengirimanBarang(Request $request){
+    public function pengirimanBarang(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -420,7 +516,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/transaction/pengiriman-sewa-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -432,30 +528,31 @@ class GeneralController extends Controller
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.transaction.pengiriman_sewa')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function additemproduct(Request $request){
+    public function additemproduct(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -463,7 +560,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/transaction/productitem-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -471,38 +568,39 @@ class GeneralController extends Controller
             $baseURL = url('/');
             $varJs = [
                 'const baseURL = "' . $baseURL . '"',
-                
+
                 'const fullname_user = "' . $MasterClass->getSession('name') . '"',
-                'const fulladdress_user = "' .Auth::user()->address. '"',
-                'const fullphone_user = "' .Auth::user()->phone. '"',
+                'const fulladdress_user = "' . Auth::user()->address . '"',
+                'const fullphone_user = "' . Auth::user()->phone . '"',
             ];
 
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.transaction.productitem')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function procurement(Request $request){
+    public function procurement(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -510,7 +608,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/transaction/procurement-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -518,38 +616,39 @@ class GeneralController extends Controller
             $baseURL = url('/');
             $varJs = [
                 'const baseURL = "' . $baseURL . '"',
-                'const roleid ='.$MasterClass->getSession('role_id'),
-                
+                'const roleid =' . $MasterClass->getSession('role_id'),
+
                 'const fullname_user = "' . $MasterClass->getSession('name') . '"',
-                'const fulladdress_user = "' .Auth::user()->address. '"',
-                'const fullphone_user = "' .Auth::user()->phone. '"',
+                'const fulladdress_user = "' . Auth::user()->address . '"',
+                'const fullphone_user = "' . Auth::user()->phone . '"',
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.transaction.procurement')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-    public function goodreceipt(Request $request){
+    public function goodreceipt(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -557,7 +656,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/transaction/goodreceipt-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -565,38 +664,39 @@ class GeneralController extends Controller
             $baseURL = url('/');
             $varJs = [
                 'const baseURL = "' . $baseURL . '"',
-                'const roleid ='.$MasterClass->getSession('role_id'),
-                
+                'const roleid =' . $MasterClass->getSession('role_id'),
+
                 'const fullname_user = "' . $MasterClass->getSession('name') . '"',
-                'const fulladdress_user = "' .Auth::user()->address. '"',
-                'const fullphone_user = "' .Auth::user()->phone. '"',
+                'const fulladdress_user = "' . Auth::user()->address . '"',
+                'const fullphone_user = "' . Auth::user()->phone . '"',
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.transaction.goodreceipt')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
 
-     public function unitlist(Request $request){
+    public function unitlist(Request $request)
+    {
 
         $MasterClass = new Master();
 
         $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
 
-        if($checkAuth['code'] == $MasterClass::CODE_SUCCESS){
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
 
 
             $javascriptFiles = [
@@ -604,7 +704,7 @@ class GeneralController extends Controller
                 // asset('action-js/generate/generate-action.js'),
                 asset('action-js/masterdata/unitlist-action.js'),
             ];
-        
+
             $cssFiles = [
                 asset('template/globalcss/global.css'),
                 // asset('css/custom.css'),
@@ -615,19 +715,19 @@ class GeneralController extends Controller
             ];
 
             $menuData = $checkAuth['data'][0];
-    
+
             $data = [
                 'javascriptFiles' => $javascriptFiles,
                 'cssFiles' => $cssFiles,
-                'varJs'=> $varJs,
+                'varJs' => $varJs,
                 'title' => ucwords(strtolower($menuData->header_menu)),
                 'subtitle' => $menuData->menu_name,
-                 // Menambahkan base URL ke dalam array
+                // Menambahkan base URL ke dalam array
             ];
-        
+
             return view('pages.admin.masterdata.unitlist')
                 ->with($data);
-        }else{
+        } else {
             return redirect('/login');
         }
     }
