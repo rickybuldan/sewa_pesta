@@ -30,7 +30,7 @@
     <div class="slider-area over-hidden">
         <div class="slider-active">
             <div class="single-slider slider-height d-flex align-items-center"
-                data-background="images/slider/homess_slide_1.jpg">
+                data-background="{{ asset('/template/frontend2/images/banner1.png') }}">
                 <div class="container">
                     <div class="row">
                         <div
@@ -48,7 +48,7 @@
                 </div><!-- /container -->
             </div><!-- /single-slider -->
             <div class="single-slider slider-height d-flex align-items-center"
-                data-background="images/slider/homess_slide_2.jpg">
+                data-background="/template/frontend2/images/banner1.png">
                 <div class="container">
                     <div class="row">
                         <div
@@ -64,7 +64,7 @@
                     </div><!-- /row -->
                 </div><!-- /container -->
             </div><!-- /single-slider -->
-            <div class="single-slider slider-height d-flex align-items-center"
+            {{-- <div class="single-slider slider-height d-flex align-items-center"
                 data-background="images/slider/homess_slide_3.jpg">
                 <div class="container">
                     <div class="row">
@@ -81,7 +81,7 @@
                         </div><!-- /col -->
                     </div><!-- /row -->
                 </div><!-- /container -->
-            </div><!-- /single-slider -->
+            </div><!-- /single-slider --> --}}
         </div><!-- /slider-active -->
     </div>
     <!-- slider-area-end=  -->
