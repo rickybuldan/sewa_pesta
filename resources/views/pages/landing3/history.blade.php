@@ -137,7 +137,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Silakan Upload Bukti Pelunasan Agar Dapat Dilakukan Proses Pengiriman.</p>
+                    <p >Silakan Upload Bukti Transfer Agar Langsung diproses.</p>
                     <label class="mt-25">Transfer Ke:<span class="secondary-color"></span></label>
                     <div class="">
                         <table class="table table-striped">
@@ -153,7 +153,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <label class="mt-25">Bukti Pelunasan <span class="secondary-color">**</span></label>
+                    <label class="mt-25">Bukti Transfer<span class="secondary-color">**</span></label>
                     <div class="">
                         <input type="file" class="form-control rounded-0 border-light-gray2 pl-20" id="form-img"
                             placeholder="">

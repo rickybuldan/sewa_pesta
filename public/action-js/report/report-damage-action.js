@@ -31,13 +31,16 @@ function getListData() {
         buttons: [
             {
                 extend: 'excelHtml5',
-                title: 'Data Denda',
+                title: 'Data Barang Rusak',
                 text: 'Export Excel',
                 footer: true // supaya footer ikut ke export
             },
+
+
+            ,
             {
                 extend: 'pdfHtml5',
-                title: 'Data Denda',
+                title: 'Data Barang Rusak',
                 orientation: 'landscape',
                 pageSize: 'A4',
                 text: 'Export PDF',
@@ -77,7 +80,7 @@ function getListData() {
                     // Tambah baris total ke tabel dengan colspan
                     var totalRow = [
                         {
-                            text: 'Total Denda: ' + formatRupiah(totalUnit),
+                            text: 'Total Unit: ' + totalUnit,
                             colSpan: colCount,
                             alignment: 'right',
                             bold: true,
@@ -92,15 +95,18 @@ function getListData() {
                     tableNode.body.push(totalRow);
                 }
             }
+
+
+
         ],
         ajax: {
-            url: baseURL + "/getDenda",
+            url: baseURL + "/getReportDamage",
             type: "POST",
             contentType: "application/json", // Set content type to JSON
             data: function (d) {
                 return JSON.stringify({
                     // tableName: "transactions",
-                    where: ` AND DATE_FORMAT(t.created_at, '%Y-%m') = '${month}'`
+                    where: `DATE_FORMAT(t.created_at, '%Y-%m') = '${month}'`
                 });
             },
             dataSrc: function (response) {
@@ -135,7 +141,7 @@ function getListData() {
             { data: "no_transaction" },
             // { data: "price_total" },
             // { data: "denda" },
-            { data: "price_total" },
+            { data: "damage" },
             // { data: "file_path" },
             // { data: "weight" },
             // { data: "id" },
@@ -178,8 +184,7 @@ function getListData() {
             {
                 mRender: function (data, type, row) {
 
-                    return formatRupiah(
-                        row.price_total);
+                    return row.damage + " Unit"
                 },
                 visible: true,
                 targets: 2,
@@ -244,14 +249,14 @@ function getListData() {
         //     var last = null;
 
         //     // Calculate totals for specific columns
-        //     var totalColumn1 = api.column(2).data().reduce(function (a, b) {
+        //     var totalColumn1 = api.column(4).data().reduce(function (a, b) {
         //         return parseInt(a) + parseInt(b);
         //     }, 0);
 
         //     $("#total-pendapatan").val(formatRupiah(parseFloat(totalColumn1)));
 
         // },
-         footerCallback: function (row, data, start, end, display) {
+        footerCallback: function (row, data, start, end, display) {
             var api = this.api();
 
             // Fungsi helper untuk parsing integer
@@ -271,10 +276,10 @@ function getListData() {
                 }, 0);
 
             // Tampilkan di footer
-            $(api.column(2).footer()).html(formatRupiah(total));
+            $(api.column(2).footer()).html(total + ' Unit');
 
             // Tetap set ke input jika mau
-            $("#total-pendapatan").val(formatRupiah(total));
+            $("#total-pendapatan").val(total + ' Unit');
         }
         ,
         initComplete: function (settings, json) {

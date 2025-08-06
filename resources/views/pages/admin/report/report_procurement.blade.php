@@ -33,10 +33,17 @@
                                         {{-- <th>Bukti Bayar</th> --}}
                                         {{-- <th>Berat</th> --}}
                                         <th>Supplier Phone</th>
+                                        <th>Total Harga</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" style="text-align:right">Total:</th>
+                                        <th id="total-unit"></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

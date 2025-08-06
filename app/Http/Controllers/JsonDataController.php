@@ -1702,6 +1702,86 @@ class JsonDataController extends Controller
         return $MasterClass->Results($results);
 
     }
+
+    public function getReportDamage(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $status = [];
+
+                    $data = json_decode($request->getContent());
+
+                    $query = "
+                        SELECT
+                            t.id,
+                            t.no_transaction,
+                            t.created_at,
+                            COALESCE(SUM(td.damage),0) damage
+                        FROM
+                            transactions t
+                            LEFT JOIN transaction_details td ON td.id_transaction = t.id
+                       
+                    ";
+                    $query = $query . " WHERE " . $data->where;
+                    // if (isset($whereClause)) {
+                       
+                    // }
+                    $query = $query . " GROUP BY t.id,t.no_transaction, t.created_at";
+
+                    // dd($query);
+
+                    $saved = DB::select($query);
+                    $saved = $MasterClass->checkErrorModel($saved);
+
+                    $status = $saved;
+
+                    // if($status['code'] == $MasterClass::CODE_SUCCESS){
+                    //     DB::commit();
+                    // }else{
+                    //     DB::rollBack();
+                    // }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
     // dashboard
     public function changeStatusTransaction(Request $request)
     {

@@ -39,6 +39,12 @@
                                 </thead>
                                 <tbody>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2" style="text-align:right">Total:</th>
+                                        <th id="total-unit"></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

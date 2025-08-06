@@ -148,7 +148,7 @@
                 <div class="auth-user-review text-center">
                     <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
                         <div class="carousel-inner">
-
+{{-- 
                             <div class="carousel-item active">
                                 <p class="prelead mb-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
@@ -203,7 +203,7 @@
                                 </p>
                                 <h4 class="mb-1">Laurent Smith</h4>
                                 <p class="mb-0">Product designer</p>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>

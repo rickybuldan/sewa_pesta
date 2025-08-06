@@ -280,6 +280,46 @@ class GeneralController extends Controller
         }
     }
 
+     public function reportdamage(Request $request)
+    {
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->AuthenticatedView($request->route()->uri());
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+
+            $javascriptFiles = [
+                asset('action-js/global/global-action.js'),
+                asset('action-js/report/report-damage-action.js'),
+                // asset('action-js/generate/generate-action.js'),
+            ];
+
+            $cssFiles = [
+                // asset('css/main.css'),
+                // asset('css/custom.css'),
+            ];
+            $baseURL = url('/');
+            $varJs = [
+                'const baseURL = "' . $baseURL . '"',
+            ];
+
+            $menuData = $checkAuth['data'][0];
+            $data = [
+                'javascriptFiles' => $javascriptFiles,
+                'cssFiles' => $cssFiles,
+                'varJs' => $varJs,
+                'title' => ucwords(strtolower($menuData->header_menu)),
+                'subtitle' => $menuData->menu_name,
+                // Menambahkan base URL ke dalam array
+            ];
+
+            return view('pages.admin.report.report_damage')
+                ->with($data);
+        } else {
+            return redirect('/login');
+        }
+    }
+
     public function reportprocurement(Request $request)
     {
         $MasterClass = new Master();

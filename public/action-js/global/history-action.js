@@ -121,7 +121,9 @@ function loadOrderCart() {
                         $state = ` <span class="badge rounded-pill badge-info">Pembayaran Berhasil</span>`;
                     }
                     if (item.status == 50) {
-                        $btnact = `Ditolak, Anda Akan dihubungi Oleh Admin Untuk Proses Pengembalian Dana.`;
+                        if (!item.type_pay) {
+                            $btnuploadpaid = `<button onclick="showModalFilePaid('${item.id}',${(item.nominal_payment)},'1')" type="button" class="btn btn-warning btn-sm me-2">Upload Bukti Ulang</button>`;
+                        }
                         $state = ` <span class="badge rounded-pill badge-danger">Transaksi ditolak</span>`;
                     }
                     if (item.status == 20) {
@@ -200,7 +202,10 @@ function getpayment(params) {
 
 
 let no_transaction_assign_paid
-function showModalFilePaid(trx, total) {
+function showModalFilePaid(trx, total, reply) {
+    if(reply){
+        $(".f-title").html("Upload Bukti Ulang")
+    }
     no_transaction_assign_paid = trx
     $(".total-transfer").html(formatRupiah(total))
     $("#upload-file-paid").modal("show")

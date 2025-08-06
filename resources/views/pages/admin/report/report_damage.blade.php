@@ -28,9 +28,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No Transaksi</th>
-                                        
+
                                         {{-- <th>Denda</th> --}}
-                                        <th>Total Denda</th>
+                                        <th>Total Barang Rusak</th>
                                         {{-- <th>Deskripsi</th> --}}
                                         {{-- <th>Bukti Bayar</th> --}}
                                         {{-- <th>Berat</th> --}}

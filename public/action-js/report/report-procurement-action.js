@@ -26,22 +26,70 @@ function setImagePackage(urlFile, elementID) {
 
 let month = null
 function getListData() {
-   dtpr = $("#table-list").DataTable({
+    dtpr = $("#table-list").DataTable({
         dom: 'Bfrtip', // Tambahkan ini agar tombol muncul
         buttons: [
             {
                 extend: 'excelHtml5',
-                title: 'Data Sewa',
-                text: 'Export Excel'
+                title: 'Data Pembelian',
+                text: 'Export Excel',
+                footer: true // supaya footer ikut ke export
             },
             {
                 extend: 'pdfHtml5',
-                title: 'Data Sewa',
+                title: 'Data Pembelian',
                 orientation: 'landscape',
                 pageSize: 'A4',
                 text: 'Export PDF',
+                footer: false,
                 customize: function (doc) {
                     doc.defaultStyle.fontSize = 10;
+
+                    var tableNode = doc.content[1].table;
+                    var colCount = tableNode.body[0].length;
+                    tableNode.widths = Array(colCount).fill('*');
+
+                    // Tambah border
+                    doc.content[1].layout = {
+                        hLineWidth: function () { return 0.5; },
+                        vLineWidth: function () { return 0.5; },
+                        hLineColor: function () { return '#000'; },
+                        vLineColor: function () { return '#000'; },
+                        paddingLeft: function () { return 4; },
+                        paddingRight: function () { return 4; },
+                        paddingTop: function () { return 2; },
+                        paddingBottom: function () { return 2; }
+                    };
+
+                    // Rata tengah semua cell
+                    doc.styles.tableBodyEven = { alignment: 'center' };
+                    doc.styles.tableBodyOdd = { alignment: 'center' };
+                    doc.styles.tableHeader = { alignment: 'center', bold: true };
+
+                    // Hitung total unit dari kolom damage
+                    var totalUnit = $('#table-list').DataTable()
+                        .column(4)
+                        .data()
+                        .reduce(function (a, b) {
+                            return parseInt(a) + parseInt(b);
+                        }, 0);
+
+                    // Tambah baris total ke tabel dengan colspan
+                    var totalRow = [
+                        {
+                            text: 'Total Denda: ' + formatRupiah(totalUnit),
+                            colSpan: colCount,
+                            alignment: 'right',
+                            bold: true,
+                            fillColor: '#f0f0f0'
+                        }
+                    ];
+                    // Isi sel kosong untuk sisa colSpan
+                    for (var i = 1; i < colCount; i++) {
+                        totalRow.push({});
+                    }
+
+                    tableNode.body.push(totalRow);
                 }
             }
         ],
@@ -88,7 +136,8 @@ function getListData() {
             // { data: "price_total" },
             // { data: "denda" },
             { data: "supplier_name" },
-                        { data: "supplier_phone" },
+            { data: "supplier_phone" },
+            { data: "price_total" },
             // { data: "file_path" },
             // { data: "weight" },
             // { data: "id" },
@@ -135,7 +184,7 @@ function getListData() {
                         row.price_total);
                 },
                 visible: true,
-                targets: 2,
+                targets: 4,
                 className: "text-center",
             },
             // {
@@ -190,20 +239,33 @@ function getListData() {
             //     className: "text-center",
             // },
         ],
-
-        drawCallback: function (settings) {
+        footerCallback: function (row, data, start, end, display) {
             var api = this.api();
-            var rows = api.rows({ page: "current" }).nodes();
-            var last = null;
 
-            // Calculate totals for specific columns
-            var totalColumn1 = api.column(4).data().reduce(function (a, b) {
-                return parseInt(a) + parseInt(b);
-            }, 0);
+            // Fungsi helper untuk parsing integer
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[^0-9]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
 
-            $("#total-pendapatan").val(formatRupiah(parseFloat(totalColumn1)));
+            // Hitung total semua halaman
+            var total = api
+                .column(4) // kolom damage
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
 
-        },
+            // Tampilkan di footer
+            $(api.column(4).footer()).html(formatRupiah(total));
+
+            // Tetap set ke input jika mau
+            $("#total-pendapatan").val(formatRupiah(total));
+        }
+,
+
         initComplete: function (settings, json) {
             // Create an input element of type 'text' to attach Flatpickr
             var dateInput = document.createElement('input');
