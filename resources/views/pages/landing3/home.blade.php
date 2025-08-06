@@ -64,8 +64,8 @@
                     </div><!-- /row -->
                 </div><!-- /container -->
             </div><!-- /single-slider -->
-            {{-- <div class="single-slider slider-height d-flex align-items-center"
-                data-background="images/slider/homess_slide_3.jpg">
+            <div class="single-slider slider-height d-flex align-items-center"
+                data-background="{{ asset('/template/frontend2/images/banner1.png') }}">
                 <div class="container">
                     <div class="row">
                         <div
@@ -81,7 +81,7 @@
                         </div><!-- /col -->
                     </div><!-- /row -->
                 </div><!-- /container -->
-            </div><!-- /single-slider --> --}}
+            </div><!-- /single-slider -->
         </div><!-- /slider-active -->
     </div>
     <!-- slider-area-end=  -->
