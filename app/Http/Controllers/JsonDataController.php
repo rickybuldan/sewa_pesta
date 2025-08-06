@@ -2502,7 +2502,7 @@ class JsonDataController extends Controller
                                     'accept_item' => $it->accept_item
                                 ]);
 
-                        $total += $it->accept_item * $it->items_price;
+                        $total += $it->accept_item * $it->price;
 
                         $saved = $MasterClass->checkerrorModelUpdate($saved);
 
