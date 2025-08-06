@@ -47,8 +47,7 @@
                     </div><!-- /row -->
                 </div><!-- /container -->
             </div><!-- /single-slider -->
-            <div class="single-slider slider-height d-flex align-items-center"
-                data-background="/{{ asset('/template/frontend2/images/banner2.png') }}">
+            <div class="single-slider slider-height d-flex align-items-center" data-background="{{ asset('/template/frontend2/images/banner2.png') }}">
                 <div class="container">
                     <div class="row">
                         <div
