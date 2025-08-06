@@ -36,30 +36,30 @@
                         <div
                             class="col-xl-12  col-lg-12  col-md-12  col-sm-12 col-12  d-flex align-items-center justify-content-center">
                             <div class="slider-content text-center">
-                                <span data-animation="slideInUp" data-delay=".7s" class="d-block">Get 20% Off All Products
+                                {{-- <span data-animation="slideInUp" data-delay=".7s" class="d-block">Get 20% Off All Products
                                     In Store</span>
                                 <h1 data-animation="fadeInUp" data-delay="1s" class="pt-2 reveal-text">Flamingo Decor 2018
                                 </h1>
                                 <a data-animation="fadeInUp" data-delay="1.7s" href="#"
-                                    class="slider-btn d-inline-block mt-80 text-uppercase theme-color">Discover Now</a>
+                                    class="slider-btn d-inline-block mt-80 text-uppercase theme-color">Discover Now</a> --}}
                             </div>
                         </div><!-- /col -->
                     </div><!-- /row -->
                 </div><!-- /container -->
             </div><!-- /single-slider -->
             <div class="single-slider slider-height d-flex align-items-center"
-                data-background="/template/frontend2/images/banner1.png">
+                data-background="/{{ asset('/template/frontend2/images/banner2.png') }}">
                 <div class="container">
                     <div class="row">
                         <div
                             class="col-xl-12  col-lg-12  col-md-12  col-sm-12 col-12  d-flex align-items-center justify-content-center">
-                            <div class="slider-content text-center">
+                            {{-- <div class="slider-content text-center">
                                 <span data-animation="fadeInUp" data-delay=".7s" class="d-block">Get 60% Off All Products In
                                     Store</span>
                                 <h1 data-animation="fadeInUp" data-delay="1s" class="pt-2">A Beautiful Design.</h1>
                                 <a data-animation="fadeInUp" data-delay="1.8s" href="#"
                                     class="slider-btn d-inline-block mt-80 text-uppercase theme-color">Discover Now</a>
-                            </div>
+                            </div> --}}
                         </div><!-- /col -->
                     </div><!-- /row -->
                 </div><!-- /container -->

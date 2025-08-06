@@ -153,7 +153,7 @@
                          <div class="logo">
                              <a href="index.html" class="d-block" data-toggle="tooltip" data-selector="true"
                                  data-placement="bottom" title="Homess">
-                                 <img height="50px" src="{{ asset('/template/admin3/dist/assets/images/logo-dark-3.png') }}"
+                                 <img height="80px" src="{{ asset('/template/admin3/dist/assets/images/logo-dark-3.png') }}"
                                      alt="HOMESS">
                              </a>
                          </div>
