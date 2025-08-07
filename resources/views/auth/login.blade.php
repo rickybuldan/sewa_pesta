@@ -15,14 +15,14 @@
                                             <a href="{{ url('/') }}" class="logo logo-light">
                                                 <span class="logo-lg">
                                                     <img src="{{ asset('template/admin3/dist/assets/images/logo-light-3.png') }}"
-                                                        alt="" height="24">
+                                                        alt="" height="80">
                                                 </span>
                                             </a>
 
                                             <a href="{{ url('/') }}" class="logo logo-dark">
                                                 <span class="logo-lg">
                                                     <img src="{{ asset('template/admin3/dist/assets/images/logo-dark-3.png') }}"
-                                                        alt="" height="24">
+                                                        alt="" height="80">
                                                 </span>
                                             </a>
                                         </div>
