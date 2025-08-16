@@ -79,7 +79,7 @@ function getListData() {
                     if (row.status == 20) {
                         $rowData += ` <span class="badge rounded-pill text-bg-success">diverifikasi</span>`;
                     }
-                    if (row.status == 30) {
+                    if (row.status == 21) {
                         $rowData += ` <span class="badge rounded-pill text-bg-danger">ditolak</span>`;
                     }
                     return $rowData;
@@ -725,7 +725,7 @@ function denyTransaction(paramObj) {
 
     isReq = {}
     isReq.id = paramObj.id
-    isReq.status = 30
+    isReq.status = 21
 
 
     var formData = new FormData();
