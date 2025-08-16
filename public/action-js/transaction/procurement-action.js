@@ -732,7 +732,7 @@ function denyTransaction(paramObj) {
     formData.append("data", JSON.stringify(isReq));
 
     $.ajax({
-        url: baseURL + "/verifTransaction",
+        url: baseURL + "/verifProcurement",
         type: "POST",
         data: formData,
         dataType: "json",
