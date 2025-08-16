@@ -82,6 +82,9 @@ function getListData() {
                     if (row.status == 21) {
                         $rowData += ` <span class="badge rounded-pill text-bg-danger">ditolak</span>`;
                     }
+                    if (row.status == 30) {
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">diterima</span>`;
+                    }
                     return $rowData;
                 },
                 visible: true,
