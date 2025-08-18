@@ -10,7 +10,7 @@
                             </div>
                             <p>Sewa alat terbaik hanya untuk anda.</p>
                             <ul class="social-link d-flex justify-content-center align-items-center mt-35 mb-30">
-                                <li data-toggle="tooltip" data-placement="top" title="Twitter">
+                                <li data-toggle="tooltip" data-placement="top" title="Instagram">
                                     <a href="https://www.instagram.com/dwikarya_tenda/"><i class="fab fa-instagram"></i></a>
                                 </li>
                                 <li data-toggle="tooltip" data-placement="top" title="Whatsapp">
