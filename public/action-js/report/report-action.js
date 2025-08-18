@@ -31,13 +31,13 @@ function getListData() {
         buttons: [
             {
                 extend: 'excelHtml5',
-                title: 'Data Denda',
+                title: 'Data Harian',
                 text: 'Export Excel',
                 footer: true // supaya footer ikut ke export
             },
             {
                 extend: 'pdfHtml5',
-                title: 'Data Denda',
+                title: 'Data Harian',
                 orientation: 'landscape',
                 pageSize: 'A4',
                 text: 'Export PDF',
