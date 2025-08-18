@@ -11,17 +11,17 @@
                             <p>Sewa alat terbaik hanya untuk anda.</p>
                             <ul class="social-link d-flex justify-content-center align-items-center mt-35 mb-30">
                                 <li data-toggle="tooltip" data-placement="top" title="Twitter">
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
+                                    <a href="https://www.instagram.com/dwikarya_tenda/"><i class="fab fa-instagram"></i></a>
                                 </li>
-                                <li data-toggle="tooltip" data-placement="top" title="Facebook">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <li data-toggle="tooltip" data-placement="top" title="Whatsapp">
+                                    <a href="https://wa.link/0nhxm4"><i class="fab fa-whatsapp-square"></i></a>
                                 </li>
-                                <li data-toggle="tooltip" data-placement="top" title="Google-plus">
+                                {{-- <li data-toggle="tooltip" data-placement="top" title="Google-plus">
                                     <a href="#"><i class="fab fa-google-plus-g"></i></a>
                                 </li>
                                 <li data-toggle="tooltip" data-placement="top" title="Linkedin">
                                     <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                </li>
+                                </li> --}}
                             </ul>
                             <ul class="footer-menu text-center">
                                 <li><a href="/home">Home</a></li>
@@ -39,11 +39,11 @@
                     <div class="row align-items-center justify-content-center">
                         <div class="col-xl-12  col-lg-12  col-md-12  col-sm-12 col-12">
                             <div class="copyright-text d-sm-flex justify-content-center align-items-center text-center">
-                                <p class="pr-1">Copyright ©
+                                {{-- <p class="pr-1">Copyright ©
                                     <a href="#">Homess</a>
                                     All Rights Reserved.
                                 </p>
-                                <p>Powered by <a href="#">Bluesky Themes</a></p>
+                                <p>Powered by <a href="#">Bluesky Themes</a></p> --}}
                             </div>
                         </div><!-- /col -->
                     </div><!-- /row -->

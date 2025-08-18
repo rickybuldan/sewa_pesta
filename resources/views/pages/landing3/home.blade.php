@@ -96,7 +96,7 @@
                                     class="ser-f-icon flaticon-worldwide"></i></span>
                         </div>
                         <h4 class="py-1">Sewa Alat Pesta Terlengkap</h4>
-                        <p>Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat.</p>
+                        {{-- <p>Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat.</p> --}}
                     </div>
                 </div><!-- /col -->
                 <div class="col-xl-4  col-lg-4  col-md-4  col-sm-12 col-12">
@@ -106,7 +106,7 @@
                                     class="ser-f-icon flaticon-24-hours-support"></i></span>
                         </div>
                         <h4 class="py-1">Dukungan Online 24/7</h4>
-                        <p>Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat.</p>
+                        {{-- <p>Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat.</p> --}}
                     </div>
                 </div><!-- /col -->
                 <div class="col-xl-4  col-lg-4  col-md-4  col-sm-12 col-12">
@@ -116,7 +116,7 @@
                                     class="ser-f-icon flaticon-recommend"></i></span>
                         </div>
                         <h4 class="py-1">Kualitas Terjamin</h4>
-                        <p>Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat.</p>
+                        {{-- <p>Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat.</p> --}}
                     </div>
                 </div><!-- /col -->
             </div><!-- /row -->
@@ -132,8 +132,8 @@
                 <div class="col-xl-6  col-lg-6  col-md-10  col-sm-12 col-12 offset-xl-3 offset-lg-3 offset-md-1">
                     <div class="section-title text-center">
                         <h2 class="pb-20">#Sewa Alat Pesta Terlengkap 2025</h2>
-                        <p>Nam liber tempor cum soluta nobis eleifend option congue nihil. Doming id quod mazim placerat
-                            facer possim assum. Typi non habent claritatem insitam.</p>
+                        {{-- <p>Nam liber tempor cum soluta nobis eleifend option congue nihil. Doming id quod mazim placerat --}}
+                            {{-- facer possim assum. Typi non habent claritatem insitam.</p> --}}
                     </div><!-- /section-title -->
                 </div><!-- /col -->
             </div><!-- /row -->
