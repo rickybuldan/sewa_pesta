@@ -281,7 +281,7 @@ function getListDataDetail(id_transaction) {
                     return `<input type="number" class="form-control form-control-sm price-input" 
                    name="price_${row.id}" 
                    data-id="${row.id}" 
-                   value="${data ?? 0}" 
+                   value="${0}" 
                    min="0" style="width: 100%;">`;
                 }
             },
