@@ -19,7 +19,8 @@ globStartDate = null;
 globEndDate = null;
 globGrandTotal = 0;
 globArrCart = [];
-flatpickr("#dateRange", {
+
+fp = flatpickr("#dateRange", {
     mode: "range",
     dateFormat: "Y-m-d", // hanya tanggal
     minDate: new Date(),
@@ -314,10 +315,13 @@ $("#payButton").click(function () {
 $(".ct-nominal-dp").hide();
 $("#s-type-pay").change(function () {
     var selectedValue = $(this).val();
+    fp.clear(); 
     if (selectedValue == 0) {
         $("#f-nominal-dp").val(formatRupiah(globGrandTotal*50/100))
         $(".ct-nominal-dp").show();
+        fp.set("minDate", new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000));
     } else {
+        fp.set("minDate", new Date());
         $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
         $(".ct-nominal-dp").hide();
     }
