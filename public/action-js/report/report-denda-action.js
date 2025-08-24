@@ -157,6 +157,10 @@ function getListData() {
                     }
                     if (row.status == 13) {
 
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Pembayaran DP Berhasil</span>`;
+                    }
+                    if (row.status == 14) {
+
                         $rowData += ` <span class="badge rounded-pill text-bg-info">Verifikasi Lunas</span>`;
                     }
 
@@ -251,7 +255,7 @@ function getListData() {
         //     $("#total-pendapatan").val(formatRupiah(parseFloat(totalColumn1)));
 
         // },
-         footerCallback: function (row, data, start, end, display) {
+        footerCallback: function (row, data, start, end, display) {
             var api = this.api();
 
             // Fungsi helper untuk parsing integer

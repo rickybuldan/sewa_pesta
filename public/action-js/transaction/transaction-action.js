@@ -93,7 +93,12 @@ function getListData() {
                     }
                     if (row.status == 13) {
 
-                        $rowData += ` <span class="badge rounded-pill text-bg-info">Verifikasi Lunas</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Pembayaran DP Berhasil</span>`;
+                    }
+
+                    if (row.status == 14) {
+
+                        $rowData += ` <span class="badge rounded-pill text-bg-success">Verifikasi Lunas</span>`;
                     }
 
                     if (row.status == 20) {
@@ -157,9 +162,15 @@ function getListData() {
             {
                 mRender: function (data, type, row) {
                     var $rowData = `<button type="button" class="btn btn-info btn-sm me-2 edit-btn">Invoice</button>`;
-                    if (row.status == 12) {
-                        $rowData += `<button type="button" class="btn btn-primary btn-sm me-2 verif-btn">Verifikasi</i></button>`;
+                    if (row.status == 13) {
+                        $rowData += `<button type="button" class="btn btn-primary btn-sm me-2 verif-btn">Verifikasi Bayar</i></button>`;
                     }
+
+                    if (row.status == 12) {
+                        $rowData += `<button type="button" class="btn btn-success btn-sm me-2 verif-paid-btn">Verifikasi Lunas</i></button>`;
+                    }
+
+
                     if (row.status == 10 || row.status == 11 || row.status == 12 || row.status == 13) {
                         $rowData += `<button type="button" class="btn btn-danger btn-sm me-2 tolak-btn">Tolak</i></button>`;
                     }
@@ -197,6 +208,15 @@ function getListData() {
         var rowData = dtpr.row(tr).data();
         verifTransaction(rowData);
     });
+
+
+    $('body').off('click', '.verif-paid-btn').on('click', '.verif-paid-btn', function () {
+        var tr = $(this).closest('tr');
+        if (tr.hasClass('child')) tr = tr.prev();
+        var rowData = dtpr.row(tr).data();
+        verifPaidOffTransaction(rowData);
+    });
+
 
     $('body').off('click', '.tolak-btn').on('click', '.tolak-btn', function () {
         var tr = $(this).closest('tr');
@@ -618,7 +638,7 @@ function verifTransaction(paramObj) {
     isReq.status = 11
 
     if (paramObj.type_pay == 1) {
-        isReq.status = 13
+        isReq.status = 14
     }
 
     var formData = new FormData();
@@ -656,3 +676,49 @@ function verifTransaction(paramObj) {
         },
     });
 }
+
+
+function verifPaidOffTransaction(paramObj) {
+    // formdata
+
+    isReq = {}
+    isReq.no_transaction = paramObj.no_transaction
+    isReq.status = 14
+
+    var formData = new FormData();
+    formData.append("data", JSON.stringify(isReq));
+
+    $.ajax({
+        url: baseURL + "/verifTransaction",
+        type: "POST",
+        data: formData,
+        dataType: "json",
+        processData: false, // Important: prevent jQuery from automatically processing the data
+        contentType: false,
+        beforeSend: function () {
+            Swal.fire({
+                title: "Loading",
+                text: "Please wait...",
+            });
+        },
+        complete: function () { },
+        success: function (response) {
+            // Handle response sukses
+            if (response.code == 0) {
+                swal("Saved !", response.message, "success").then(function () {
+                    location.reload();
+                });
+                // Reset form
+            } else {
+                sweetAlert("Oops...", response.message, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+}
+
+

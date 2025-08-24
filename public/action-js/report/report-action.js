@@ -157,7 +157,10 @@ function getListData() {
                     }
                     if (row.status == 13) {
 
-                        $rowData += ` <span class="badge rounded-pill text-bg-info">Verifikasi Lunas</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Pembayaran DP Berhasil</span>`;
+                    }
+                     if (row.status  == 14) {
+                        $rowData = ` Verifikasi Lunas`;
                     }
 
                     if (row.status == 20) {

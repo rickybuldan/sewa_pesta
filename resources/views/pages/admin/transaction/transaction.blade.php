@@ -23,9 +23,10 @@
                     <div class="card-body">
                         <select class="form-select w-50 mb-3" id="f-status" onchange="getListData()">
                             <option value="10">Proses</option>
+                            <option value="13">Pembayaran DP Berhasil</option>
                             <option value="11">Verifikasi DP</option>
                             <option value="12">Lunas</option>
-                            <option value="13">Verifikasi Lunas</option>
+                            <option value="14">Verifikasi Lunas</option>
                             <option value="20">Kirim</option>
                             <option value="30">Selesai</option>
                             <option value="50">Ditolak</option>

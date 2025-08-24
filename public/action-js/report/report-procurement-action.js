@@ -159,6 +159,10 @@ function getListData() {
                     }
                     if (row.status == 13) {
 
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Pembayaran DP Berhasil</span>`;
+                    }
+                    if (row.status == 14) {
+
                         $rowData += ` <span class="badge rounded-pill text-bg-info">Verifikasi Lunas</span>`;
                     }
 
@@ -264,7 +268,7 @@ function getListData() {
             // Tetap set ke input jika mau
             $("#total-pendapatan").val(formatRupiah(total));
         }
-,
+        ,
 
         initComplete: function (settings, json) {
             // Create an input element of type 'text' to attach Flatpickr

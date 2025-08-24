@@ -154,6 +154,9 @@ function getHistoryTransaction() {
                         $rowData = ` Lunas`;
                     }
                     if (sstatus == 13) {
+                        $rowData = ` Pembayaran DP Berhasil`;
+                    }
+                    if (sstatus == 14) {
                         $rowData = ` Verifikasi Lunas`;
                     }
                      if (sstatus == 20) {
@@ -256,6 +259,9 @@ function getDetailProducts() {
                         $rowData = ` Lunas`;
                     }
                     if (sstatus == 13) {
+                        $rowData = ` Pembayaran DP Berhasil`;
+                    }
+                     if (sstatus == 14) {
                         $rowData = ` Verifikasi Lunas`;
                     }
                      if (sstatus == 20) {
@@ -358,6 +364,9 @@ function getDetailPenalty() {
                         $rowData = ` Lunas`;
                     }
                     if (sstatus == 13) {
+                        $rowData = ` Pembayaran DP Berhasil`;
+                    }
+                     if (sstatus == 14) {
                         $rowData = ` Verifikasi Lunas`;
                     }
                      if (sstatus == 20) {
