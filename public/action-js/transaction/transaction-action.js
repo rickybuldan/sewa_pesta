@@ -25,18 +25,18 @@ function setImagePackage(urlFile, elementID) {
 }
 
 function getListData() {
-    if(dtpr){
+    if (dtpr) {
         dtpr.destroy();
     }
     dtpr = $("#table-list").DataTable({
         ajax: {
             url: baseURL + "/getOverviewTransaction",
             type: "POST",
-            contentType: "application/json", 
+            contentType: "application/json",
             data: function (d) {
                 return JSON.stringify({
                     tableName: "transactions",
-                    status:$("#f-status").val()
+                    status: $("#f-status").val()
                 });
             },
             dataSrc: function (response) {
@@ -91,11 +91,11 @@ function getListData() {
 
                         $rowData += ` <span class="badge rounded-pill text-bg-info">Lunas</span>`;
                     }
-                     if (row.status == 13) {
+                    if (row.status == 13) {
 
                         $rowData += ` <span class="badge rounded-pill text-bg-info">Verifikasi Lunas</span>`;
                     }
-          
+
                     if (row.status == 20) {
                         $rowData += ` <span class="badge rounded-pill text-bg-warning">Kirim</span>`;
                     }
@@ -157,7 +157,7 @@ function getListData() {
             {
                 mRender: function (data, type, row) {
                     var $rowData = `<button type="button" class="btn btn-info btn-sm me-2 edit-btn">Invoice</button>`;
-                    if (row.status == 13) {
+                    if (row.status == 12) {
                         $rowData += `<button type="button" class="btn btn-primary btn-sm me-2 verif-btn">Verifikasi</i></button>`;
                     }
                     if (row.status == 10 || row.status == 11 || row.status == 12 || row.status == 13) {
@@ -176,9 +176,6 @@ function getListData() {
 
         drawCallback: function (settings) {
 
-
-
-
         },
     });
 
@@ -186,36 +183,36 @@ function getListData() {
     // var rows = api.rows({ page: "current" }).nodes();
     // var last = null;
 
-    $('body').on('click', '.edit-btn', function () {
+    // pastikan tidak dobel binding
+    $('body').off('click', '.edit-btn').on('click', '.edit-btn', function () {
         var tr = $(this).closest('tr');
-        if (tr.hasClass('child')) tr = tr.prev(); // jika tombol ada di child row responsive
+        if (tr.hasClass('child')) tr = tr.prev();
         var rowData = dtpr.row(tr).data();
-        // console.log(rowData);
         getinvoice(rowData);
     });
 
-    $('body').on('click', '.verif-btn', function () {
+    $('body').off('click', '.verif-btn').on('click', '.verif-btn', function () {
         var tr = $(this).closest('tr');
         if (tr.hasClass('child')) tr = tr.prev();
         var rowData = dtpr.row(tr).data();
         verifTransaction(rowData);
     });
 
-    $('body').on('click', '.tolak-btn', function () {
+    $('body').off('click', '.tolak-btn').on('click', '.tolak-btn', function () {
         var tr = $(this).closest('tr');
         if (tr.hasClass('child')) tr = tr.prev();
         var rowData = dtpr.row(tr).data();
         denyTransaction(rowData);
     });
 
-    $('body').on('click', '.print-barcode-btn', function () {
+    $('body').off('click', '.print-barcode-btn').on('click', '.print-barcode-btn', function () {
         var tr = $(this).closest('tr');
         if (tr.hasClass('child')) tr = tr.prev();
         var rowData = dtpr.row(tr).data();
-
         $("#form-barcode-br").val(rowData.prod_code);
         $("#modal-data-barcode").modal("show");
     });
+
 }
 
 
@@ -621,7 +618,7 @@ function verifTransaction(paramObj) {
     isReq.status = 11
 
     if (paramObj.type_pay == 1) {
-        isReq.status = 12
+        isReq.status = 13
     }
 
     var formData = new FormData();
