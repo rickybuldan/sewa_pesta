@@ -60,8 +60,9 @@ function getListData() {
         type: "POST",
         data: JSON.stringify({
             where: wherestate,
-            tableName: "products LEFT JOIN units ON units.id = products.id_unit",
-            where: "status = 0"
+            tableName: "products p  LEFT JOIN units u ON u.id = p.id_unit",
+            where: "status = 0",
+            is_procurement: true,
         }),
         dataType: "json",
         contentType: "application/json",

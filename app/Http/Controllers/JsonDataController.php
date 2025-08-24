@@ -1658,6 +1658,10 @@ class JsonDataController extends Controller
 
                     }
 
+                     if (isset($data->is_procurement)) {
+                            $query = "SELECT p.*, u.unit_name FROM " .$data->tableName;
+                     }
+
                     $whereClause = isset($data->where) ? " WHERE " . $data->where : "";
 
                     if ($whereClause) {
