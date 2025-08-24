@@ -60,7 +60,7 @@ function getListData() {
         type: "POST",
         data: JSON.stringify({
             where: wherestate,
-            tableName: "products",
+            tableName: "products LEFT JOIN units ON units.id = products.id_unit",
             where: "status = 0"
         }),
         dataType: "json",
@@ -93,6 +93,8 @@ function getListData() {
                     dsc = prods[index].desc;
                     img = prods[index].file_path;
                     idp = prods[index].id;
+                    titem = prods[index].items;
+                    nunit = prods[index].unit_name
 
                     $defaultimg = `<img src="/template/admin2/assets/images/lightgallry/01.jpg" class="img-fluid rounded mx-auto d-block" style="width:50px!important; height:120px!important">`;
 
@@ -119,9 +121,7 @@ function getListData() {
                                     <div class="card-body h-75">
                                         ${$defaultimg}
                                         <div class="d-grid gap-2 mt-3">
-                                            <span class="badge text-bg-secondary mb-3">${formatRupiah(
-                        pc
-                    )} / items</span>
+                                            <span class="badge text-bg-secondary mb-3">${titem} - ${nunit}</span>
                                             <button type="button" onclick='addToCart(this,${idp})' class="btn btn-outline-info tambah-item-btn-${idp} rounded-pill">Tambah</button>
                                         </div>
                                     </div> <!-- end card-body -->

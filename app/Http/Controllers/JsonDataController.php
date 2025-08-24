@@ -1709,6 +1709,72 @@ class JsonDataController extends Controller
 
     }
 
+    public function GetProductWithStatus(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $status = [];
+
+                    $query = "SELECT p.*, COALESCE(d.item) as item_sewa FROM products p 
+                                LEFT JOIN (
+                                    select td.* from transactions t LEFT JOIN transaction_details td on t.id = td.id_transaction 
+                                    WHERE t.status NOT IN (50,30)
+                                ) d ON d.id_product = p.id ";
+                    // dd($query);
+
+                    $saved = DB::select($query);
+                    $saved = $MasterClass->checkErrorModel($saved);
+
+                    $status = $saved;
+
+                    // if($status['code'] == $MasterClass::CODE_SUCCESS){
+                    //     DB::commit();
+                    // }else{
+                    //     DB::rollBack();
+                    // }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
     public function getReportDamage(Request $request)
     {
 

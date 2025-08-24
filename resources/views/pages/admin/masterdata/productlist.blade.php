@@ -28,6 +28,7 @@
                                         <th>No</th>
                                         <th>Nama Produk</th>
                                         <th>Item</th>
+                                        <th>Item Disewa</th>
                                         <th>Harga</th>
                                         {{-- <th>Deskripsi</th> --}}
                                         <th>Gambar</th>

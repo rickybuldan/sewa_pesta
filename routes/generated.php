@@ -52,3 +52,4 @@ Route::get('/reportdenda', [GeneralController::class, 'reportdenda'])->name('');
 Route::post('/getDenda', [JsonDataController::class, 'getDenda'])->name('');
 Route::get('/reportdamage', [GeneralController::class, 'reportdamage'])->name('');
 Route::post('/getReportDamage', [JsonDataController::class, 'getReportDamage'])->name('');
+Route::post('/GetProductWithStatus', [JsonDataController::class, 'GetProductWithStatus'])->name('');

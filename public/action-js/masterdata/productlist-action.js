@@ -23,7 +23,7 @@ function setImagePackage(urlFile, elementID) {
 function getListData() {
     dtpr = $("#table-list").DataTable({
         ajax: {
-            url: baseURL + "/loadGlobal",
+            url: baseURL + "/GetProductWithStatus",
             type: "POST",
             contentType: "application/json", // Set content type to JSON
             data: function (d) {
@@ -62,6 +62,7 @@ function getListData() {
             },
             { data: "product_name" },
             { data: "items" },
+            { data:"item_sewa"},
             { data: "price" },
             // { data: "desc" },
             { data: "file_path" },
@@ -91,7 +92,7 @@ function getListData() {
                         row.price);
                 },
                 visible: true,
-                targets: 3,
+                targets: 4,
                 className: "text-center",
             },
             {
@@ -104,7 +105,7 @@ function getListData() {
                     return $rowData;
                 },
                 visible: true,
-                targets: 4,
+                targets: 5,
                 className: "text-center",
             },
             // {
@@ -124,7 +125,7 @@ function getListData() {
                     return $rowData;
                 },
                 visible: true,
-                targets: 5,
+                targets: 6,
                 className: "text-center",
             },
         ],
