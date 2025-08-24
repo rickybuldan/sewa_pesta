@@ -25,8 +25,8 @@
                             <option value="10">Proses</option>
                             <option value="13">Upload Pembayaran DP Berhasil</option>
                             <option value="11">Verifikasi DP</option>
-                            <option value="12">Lunas</option>
-                            <option value="14">Verifikasi Lunas</option>
+                            <option value="12">Upload Bukti Lunas Berhasil</option>
+                            <option value="14">Verifikasi Lunas Berhasil</option>
                             <option value="20">Kirim</option>
                             <option value="30">Selesai</option>
                             <option value="50">Ditolak</option>
