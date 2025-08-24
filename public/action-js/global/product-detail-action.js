@@ -26,7 +26,7 @@ function loadOrderCart() {
         url: baseURL + "/home/loadGlobal",
         type: "POST",
         data: JSON.stringify({
-            tableName: "products p LEFT JOIN units u ON u.id = p.id_unit",
+            tableName: "products p LEFT JOIN units u ON u.id = p.id_unit LEFT JOIN categories c ON c.id = p.id_category",
             where: "p.id = " + id_product_glob,
             is_product: true
         }),
