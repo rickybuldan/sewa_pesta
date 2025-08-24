@@ -77,7 +77,7 @@ function loadOrderCart() {
         data: JSON.stringify({
             tableName: "carts c LEFT JOIN products p ON p.id = c.id_product LEFT JOIN units u ON u.id = p.id_unit",
             where: "c.id_user = " + xid,
-            is_carts:true
+            is_carts: true
         }),
 
         dataType: "json",
@@ -138,7 +138,14 @@ function loadOrderCart() {
 
                 $(".order_table tbody").html(rows);
                 $(".total-transfer").html(formatRupiah(grandTotal));
-                $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
+                if ($("#s-type-pay").val() == 1) {
+                    $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
+                } else {
+                    $("#f-nominal-dp").val(formatRupiah(globGrandTotal * 50 / 100))
+                    // $(".ct-nominal-dp").hide();
+                }
+
+                // $("#f-nominal-dp").val(formatRupiah(globGrandTotal))
             } else {
                 Swal.fire({
                     title: "Oops...",
@@ -291,7 +298,7 @@ $("#payButton").click(function () {
                 success: function (response) {
                     // Handle response sukses
                     if (response.code == 0) {
-                          // location.reload();
+                        // location.reload();
                         getinvoice(response.data);
                         function getinvoice(params) {
                             location.href = baseURL + "/home/payment?noinvoice=" + params;
@@ -315,9 +322,9 @@ $("#payButton").click(function () {
 $(".ct-nominal-dp").hide();
 $("#s-type-pay").change(function () {
     var selectedValue = $(this).val();
-    fp.clear(); 
+    fp.clear();
     if (selectedValue == 0) {
-        $("#f-nominal-dp").val(formatRupiah(globGrandTotal*50/100))
+        $("#f-nominal-dp").val(formatRupiah(globGrandTotal * 50 / 100))
         $(".ct-nominal-dp").show();
         fp.set("minDate", new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000));
     } else {
