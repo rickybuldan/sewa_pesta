@@ -14,10 +14,10 @@
                                      <li><a class="active" href="#">Menu</a>
                                          <ul class="mega-menu border-gray pt-30 pb-20 pl-30 pr-30">
                                              <li><a href="/home">Home</a></li>
-                                             <li><a href="#" class="btn-tracking">Tracking</a></li>
-                                             <li><a href="/home/history" class="btn-tracking">History</a></li>
+                                             <li><a href="#" class="btn-tracking">Lacak Sewa</a></li>
+                                             <li><a href="/home/history" class="btn-tracking">Riwayat</a></li>
                                              
-                                             <li><a href="#" class="btn-cart">Cart</a></li>
+                                             <li><a href="#" class="btn-cart">Keranjang</a></li>
                                              {{-- <li><a href="index2.html">Home page 2</a></li>
                                              <li><a href="index3.html">Home page 3</a></li>
                                              <li><a href="index4.html">Home page 4</a></li>

@@ -59,14 +59,14 @@
                     <div class="row">
                         <div class="col-xl-8  col-lg-10  col-md-12  col-sm-12 col-12 offset-xl-2 offset-lg-1 px-xl-0">
                             <div class="login-form-area border-light-gray2 pl-90 pr-90 pt-90 pb-95">
-                                <h3 class="mb-30 text-center">Cart Details</h3>
+                                <h3 class="mb-30 text-center">Detail Keranjang</h3>
                               
                                     <div class="login-form mb-50">
                                         <label class="mt-25">Nama <span class="secondary-color">**</span></label>
                                         <div class="">
                                             <input type="text" class="form-control rounded-0 border-light-gray2 pl-20"  id="f-name" placeholder="Nama">
                                         </div>
-                                        <label class="mt-25">Phone <span class="secondary-color">**</span></label>
+                                        <label class="mt-25">No Telp <span class="secondary-color">**</span></label>
                                         <div class="">
                                             <input type="text" class="form-control rounded-0 border-light-gray2 pl-20"  id="f-phone" placeholder="Alamat">
                                         </div>
@@ -78,7 +78,7 @@
                                         <div class="">
                                             <input type="text" class="form-control rounded-0 border-light-gray2 pl-20"  id="dateRange" placeholder="Hari">
                                         </div>
-                                        <label class="mt-25">Item Details<span class="secondary-color"></span></label>
+                                        <label class="mt-25">Daftar Item<span class="secondary-color"></span></label>
                                         <div class="">
                                             <table class="order_table table table-striped" >
                                                 <thead>
@@ -128,7 +128,7 @@
                                         
 
                                     </div><!-- /login-form -->
-                                    <button id="payButton" class="sub-btn d-inline-block text-center text-white theme-bg transition text-uppercase width100">Pay Now!</button>
+                                    <button id="payButton" class="sub-btn d-inline-block text-center text-white theme-bg transition text-uppercase width100">Bayar</button>
                                    
                             </div>
                         </div>

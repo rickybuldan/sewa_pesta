@@ -270,9 +270,8 @@ function getDetailProducts() {
                                 <td>${prods[index].item} ${prods[index].unit_name}</td>
                                 <td>${nm} @${formatRupiah(hrs)}</td>
                                 <td>${formatRupiah(dsc)}</td>
-                                <td>${prods[index].damage} ${prods[index].unit_name} - ${formatRupiah(img)}</td>
-                                <td>${formatRupiah(dtel)}</td>
-                                <td>${formatRupiah(dsc+img+dtel)}</td>
+                              
+                                <td>${formatRupiah(dsc)}</td>
                             </tr>
                         `;
 
@@ -283,7 +282,7 @@ function getDetailProducts() {
                 console.log(gt);
                 
 
-                $("#grand-total").html(formatRupiah(gt))
+                // $("#grand-total").html(formatRupiah(gt))
                 $("#data-products").html(galleryprods);
             } else {
                 sweetAlert("Oops...", response.info, "error");
@@ -296,3 +295,107 @@ function getDetailProducts() {
         },
     });
 }
+
+getDetailPenalty()
+function getDetailPenalty() {
+    let wherestate = "t.no_transaction = '" + no_invoice+"'";
+    $.ajax({
+        url: baseURL + "/loadGlobal",
+        type: "POST",
+        data: JSON.stringify({
+            where: wherestate,
+            is_detail:true,
+            tableName: "transactions t LEFT JOIN users us ON us.id = t.updated_by LEFT JOIN transaction_details td ON td.id_transaction = t.id LEFT JOIN products p ON p.id = td.id_product LEFT JOIN master_constants mc ON mc.is_active = 1 LEFT JOIN units u ON u.id = p.id_unit",
+        }),
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: function () {
+            // Swal.fire({
+            //     title: "Loading",
+            //     text: "Please wait...",
+            // });
+        },
+        complete: function () {
+            // Swal.close();
+        },
+        success: function (response) {
+            // Handle response sukses
+            $("#data-products").html();
+            if (response.code == 0) {
+                
+                if (response.data.length == 0) {
+                    sweetAlert("Oops...", "Tidak ada data!", "error");
+                    return;
+                }
+
+                let prods = response.data;
+                globProduct = prods;
+                galleryprods = ``;
+                gt = 0
+                $("#data-products").html();
+                for (let index = 0; index < prods.length; index++) {
+                   
+                    
+                    nt = prods[index].updated_at;
+                    nm = prods[index].product_name;
+                    hrs = prods[index].price;
+                    dsc = prods[index].sub_total;
+                    img = prods[index].penalty;
+                    dtel = prods[index].denda_telat;
+                    idp = prods[index].id;
+                    sstatus = prods[index].status;
+                    valuedenda = prods[index].value
+                    // img= 100000
+                    gt += dsc+img+dtel
+                    $rowData  = ''
+                    if (sstatus == 10) {
+                        $rowData = ` Proses`;
+                    }
+                    if (sstatus == 11) {
+                        $rowData = ` Verifikasi DP`;
+                    }
+                    if (sstatus == 12) {
+                        $rowData = ` Lunas`;
+                    }
+                    if (sstatus == 13) {
+                        $rowData = ` Pembayaran Berhasil`;
+                    }
+                     if (sstatus == 20) {
+                        $rowData = ` Kirim`;
+                    }
+                    if (sstatus == 30) {
+                        $rowData = `Selesai`;
+                    }
+
+                    galleryprods += `
+                            <tr>
+                                <td>${prods[index].damage} ${prods[index].unit_name}</td>
+                                <td>${nm} @${formatRupiah(hrs)}</td>
+                             
+                                <td>${formatRupiah(img)}</td>
+                                <td>${formatRupiah(dtel)}</td>
+                                <td>${formatRupiah(img+dtel)}</td>
+                            </tr>
+                        `;
+
+                    // if ((index + 1) % 4 == 0 || index == prods.length - 1) {
+                    //     galleryprods += `</div>`; // end row
+                    // }
+                }
+                console.log(gt);
+                
+
+                $("#grand-total").html(formatRupiah(gt))
+                $("#data-products-penalty").html(galleryprods);
+            } else {
+                sweetAlert("Oops...", response.info, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+}
+

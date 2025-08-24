@@ -1,244 +1,287 @@
 <!DOCTYPE html>
 <html lang="id">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Kwitansi Sewa Dwi Karya</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            padding: 20px;
-            max-width: 900px;
-            margin: auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .header h1 {
-            margin: 0;
-            color: #005baa;
-        }
-
-        .subheader {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 4px;
-        }
-
-        .info {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-            position: relative;
-            z-index: 2;
-        }
-
-        .info div {
-            width: 38%;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 2;
-        }
-
-        table, th, td {
-            border: 1px solid #000;
-        }
-
-        th, td {
-            padding: 5px;
-            text-align: center;
-        }
-
-        .total-box {
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            z-index: 2;
-        }
-
-        .total-box div {
-            width: 48%;
-        }
-
-        .footer {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            z-index: 2;
-        }
-
-        .footer .left {
-            font-size: 10px;
-        }
-
-        .footer .right {
-            text-align: center;
-        }
-
-        /* Watermark Styles */
-        .watermark {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 100px;
-            color: rgba(0, 0, 0, 0.06);
-            z-index: 0;
-            pointer-events: none;
-            user-select: none;
-            white-space: nowrap;
-        }
-
-        @media print {
-            .no-print {
-                display: none !important;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>Kwitansi Sewa Dwi Karya</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                padding: 20px;
+                max-width: 900px;
+                margin: auto;
+                position: relative;
+                z-index: 1;
             }
-        }
 
-        @media screen {
+            .header {
+                text-align: center;
+                border-bottom: 2px solid #000;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+                position: relative;
+                z-index: 2;
+            }
+
+            .header h1 {
+                margin: 0;
+                color: #005baa;
+            }
+
+            .subheader {
+                text-align: center;
+                font-size: 10px;
+                margin-top: 4px;
+            }
+
+            .info {
+                display: flex;
+                justify-content: space-between;
+                margin: 10px 0;
+                position: relative;
+                z-index: 2;
+            }
+
+            .info div {
+                width: 38%;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 10px;
+                position: relative;
+                z-index: 2;
+            }
+
+            table,
+            th,
+            td {
+                border: 1px solid #000;
+            }
+
+            th,
+            td {
+                padding: 5px;
+                text-align: center;
+            }
+
+            .total-box {
+                margin-top: 10px;
+                display: flex;
+                justify-content: space-between;
+                position: relative;
+                z-index: 2;
+            }
+
+            .total-box div {
+                width: 48%;
+            }
+
+            .footer {
+                margin-top: 30px;
+                display: flex;
+                justify-content: space-between;
+                position: relative;
+                z-index: 2;
+            }
+
+            .footer .left {
+                font-size: 10px;
+            }
+
+            .footer .right {
+                text-align: center;
+            }
+
+            /* Watermark Styles */
             .watermark {
-                display: block;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-30deg);
+                font-size: 100px;
+                color: rgba(0, 0, 0, 0.06);
+                z-index: 0;
+                pointer-events: none;
+                user-select: none;
+                white-space: nowrap;
             }
-        }
 
-        @media print {
-            .watermark {
-                display: block;
+            @media print {
+                .no-print {
+                    display: none !important;
+                }
             }
-        }
-    </style>
-</head>
 
-<body>
-    <div class="watermark" id="watermark">-</div>
+            @media screen {
+                .watermark {
+                    display: block;
+                }
+            }
 
-    <div class="header">
-        <h1>DWI KARYA</h1>
-        <div class="subheader">Penyewaan Perlengkapan Pesta</div>
-        <div class="subheader">Jl. Raya Timur No. 89 Cikuray Singaparna Telp. (0265) 545526</div>
-    </div>
+            @media print {
+                .watermark {
+                    display: block;
+                }
+            }
+        </style>
+    </head>
 
-    <div class="info">
-        <div>
-            <strong>No Transaksi:</strong><b id="f-no-transaksi">-</b><br>
-            <strong>No HP Customer:</strong><b id="f-phone-customer">-</b><br>
-            <strong>Yth:</strong> Bapak/Ibu <b id="f-name-customer">-</b><br>
-            <strong>Alamat:</strong><b id="f-address-customer">-</b><br>
+    <body>
+        <div class="watermark" id="watermark">-</div>
+
+        <div class="header">
+            <h1>DWI KARYA</h1>
+            <div class="subheader">Penyewaan Perlengkapan Pesta</div>
+            <div class="subheader">Jl. Raya Timur No. 89 Cikuray Singaparna Telp. (0265) 545526</div>
         </div>
-        <div>
-            <strong>Singaparna,</strong> 30 Juni 2025<br>
-            <strong>Untuk Sewa Tgl:</strong><b id="f-rent-date">-</b><br>
+
+        <div class="info">
+            <div>
+                <strong>No Transaksi:</strong><b id="f-no-transaksi">-</b><br>
+                <strong>No HP Customer:</strong><b id="f-phone-customer">-</b><br>
+                <strong>Yth:</strong> Bapak/Ibu <b id="f-name-customer">-</b><br>
+                <strong>Alamat:</strong><b id="f-address-customer">-</b><br>
+            </div>
+            <div>
+                <strong>Singaparna,</strong> 30 Juni 2025<br>
+                <strong>Untuk Sewa Tgl:</strong><b id="f-rent-date">-</b><br>
+            </div>
         </div>
-    </div>
 
         <table>
-        <tr>
-            <th colspan="5">STATUS SEWA</th>
-        </tr>
-        <tr>
-            <th>TGL</th>
-            <th>STATUS</th>
-            <th>OLEH</th>
-           
-        <tbody id="data-history">
             <tr>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <th colspan="5">STATUS SEWA</th>
             </tr>
-        </tbody>
-        
-        <!-- Tambahkan baris lainnya di sini -->
-       
-    </table>
-
-    <table>
-        <tr>
-            <th colspan="5">BARANG YANG DISEWA</th>
-        </tr>
-        <tr>
-            <th>BANYAKNYA</th>
-            <th>BARANG</th>
-            <th>HARGA</th>
-            <th>DENDA KERUSAKAN</th>
-            <th>DENDA KETERLAMBATAN PENGEMBALIAN</th>
-            <th>SUBTOTAL</th>
-        </tr>
-
-        <tbody id="data-products">
             <tr>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+                <th>TGL</th>
+                <th>STATUS</th>
+                <th>OLEH</th>
+
+                <tbody id="data-history">
+                    <tr>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+
+                <!-- Tambahkan baris lainnya di sini -->
+
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="4">BARANG YANG DISEWA</th>
             </tr>
-        </tbody>
-       
-        
-        <!-- Tambahkan baris lainnya di sini -->
-        {{-- <tr>
+            <tr>
+                <th>BANYAKNYA</th>
+                <th>BARANG</th>
+                <th>HARGA</th>
+                <th>SUBTOTAL</th>
+            </tr>
+
+            <tbody id="data-products">
+                <tr>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+
+
+            <!-- Tambahkan baris lainnya di sini -->
+            {{-- <tr>
             <td colspan="4" align="right"><strong>JUMLAH</strong></td>
             <td>50.000</td>
         </tr> --}}
-    </table>
+        </table>
+        <table>
+            <tr>
+                <th colspan="5">DETAIL DENDA</th>
+            </tr>
+            <tr>
+                <th>JUMLAH RUSAK</th>
+                <th>BARANG</th>
+                <th>DENDA KERUSAKAN</th>
+                <th>DENDA KETERLAMBATAN PENGEMBALIAN</th>
+                <th>SUBTOTAL</th>
+            </tr>
 
-    <div class="total-box">
-        <div>
-            <p><strong>CATATAN:</strong><br>
-                Barang yang hilang/rusak harus diganti oleh penyewa dengan harga yang sesuai</p>
-        </div>
-        <div>
-            <table style="width:100%">
+            <tbody id="data-products-penalty">
                 <tr>
-                    <td><strong>GRAND TOTAL</strong></td>
-                    <td><strong id="grand-total">-</strong></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
                 </tr>
-            </table>
-        </div>
-    </div>
+            </tbody>
 
-    <div class="footer">
-        <div class="left">
-            <em>Terima Kasih</em>
-        </div>
-        <div class="right">
-            Hormat Kami,<br><br><br>
-            ( Tanda Tangan )
-        </div>
-    </div>
 
-    <a href="#" class="no-print " onclick="window.history.back();">Kembali</a>
-    <a style="margin-left:10px" class="no-print" href="#" onclick="window.print()">Cetak</a>
+            <!-- Tambahkan baris lainnya di sini -->
+            {{-- <tr>
+            <td colspan="4" align="right"><strong>JUMLAH</strong></td>
+            <td>50.000</td>
+        </tr> --}}
+        </table>
 
-    <script>
-        @foreach ($varJs as $varjsi)
-            {!! $varjsi !!}
+        <div class="total-box">
+            <div>
+                <p><strong>CATATAN:</strong><br>
+                <ul class="list-group">
+                    <li class="list-group-item">Pembayaran DP 50% dari total harga alat yang disewa</li>
+                    <li class="list-group-item">Transaksi menggunakan DP harus melakukan pelunasan 1 hari sebelum
+                        tanggal awal penyewaan</li>
+                    <li class="list-group-item">Uang DP dianggap hangus jika penyewa tidak melakukan pelunasan</li>
+                    <li class="list-group-item">Masa sewa berlaku untuk 1 X 24 Jam</li>
+                    <li class="list-group-item">Keterlambatan pengembalian akan dikenakan biaya tambahan (denda per
+                        hari)</li>
+                    <li class="list-group-item">Penyewa bertanggung jawab atas alat selama masa sewa</li>
+                    <li class="list-group-item">Jika terdapat alat yang hilang atau rusak, maka penyewa wajib
+                        mengganti dengan harga yang sesuai</li>
+                    <li class="list-group-item"> Tidak boleh mengalihkan barang sewaan kepada pihak lain tanpa izin
+                    </li>
+                </ul>
+                </p>
+            </div>
+            <div>
+                <table style="width:100%">
+                    <tr>
+                        <td><strong>GRAND TOTAL</strong></td>
+                        <td><strong id="grand-total">-</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="left">
+                <em>Terima Kasih</em>
+            </div>
+            <div class="right">
+                Hormat Kami,<br><br><br>
+                ( Tanda Tangan )
+            </div>
+        </div>
+
+        <a href="#" class="no-print " onclick="window.history.back();">Kembali</a>
+        <a style="margin-left:10px" class="no-print" href="#" onclick="window.print()">Cetak</a>
+
+        <script>
+            @foreach ($varJs as $varjsi)
+                {!! $varjsi !!}
+            @endforeach
+        </script>
+        <script src="{{ asset('template/admin2/assets/js/jquery.min.js') }}"></script>
+        @foreach ($javascriptFiles as $file)
+            <script src="{{ $file }}"></script>
         @endforeach
-    </script>
-    <script src="{{ asset('template/admin2/assets/js/jquery.min.js') }}"></script>
-    @foreach ($javascriptFiles as $file)
-        <script src="{{ $file }}"></script>
-    @endforeach
-</body>
+    </body>
 
 </html>
-

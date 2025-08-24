@@ -4,24 +4,25 @@
         <link rel="stylesheet" href="{{ $file }}">
     @endforeach
     <style>
-    .single-product {
-        width: 320px!important;;
-        height: 320px!important;;
-        {{-- overflow: hidden; --}}
-    }
+        .single-product {
+            width: 320px !important;
+            ;
+            height: 320px !important;
+            ;
+            {{-- overflow: hidden; --}}
+        }
 
-    .slick-slide img {
-        width: 320px !important;
-        height: 320px !important;
-        object-fit: cover;
-    }
+        .slick-slide img {
+            width: 320px !important;
+            height: 320px !important;
+            object-fit: cover;
+        }
 
-    .single-product-img {
-        width: 320px;
-        height: 320px;
-        {{-- overflow: hidden; --}}
-    }
-
+        .single-product-img {
+            width: 320px;
+            height: 320px;
+            {{-- overflow: hidden; --}}
+        }
     </style>
 @endpush
 
@@ -47,7 +48,8 @@
                     </div><!-- /row -->
                 </div><!-- /container -->
             </div><!-- /single-slider -->
-            <div class="single-slider slider-height d-flex align-items-center" data-background="{{ asset('/template/frontend2/images/banner2.png') }}">
+            <div class="single-slider slider-height d-flex align-items-center"
+                data-background="{{ asset('/template/frontend2/images/banner2.png') }}">
                 <div class="container">
                     <div class="row">
                         <div
@@ -133,7 +135,7 @@
                     <div class="section-title text-center">
                         <h2 class="pb-20">#Sewa Alat Pesta Terlengkap 2025</h2>
                         {{-- <p>Nam liber tempor cum soluta nobis eleifend option congue nihil. Doming id quod mazim placerat --}}
-                            {{-- facer possim assum. Typi non habent claritatem insitam.</p> --}}
+                        {{-- facer possim assum. Typi non habent claritatem insitam.</p> --}}
                     </div><!-- /section-title -->
                 </div><!-- /col -->
             </div><!-- /row -->
@@ -173,12 +175,12 @@
                 <div class="tab-content mt-25" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row product-active product-new-added mlr--20">
-                            
+
                             <!-- /col -->
-                            
+
                         </div><!-- /row -->
                     </div>
-                
+
                 </div>
                 {{-- <div class="row mt-55">
                     <div class="col-xl-12  col-lg-12  col-md-12  col-sm-12 col-12 d-flex justify-content-center">
@@ -337,14 +339,28 @@
     <!-- blog-area-end -->
 
     <!-- ====== subscribe-area-start ========================================= -->
-    
+
     <div class="subscribe-area mt-100 mb-100">
         <div class="container">
             <div class="row">
                 <div class="col-xl-8  col-lg-10  col-md-12  col-sm-12 col-12 offset-xl-2 offset-lg-1">
-                    <div class="section-title text-center pl-50 pr-50">
-                        <h2 class="pb-20">Booking Now! </h2>
-                        <p>Sewa alat pesta terbaik hanya untuk anda.</p>
+                    <div class="section-title text-left pl-50 pr-50">
+                        <h2 class="pb-20 text-center">ATURAN SEWA</h2>
+                        <ul class="list-group">
+                            <li class="list-group-item">Pembayaran DP 50% dari total harga alat yang disewa</li>
+                            <li class="list-group-item">Transaksi menggunakan DP harus melakukan pelunasan 1 hari sebelum
+                                tanggal awal penyewaan</li>
+                            <li class="list-group-item">Uang DP dianggap hangus jika penyewa tidak melakukan pelunasan</li>
+                            <li class="list-group-item">Masa sewa berlaku untuk 1 X 24 Jam</li>
+                            <li class="list-group-item">Keterlambatan pengembalian akan dikenakan biaya tambahan (denda per
+                                hari)</li>
+                            <li class="list-group-item">Penyewa bertanggung jawab atas alat selama masa sewa</li>
+                            <li class="list-group-item">Jika terdapat alat yang hilang atau rusak, maka penyewa wajib
+                                mengganti dengan harga yang sesuai</li>
+                            <li class="list-group-item"> Tidak boleh mengalihkan barang sewaan kepada pihak lain tanpa izin
+                            </li>
+                        </ul>
+                        {{-- <p>Sewa alat pesta terbaik hanya untuk anda.</p> --}}
                     </div><!-- /section-title -->
                 </div><!-- /col -->
             </div><!-- /row -->
@@ -354,8 +370,7 @@
                         <form action="#">
                             {{-- <input class="sub-name form-control text-center" type="text" name="-name"
                                 id="name" placeholder="Subscribe to our newsletter..."> --}}
-                            <a href="/login"
-                                class="sub-btn d-inline-block text-white theme-bg border-0">Login/Register</a>
+                            <a href="/login" class="sub-btn d-inline-block text-white theme-bg border-0">Login/Register</a>
                         </form>
                     </div>
                 </div><!-- /col -->

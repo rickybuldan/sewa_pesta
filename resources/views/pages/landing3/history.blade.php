@@ -37,11 +37,11 @@
                     <div
                         class="col-xl-12  col-lg-12  col-md-12  col-sm-12 col-12  d-flex align-items-center justify-content-center">
                         <div class="page-title pt-65 pb-75 text-center">
-                            <h2 class="text-capitalize theme-color mb-20">History</h2>
+                            <h2 class="text-capitalize theme-color mb-20">Riwayat</h2>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-center bg-transparent">
                                     <li class="breadcrumb-item"><a class="primary-color" href="/home">Home</a></li>
-                                    <li class="breadcrumb-item active text-capitalize" aria-current="page">History</li>
+                                    <li class="breadcrumb-item active text-capitalize" aria-current="page">Riwayat</li>
                                 </ol>
                             </nav>
                         </div><!-- /page title -->
@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col-xl-8  col-lg-10  col-md-12  col-sm-12 col-12 offset-xl-2 offset-lg-1 px-xl-0">
                     <div class="login-form-area border-light-gray2 pl-10 pr-10 pt-10 pb-5">
-                        <h3 class="mb-30 text-center">History Details</h3>
+                        <h3 class="mb-30 text-center">Detail Riwayat</h3>
 
                         <div class="login-form mb-50">
                             {{-- <label class="mt-25">Nama <span class="secondary-color">**</span></label>

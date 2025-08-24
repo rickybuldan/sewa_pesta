@@ -25,8 +25,8 @@
                             </ul>
                             <ul class="footer-menu text-center">
                                 <li><a href="/home">Home</a></li>
-                                <li><a href="#" class="btn-tracking">Tracking</a></li>
-                                <li><a href="#" class="btn-cart">Cart</a></li>
+                                <li><a href="#" class="btn-tracking">Lacak Sewa</a></li>
+                                <li><a href="#" class="btn-cart">Keranjang</a></li>
                             </ul><!-- /footer-menu -->
                         </div><!-- /footer-top-content -->
                     </div><!-- /col -->
