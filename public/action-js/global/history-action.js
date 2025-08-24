@@ -114,7 +114,7 @@ function loadOrderCart() {
                     }
                     if (item.status == 12) {
                         $btnact = `<button onclick="getinvoice('${item.no_transaction}')" type="button" class="btn btn-info btn-sm me-2 ">Invoice</button>`;
-                        $state = ` <span class="badge rounded-pill badge-info">Lunas</span>`;
+                        $state = ` <span class="badge rounded-pill badge-info">Upload Bukti Lunas Berhasil</span>`;
                     }
                     if (item.status == 13) {
                         $btnact = `<button onclick="getinvoice('${item.no_transaction}')" type="button" class="btn btn-info btn-sm me-2 ">Invoice</button>`;
@@ -122,7 +122,7 @@ function loadOrderCart() {
                     }
                     if (item.status == 14) {
                         $btnact = `<button onclick="getinvoice('${item.no_transaction}')" type="button" class="btn btn-info btn-sm me-2 ">Invoice</button>`;
-                        $state = ` <span class="badge rounded-pill badge-info">Verifikasi Lunas</span>`;
+                        $state = ` <span class="badge rounded-pill badge-info">Verifikasi Lunas Berhasil</span>`;
                     }
                     if (item.status == 50) {
                         if (!item.type_pay) {

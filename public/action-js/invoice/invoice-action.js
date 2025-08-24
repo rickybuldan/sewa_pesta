@@ -151,13 +151,13 @@ function getHistoryTransaction() {
                         $rowData = ` Verifikasi DP Berhasil`;
                     }
                     if (sstatus == 12) {
-                        $rowData = ` Lunas`;
+                        $rowData = ` Upload Bukti Lunas`;
                     }
                     if (sstatus == 13) {
                         $rowData = ` Upload Bukti Pembayaran DP Berhasil`;
                     }
                     if (sstatus == 14) {
-                        $rowData = ` Verifikasi Lunas`;
+                        $rowData = ` Verifikasi Lunas Berhasil`;
                     }
                      if (sstatus == 20) {
                         $rowData = ` Kirim`;

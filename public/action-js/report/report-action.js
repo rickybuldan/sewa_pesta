@@ -153,7 +153,7 @@ function getListData() {
                     }
                     if (row.status == 12) {
 
-                        $rowData += ` <span class="badge rounded-pill text-bg-info">Lunas</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-info"> Upload Bukti Lunas Berhasil</span>`;
                     }
                     
                     if (row.status == 13) {
@@ -161,7 +161,7 @@ function getListData() {
                         $rowData += ` <span class="badge rounded-pill text-bg-info">Upload Bukti Pembayaran DP Berhasil</span>`;
                     }
                      if (row.status  == 14) {
-                        $rowData = ` Verifikasi Lunas`;
+                        $rowData = ` Verifikasi Lunas Berhasil`;
                     }
 
                     if (row.status == 20) {

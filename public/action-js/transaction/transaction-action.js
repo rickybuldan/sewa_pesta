@@ -90,7 +90,7 @@ function getListData() {
                     }
                     if (row.status == 12) {
 
-                        $rowData += ` <span class="badge rounded-pill text-bg-info">Lunas</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Upload Bukti Lunas Berhasil</span>`;
                     }
                     if (row.status == 13) {
 
@@ -99,7 +99,7 @@ function getListData() {
 
                     if (row.status == 14) {
 
-                        $rowData += ` <span class="badge rounded-pill text-bg-success">Verifikasi Lunas</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-success">Verifikasi Lunas Berhasil</span>`;
                     }
 
                     if (row.status == 20) {
