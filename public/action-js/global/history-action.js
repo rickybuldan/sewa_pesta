@@ -107,7 +107,7 @@ function loadOrderCart() {
                     }
                     if (item.status == 11) {
                         $btnact = `<button onclick="getinvoice('${item.no_transaction}')" type="button" class="btn btn-info btn-sm me-2 ">Invoice</button>`;
-                        $state = ` <span class="badge rounded-pill badge-info">Verifikasi DP Berhasil</span>`;
+                        $state = ` <span class="badge rounded-pill badge-info">Pembayaran DP Berhasil</span>`;
                         if (!item.type_pay && item.is_bill) {
                             $btnuploadpaid = `<button onclick="showModalFilePaid('${item.id}',${(item.price_total-item.nominal_payment)})" type="button" class="btn btn-warning btn-sm me-2">Upload Pelunasan</button>`;
                         }
@@ -118,7 +118,7 @@ function loadOrderCart() {
                     }
                     if (item.status == 13) {
                         $btnact = `<button onclick="getinvoice('${item.no_transaction}')" type="button" class="btn btn-info btn-sm me-2 ">Invoice</button>`;
-                        $state = ` <span class="badge rounded-pill badge-info">Pembayaran DP Berhasil</span>`;
+                        $state = ` <span class="badge rounded-pill badge-info">Verifikasi DP Berhasil</span>`;
                     }
                     if (item.status == 14) {
                         $btnact = `<button onclick="getinvoice('${item.no_transaction}')" type="button" class="btn btn-info btn-sm me-2 ">Invoice</button>`;
