@@ -1,6 +1,8 @@
 @extends('layout.default_login_three')
 @push('after-style')
     <link rel="stylesheet" type="text/css" href="{{ asset('template/admin2/assets/css/vendors/sweetalert2.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 @endpush
 @section('content')
     <div class="row align-items-center g-0 px-3 py-3 vh-100">
@@ -91,9 +93,14 @@
                                                     placeholder="08***" id="v-phone">
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label for="emailaddress" class="form-label">Address</label>
-                                                <input class="form-control" type="email" required=""
-                                                    placeholder="bandung" id="v-alamat">
+                                            <label for="v-alamat" class="form-label">Address</label>
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" required value="" placeholder="desa / kecamatan" id="v-alamat">
+                                                <input class="form-control" type="text" required value="Tasikmalaya" placeholder="bandung" readonly id="v-alamat2">
+                                                {{-- <span class="input-group-text" id="PlayButton" style="cursor:pointer;">
+                                                    <i class="bi bi-play-fill"></i>
+                                                </span> --}}
+                                            </div>
                                             </div>
                                            
                                             <div class="form-group mb-3">
@@ -289,9 +296,10 @@
             )
                 return false;
 
-
+            isObject["address"] += ", " + $("#v-alamat2").val();
             saveData();
         }
+
 
         function saveData() {
             isObject.id = null;

@@ -25,14 +25,18 @@ function setImagePackage(urlFile, elementID) {
 }
 
 function getListData() {
+    if(dtpr){
+        dtpr.destroy();
+    }
     dtpr = $("#table-list").DataTable({
         ajax: {
             url: baseURL + "/getOverviewTransaction",
             type: "POST",
-            contentType: "application/json", // Set content type to JSON
+            contentType: "application/json", 
             data: function (d) {
                 return JSON.stringify({
                     tableName: "transactions",
+                    status:$("#f-status").val()
                 });
             },
             dataSrc: function (response) {

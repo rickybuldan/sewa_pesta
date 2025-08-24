@@ -55,7 +55,7 @@ function loadOrderCart() {
                 $('#f-cart-item').attr('min', data.min_rent ? data.min_rent : 1);
                 $('#f-cart-item').attr('data-item', data.min_rent ? data.min_rent : 1);
                 $('#f-cart-item').val(data.min_rent ? data.min_rent : 1);
-
+                $(".satuanBox").html(data.unit_name ? data.unit_name : "-")
                 maxStock = data.items
                 // $('.total-transfer').html(formatRupiah(grandTotal));
 

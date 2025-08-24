@@ -892,7 +892,7 @@ class JsonDataController extends Controller
 
                     DB::beginTransaction();
 
-
+                    $data = json_decode($request->getContent());
                     $status = [];
 
 
@@ -920,6 +920,11 @@ class JsonDataController extends Controller
                     // ORDER BY
                     //     all_days.day_order;
                     // ";
+                    $wherestate = "";
+                   
+                    if(isset($data->status)){
+                        $wherestate = "WHERE status = ".$data->status;
+                    }
 
                     $query = "
                         SELECT
@@ -960,10 +965,11 @@ class JsonDataController extends Controller
                             LEFT JOIN master_constants mc ON mc.is_active = 1
                             GROUP BY td.id_transaction
                         ) d ON d.id_transaction = t.id
+                         ".$wherestate."
                         ORDER BY t.created_at ASC;
                     ";
 
-
+                    // dd($query);
                     $saved = DB::select($query);
                     $saved = $MasterClass->checkErrorModel($saved);
 

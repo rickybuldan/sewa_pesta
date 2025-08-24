@@ -118,6 +118,11 @@
                                             <input type="text" id="f-cart-item" name="select1" data-item='1'  min="1"
                                                 class="quantity-input-arrow quantity-input-2 border-light-gray2 text-center">
                                         </div>
+                                        <div class="d-inline-block mt-15 mr-15">
+                                            <span class="border border-light-gray2 d-inline-block text-center px-3 py-2 satuanBox" style="min-width:60px;">
+                                                -
+                                            </span>
+                                        </div>
                                         <a href="#"
                                             class="add-cart-btn sub-btn dark-black-bg d-inline-block text-white mt-15 mr-15">Add to
                                             cart</a>
@@ -140,7 +145,7 @@
                                 <div class="mega-product pt-2 pr-150">
                                     <ul>
                                         <li class="theme-color"><span>Categories:</span></li>
-                                        <li><a href="#" class="primary-color">Product,</a></li>
+                                        <li><a href="#" class="primary-color">Product</a></li>
                                         {{-- <li><a href="product-details.html" class="primary-color">Chest of Drawers,</a></li>
                                         <li><a href="product-details.html" class="primary-color">Deco,</a></li>
                                         <li><a href="product-details.html" class="primary-color">Floor,</a></li>
