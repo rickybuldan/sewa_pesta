@@ -155,7 +155,7 @@ function getListData() {
                     }
                     if (row.status == 11) {
 
-                        $rowData += ` <span class="badge rounded-pill text-bg-info">Verifikasi DP Berhasil</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Pembayaran DP Berhasil</span>`;
                     }
                     if (row.status == 12) {
 
