@@ -154,7 +154,7 @@ function getHistoryTransaction() {
                         $rowData = ` Lunas`;
                     }
                     if (sstatus == 13) {
-                        $rowData = ` Pembayaran Berhasil`;
+                        $rowData = ` Verifikasi Lunas`;
                     }
                      if (sstatus == 20) {
                         $rowData = ` Kirim`;
@@ -256,7 +256,7 @@ function getDetailProducts() {
                         $rowData = ` Lunas`;
                     }
                     if (sstatus == 13) {
-                        $rowData = ` Pembayaran Berhasil`;
+                        $rowData = ` Verifikasi Lunas`;
                     }
                      if (sstatus == 20) {
                         $rowData = ` Kirim`;
@@ -358,7 +358,7 @@ function getDetailPenalty() {
                         $rowData = ` Lunas`;
                     }
                     if (sstatus == 13) {
-                        $rowData = ` Pembayaran Berhasil`;
+                        $rowData = ` Verifikasi Lunas`;
                     }
                      if (sstatus == 20) {
                         $rowData = ` Kirim`;

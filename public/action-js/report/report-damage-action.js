@@ -163,7 +163,7 @@ function getListData() {
                     }
                     if (row.status == 13) {
 
-                        $rowData += ` <span class="badge rounded-pill text-bg-info">Pembayaran Berhasil</span>`;
+                        $rowData += ` <span class="badge rounded-pill text-bg-info">Verifikasi Lunas</span>`;
                     }
 
                     if (row.status == 20) {
