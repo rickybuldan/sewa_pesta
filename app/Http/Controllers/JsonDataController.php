@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\House;
 use App\Models\Package;
 
@@ -1724,11 +1725,13 @@ class JsonDataController extends Controller
 
                     $status = [];
 
-                    $query = "SELECT p.*, COALESCE(d.item) as item_sewa FROM products p 
+                    $query = "SELECT p.*, COALESCE(d.item) as item_sewa, c.category_name FROM products p 
                                 LEFT JOIN (
                                     select td.* from transactions t LEFT JOIN transaction_details td on t.id = td.id_transaction 
                                     WHERE t.status NOT IN (50,30)
-                                ) d ON d.id_product = p.id ";
+                                ) d ON d.id_product = p.id
+                                LEFT JOIN categories c ON c.id = p.id_category
+                                 ";
                     // dd($query);
 
                     $saved = DB::select($query);
@@ -1975,6 +1978,7 @@ class JsonDataController extends Controller
                             'items' => $data->items,
                             'id_unit' => $data->id_unit,
                             'min_rent' => $data->min_rent,
+                            'id_category' => $data->id_category,
                             // 'stock_minimum' => $data->min,
                             // 'stock_maximum' => $data->max,
                             // 'stock' => $data->init,
@@ -2671,6 +2675,82 @@ class JsonDataController extends Controller
                         ],
                         [
                             'unit_name' => $data->unit_name,
+                            // 'updated_by' => $MasterClass->getSession('user_id'),
+                            // 'created_by' => $MasterClass->getSession('user_id'),
+                        ]
+                    );
+
+                    // if ($imagePath && $data->id) {
+
+                    // }
+
+                    $saved = $MasterClass->checkErrorModel($saved);
+
+                    $status = $saved;
+
+                    if ($status['code'] == $MasterClass::CODE_SUCCESS) {
+                        DB::commit();
+                    } else {
+                        DB::rollBack();
+                    }
+
+                    $results = [
+                        'code' => $status['code'],
+                        'info' => $status['info'],
+                        'data' => $status['data'],
+                    ];
+
+
+
+                } else {
+                    $results = [
+                        'code' => '103',
+                        'info' => "Method Failed",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Roll back the transaction in case of an exception
+                $results = [
+                    'code' => '102',
+                    'info' => $e->getMessage(),
+                ];
+
+            }
+        } else {
+
+            $results = [
+                'code' => '403',
+                'info' => "Unauthorized",
+            ];
+
+        }
+
+        return $MasterClass->Results($results);
+
+    }
+
+    public function saveCategory(Request $request)
+    {
+
+        $MasterClass = new Master();
+
+        $checkAuth = $MasterClass->Authenticated($MasterClass->getSession('user_id'));
+
+        if ($checkAuth['code'] == $MasterClass::CODE_SUCCESS) {
+            try {
+                if ($request->isMethod('post')) {
+
+                    DB::beginTransaction();
+
+                    $data = json_decode($request->input('data'));
+                    $status = [];
+
+                    $saved = Category::updateOrCreate(
+                        [
+                            'id' => $data->id,
+                        ],
+                        [
+                            'category_name' => $data->category_name,
                             // 'updated_by' => $MasterClass->getSession('user_id'),
                             // 'created_by' => $MasterClass->getSession('user_id'),
                         ]

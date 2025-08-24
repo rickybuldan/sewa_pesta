@@ -7,10 +7,15 @@ loadCart()
 
 
 function loadProduct() {
+    whcategory =""
+    if ($("#category-select").val() ){
+            whcategory = " AND id_category = "+$("#category-select").val() 
+    }
+
     $.ajax({
         url: baseURL + "/home/loadGlobal",
         type: "POST",
-        data: JSON.stringify({ tableName: "products p LEFT JOIN units u ON u.id = p.id_unit", where: "p.status = 0" + " and p.items > 0" , is_product:true}),
+        data: JSON.stringify({ tableName: "products p LEFT JOIN units u ON u.id = p.id_unit LEFT JOIN categories c ON c.id = p.id_category", where: "p.status = 0" + " and p.items > 0"+ whcategory , is_product:true}),
         dataType: "json",
         contentType: "application/json",
         beforeSend: function () {
@@ -47,7 +52,7 @@ function loadProduct() {
                             <div class="single-product mb-40">
                                 <div class="single-product-img position-relative over-hidden">
                                     <div class="single-product-label position-absolute">
-                                        <span class="text-center text-white d-block brown-l-bg">Hot</span>
+                                        <span class="text-center w-100 px-1 text-white bg-info d-block brown-l-bg">${data[index]["category_name"] ? data[index]["category_name"] :"Unkategori"}</span>
                                     </div>
                                     <a class="position-relative d-block" href="#" tabindex="0">
                                     
@@ -115,6 +120,56 @@ function loadProduct() {
                         }
                     ]
                 });
+
+            } else {
+                sweetAlert("Oops...", response.info, "error");
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            // console.log(xhr.responseText);
+            sweetAlert("Oops...", xhr.responseText, "error");
+        },
+    });
+}
+
+loadCategory()
+function loadCategory() {
+    $.ajax({
+        url: baseURL + "/home/loadGlobal",
+        type: "POST",
+        data: JSON.stringify({ tableName: "categories"}),
+        dataType: "json",
+        contentType: "application/json",
+        beforeSend: function () {
+            // Swal.fire({
+            //     title: "Loading",
+            //     text: "Please wait...",
+            // });
+        },
+
+        complete: function () { },
+        success: function (response) {
+            console.log(response);
+            // Handle response sukses
+            if (response.code == 0) {
+                // swal("Saved !", response.info, "success").then(function () {
+                //     // location.reload();
+                //     location.href = baseURL+"/invoice?noinvoice="+response.data.no_transaction
+                // });
+                // Reset form
+                data = response.data;
+                $(".total-products").text(data.length)
+
+                imgslider = "";
+                let el = '';
+                el+=`<option value=''>Pilih Kategori</option>`   
+                for (let index = 0; index < data.length; index++) {
+                   el+=`<option value='${data[index]['id']}'>${data[index]['category_name']}</option>`   
+                }
+                // Masukkan ke elemen HTML
+                $("#category-select").html(el)
+      
 
             } else {
                 sweetAlert("Oops...", response.info, "error");

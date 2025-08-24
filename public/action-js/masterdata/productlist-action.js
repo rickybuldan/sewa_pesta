@@ -62,7 +62,7 @@ function getListData() {
             },
             { data: "product_name" },
             { data: "items" },
-            { data:"item_sewa"},
+            { data: "item_sewa", defaultContent: 0 },
             { data: "price" },
             // { data: "desc" },
             { data: "file_path" },
@@ -73,12 +73,15 @@ function getListData() {
             {
                 mRender: function (data, type, row) {
                     $rowData = row.product_name;
+                    $rowData +=  ` <span class="badge rounded-pill text-bg-info">${row.category_name ? row.category_name : ""}</span>`;;
                     if (row.status == 0) {
                         $rowData += ` <span class="badge rounded-pill text-bg-primary">Aktif</span>`;
                     }
-                     if (row.status == 1) {
+                    if (row.status == 1) {
                         $rowData += ` <span class="badge rounded-pill text-bg-danger">Inaktif</span>`;
                     }
+                   
+
                     return $rowData;
                 },
                 visible: true,
@@ -183,9 +186,10 @@ function editdata(rowData) {
     $("#form-items").val(rowData.items)
     $("#form-min-rent").val(rowData.min_rent)
     $("#form-status").val(rowData.status).trigger('change')
-    
+
     $("#form-satuan").val(rowData.id_unit).trigger('change')
-    
+    $("#form-category").val(rowData.id_category).trigger('change')
+
     // generateProdCode($("#form-code").val())
     $("#modal-data").modal("show");
 }
@@ -204,8 +208,10 @@ $("#add-btn").on("click", function (e) {
     $("#form-max").val("");
     $("#form-min").val("");
     $("#form-init").val("");
+    $("#form-category").val("").trigger('change');
     $("#form-min-rent").val("")
-    $("#form-satuan").val("").trigger('change')
+    $("#form-satuan").val("").trigger('change');
+
     $("#form-code").val("")
 
     $("#modal-data").modal("show");
@@ -297,6 +303,14 @@ function checkValidation() {
         validationSwalFailed(
             (isObject["id_unit"] = $("#form-satuan").val()),
             "Satuan produk tidak boleh kosong."
+        )
+    )
+        return false;
+
+    if (
+        validationSwalFailed(
+            (isObject["id_category"] = $("#form-category").val()),
+            "Kategori produk tidak boleh kosong."
         )
     )
         return false;
@@ -489,7 +503,7 @@ function setNullProd() {
 //             await generateProdCode($("#form-barcode-br").val())
 //         }
 //     }
-    
+
 //     Swal.close();
 
 //     if (imgUrls.length == 0) {
@@ -505,7 +519,7 @@ function setNullProd() {
 //     printWindow.document.write(`
 //         <html>
 //         <head>
-          
+
 //             <style>
 //                 body {
 //                     text-align: center;
@@ -544,7 +558,7 @@ async function loadRole() {
         const response = await $.ajax({
             url: baseURL + "/home/loadGlobal",
             type: "POST",
-            data: JSON.stringify({ tableName: "units"}),
+            data: JSON.stringify({ tableName: "units" }),
             dataType: "json",
             contentType: "application/json",
             beforeSend: function () {
@@ -565,7 +579,7 @@ async function loadRole() {
         $("#form-satuan").select2({
             // theme: "bootstrap-5",
             // width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-            width: '100%' ,
+            width: '100%',
             data: res,
             placeholder: "Please choose an option",
             dropdownParent: $("#modal-data"),
@@ -574,4 +588,45 @@ async function loadRole() {
         sweetAlert("Oops...", error.responseText, "error");
     }
 }
+
+
+
+loadCategories()
+async function loadCategories() {
+    try {
+        const response = await $.ajax({
+            url: baseURL + "/home/loadGlobal",
+            type: "POST",
+            data: JSON.stringify({ tableName: "categories" }),
+            dataType: "json",
+            contentType: "application/json",
+            beforeSend: function () {
+                // Swal.fire({
+                //     title: "Loading",
+                //     text: "Please wait...",
+                // });
+            },
+        });
+
+        const res = response.data.map(function (item) {
+            return {
+                id: item.id,
+                text: item.category_name,
+            };
+        });
+
+        $("#form-category").select2({
+            // theme: "bootstrap-5",
+            // width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            width: '100%',
+            data: res,
+            placeholder: "Please choose an option",
+            dropdownParent: $("#modal-data"),
+        });
+    } catch (error) {
+        sweetAlert("Oops...", error.responseText, "error");
+    }
+}
+
+
 

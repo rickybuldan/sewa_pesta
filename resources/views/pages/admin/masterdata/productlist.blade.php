@@ -28,7 +28,7 @@
                                         <th>No</th>
                                         <th>Nama Produk</th>
                                         <th>Item</th>
-                                        <th>Item Disewa</th>
+                                        <th>Item Sedang Disewa</th>
                                         <th>Harga</th>
                                         {{-- <th>Deskripsi</th> --}}
                                         <th>Gambar</th>
@@ -114,6 +114,15 @@
                                 <label class="col-sm-3 col-form-label">Satuan</label>
                                 <div class="col-sm-9">
                                     <select class="form-select form-select-sm" id="form-satuan">
+                                        {{-- <option value="0">Aktif</option>
+                                        <option value="1">Inaktif</option> --}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-sm-3 col-form-label">Kategori</label>
+                                <div class="col-sm-9">
+                                    <select class="form-select form-select-sm" id="form-category">
                                         {{-- <option value="0">Aktif</option>
                                         <option value="1">Inaktif</option> --}}
                                     </select>

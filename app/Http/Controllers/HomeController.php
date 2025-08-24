@@ -381,7 +381,8 @@ class HomeController extends Controller
                     $query = "
                                 SELECT
                                     p.*,
-                                    u.unit_name
+                                    u.unit_name,
+                                    c.category_name
 
                                 FROM " . $data->tableName;
                 }

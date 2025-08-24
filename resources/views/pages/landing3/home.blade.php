@@ -147,6 +147,7 @@
                             <span>Products</span><sup class="ml-1 total-products">0</sup>
                         </a>
                     </li>
+
                     {{-- <li class="nav-item mb-15">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                             aria-controls="profile" aria-selected="false">
@@ -172,6 +173,13 @@
                         </a>
                     </li> --}}
                 </ul>
+                <br>
+                <div>
+                    <select class="form-control w-25" id="category-select" onchange="loadProduct()">
+                    
+                    </select>
+                </div>
+                <br>
                 <div class="tab-content mt-25" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row product-active product-new-added mlr--20">
