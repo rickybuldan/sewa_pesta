@@ -147,7 +147,7 @@
                 <strong>Alamat:</strong><b id="f-address-customer">-</b><br>
             </div>
             <div>
-                <strong>Singaparna,</strong> 30 Juni 2025<br>
+                <strong>Singaparna,</strong> <b class="date_invoice"> </b><br>
                 <strong>Untuk Sewa Tgl:</strong><b id="f-rent-date">-</b><br>
             </div>
         </div>
