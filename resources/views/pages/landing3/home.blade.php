@@ -144,7 +144,7 @@
                     <li class="nav-item mb-15">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                             aria-controls="home" aria-selected="true">
-                            <span>Products</span><sup class="ml-1 total-products">0</sup>
+                            <span>Produk</span><sup class="ml-1 total-products">0</sup>
                         </a>
                     </li>
 
