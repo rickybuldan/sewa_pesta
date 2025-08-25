@@ -155,7 +155,7 @@ function getReturProducts(paramsid) {
                                 <input type="number" min="0" max="${item.item}" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control input-baik mb-2" value="${item.item}" placeholder="Baik">
 
                                 <label>Denda Item Rusak</label>
-                                <input type="number" min="0" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control denda-rusak" value="0" placeholder="Denda Item Rusak">
+                                <input type="number" min="0" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control denda-rusak" value="${item.penalty_late}" placeholder="Denda Item Rusak">
                             </div>
                         `;
                     });

@@ -2593,6 +2593,7 @@ class JsonDataController extends Controller
 
                         $product = Product::find($it->id_product);
                         $product->increment('items', $detail->accept_item);
+                        $product->penalty_late = $it->penalty_late;
                         $product->save();
 
 
