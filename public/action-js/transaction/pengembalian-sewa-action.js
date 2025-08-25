@@ -187,6 +187,7 @@ $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
 
     $inputRusak = $container.find('.input-rusak');
     $inputBaik = $container.find('.input-baik');
+    $inputDenda = $container.find('.denda-rusak');
 
     let rusak = parseInt($inputRusak.val()) || 0;
     let baik = parseInt($inputBaik.val()) || 0;
@@ -199,10 +200,13 @@ $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
         rusak = max - baik;
     }
 
+
     // Set ulang agar tetap sinkron
+
     $inputRusak.val(rusak);
     $inputBaik.val(baik);
-
+    denda = $inputDenda.val();
+    $inputDenda.val(rusak * denda); 
     console.log({ rusak, baik, max });
 });
 
