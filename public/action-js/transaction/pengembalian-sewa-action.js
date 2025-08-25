@@ -155,6 +155,7 @@ function getReturProducts(paramsid) {
                                 <input type="number" min="0" max="${item.item}" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control input-baik mb-2" value="${item.item}" placeholder="Baik">
 
                                 <label>Denda Item Rusak</label>
+                                 <input type="hidden" min="0" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control denda-rusak-val" value="${item.penalty_late}" placeholder="Denda Item Rusak">
                                 <input type="number" min="0" data-its="${paramsid}" data-idp="${item.id_product}" class="form-control denda-rusak" value="${item.penalty_late}" placeholder="Denda Item Rusak">
                             </div>
                         `;
@@ -188,6 +189,7 @@ $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
     $inputRusak = $container.find('.input-rusak');
     $inputBaik = $container.find('.input-baik');
     $inputDenda = $container.find('.denda-rusak');
+    $inputDendaVal = $container.find('.denda-rusak-val');
 
     let rusak = parseInt($inputRusak.val()) || 0;
     let baik = parseInt($inputBaik.val()) || 0;
@@ -205,7 +207,7 @@ $('#retur-container').on('change', '.input-rusak, .input-baik', function () {
 
     $inputRusak.val(rusak);
     $inputBaik.val(baik);
-    denda = $inputDenda.val();
+    denda = $inputDendaVal.val();
     $inputDenda.val(rusak * denda); 
     console.log({ rusak, baik, max });
 });
